@@ -6,10 +6,48 @@
 Thumbs.db
 .DS_Store
 
-# Programming languages
+# Node.js
+node_modules/
+npm-debug.log*
+
+# Build output
+dist/
+dist-ssr/
+build/
+
+# Vite
+*.local
+.vite/
+
+# Environment variables (NEVER commit secrets)
+.env
+.env.local
+.env.production
+.env.staging
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Python
 __pycache__/
 *.pyc
-node_modules/
-dist/
-build/
-.env
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+
+# Logs
+*.log
+logs/
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
