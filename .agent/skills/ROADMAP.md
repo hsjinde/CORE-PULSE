@@ -45,7 +45,7 @@
 
 ### 🔄 Phase 3：CI/CD 自動部署
 - [x] 建立 `/.github/workflows/deploy.yml`
-- [ ] 設定 Cloudflare Pages API Token（GitHub Secret）
+- [x] 設定 Cloudflare Pages API Token（GitHub Secret）
 - [ ] Push → Lint/Test → Build → Deploy → 清除 CDN 快取
 
 ### ⏳ Phase 4：R2 圖床設定
