@@ -9,6 +9,7 @@ import {
 interface BentoCardProps {
   children: React.ReactNode
   className?: string
+  style?: React.CSSProperties
   colSpan?: number
   rowSpan?: number
   delay?: number
@@ -37,7 +38,7 @@ function AnimatedCounter({ target, suffix = '' }: { target: number; suffix?: str
 
 /* ─── Mini Uptime Chart ──────────────────────────────────────── */
 function UptimeChart() {
-  const bars = Array.from({ length: 28 }, (_, i) => ({
+  const bars = Array.from({ length: 28 }, () => ({
     height: 60 + Math.random() * 40,
     ok: Math.random() > 0.04,
   }))
@@ -85,7 +86,7 @@ function SkillBadge({ label, color }: { label: string; color: string }) {
 }
 
 /* ─── Bento Card Wrapper ─────────────────────────────────────── */
-function BentoCard({ children, className = '', delay = 0 }: BentoCardProps) {
+function BentoCard({ children, className = '', style, delay = 0 }: BentoCardProps) {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '-60px' })
 
@@ -96,6 +97,7 @@ function BentoCard({ children, className = '', delay = 0 }: BentoCardProps) {
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5, delay, ease: [0.4, 0, 0.2, 1] }}
       className={`glass-card p-6 relative overflow-hidden ${className}`}
+      style={style}
     >
       {children}
     </motion.div>
