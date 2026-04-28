@@ -1,40 +1,45 @@
-import { useEffect } from 'react'
-import Lenis from 'lenis'
-import Navbar from '@/components/Navbar/Navbar'
-import Hero from '@/components/Hero/Hero'
-import BentoGrid from '@/components/Bento/BentoGrid'
-import Projects from '@/components/Projects/Projects'
-import Blog from '@/components/Blog/Blog'
-import Footer from '@/components/Footer/Footer'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import Home from '@/pages/Home'
+import BlogPost from '@/pages/BlogPost'
+import AdminLogin from '@/pages/Admin/AdminLogin'
+import AdminDashboard from '@/pages/Admin/AdminDashboard'
+import AdminEditor from '@/pages/Admin/AdminEditor'
+
+// A simple protective wrapper for admin routes
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const isAuthenticated = localStorage.getItem('admin_auth') === 'true'
+  if (!isAuthenticated) {
+    return <Navigate to="/admin" replace />
+  }
+  return <>{children}</>
+}
 
 export default function App() {
-  // Initialize Lenis smooth scroll
-  useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      touchMultiplier: 2,
-    })
-
-    function raf(time: number) {
-      lenis.raf(time)
-      requestAnimationFrame(raf)
-    }
-
-    requestAnimationFrame(raf)
-    return () => lenis.destroy()
-  }, [])
-
   return (
-    <>
-      <Navbar />
-      <main>
-        <Hero />
-        <BentoGrid />
-        <Projects />
-        <Blog />
-      </main>
-      <Footer />
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/blog/:id" element={<BlogPost />} />
+        
+        {/* Admin CMS Routes */}
+        <Route path="/admin" element={<AdminLogin />} />
+        <Route 
+          path="/admin/dashboard" 
+          element={
+            <ProtectedRoute>
+              <AdminDashboard />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin/editor/:id?" 
+          element={
+            <ProtectedRoute>
+              <AdminEditor />
+            </ProtectedRoute>
+          } 
+        />
+      </Routes>
+    </BrowserRouter>
   )
 }

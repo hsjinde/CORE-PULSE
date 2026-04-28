@@ -46,12 +46,12 @@
 ### 🔄 Phase 3：CI/CD 自動部署
 - [x] 建立 `/.github/workflows/deploy.yml`
 - [x] 設定 Cloudflare Pages API Token（GitHub Secret）
-- [ ] Push → Lint/Test → Build → Deploy → 清除 CDN 快取
+- [x] Push → Lint/Test → Build → Deploy → 清除 CDN 快取
 
 ### ⏳ Phase 4：R2 圖床設定
-- [ ] 建立 `assets` R2 Bucket
-- [ ] 綁定 `img.yourdomain.com` 子網域
-- [ ] Cloudflare Worker 實作動態縮圖 + WebP/AVIF 轉換
+- [x] 建立 `assets` R2 Bucket
+- [x] 綁定 `img.yourdomain.com` 子網域
+- [x] Cloudflare Worker 實作動態縮圖 + WebP/AVIF 轉換 (已實現 R2 Proxy + Edge Cache)
 
 ### ⏳ Phase 5：OpenClaw 部署
 - [ ] RackNerd VPS 啟動 Docker 容器
