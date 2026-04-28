@@ -3,12 +3,46 @@ import { useParams, useNavigate } from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeHighlight from 'rehype-highlight'
-import 'highlight.js/styles/github-dark.css' 
+import 'highlight.js/styles/github-dark-dimmed.css'
 import { ArrowLeft, Clock, Calendar } from 'lucide-react'
 import Navbar from '@/components/Navbar/Navbar'
 import Footer from '@/components/Footer/Footer'
 import { getPostById } from '@/services/api'
 import type { Post } from '@/services/api'
+
+// ─── Copy Code Block ─────────────────────────────────────────
+// Recursively extract plain text from React children
+function extractText(node: React.ReactNode): string {
+  if (typeof node === 'string') return node
+  if (Array.isArray(node)) return node.map(extractText).join('')
+  if (node && typeof node === 'object' && 'props' in (node as any)) {
+    return extractText((node as any).props?.children)
+  }
+  return ''
+}
+
+function PreBlock({ children }: { children?: React.ReactNode }) {
+  const [copied, setCopied] = useState(false)
+
+  const handleCopy = () => {
+    const text = extractText(children)
+    navigator.clipboard.writeText(text.trim()).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    })
+  }
+
+  return (
+    <pre>
+      <div className="prose-code-wrapper">
+        <button onClick={handleCopy} className="prose-copy-btn" aria-label="Copy code">
+          {copied ? '✓ Copied' : 'Copy'}
+        </button>
+        {children}
+      </div>
+    </pre>
+  )
+}
 
 export default function BlogPost() {
   const { id } = useParams<{ id: string }>()
@@ -97,6 +131,11 @@ export default function BlogPost() {
           <ReactMarkdown 
             remarkPlugins={[remarkGfm]}
             rehypePlugins={[rehypeHighlight]}
+            components={{
+              pre({ children }) {
+                return <PreBlock>{children}</PreBlock>
+              }
+            }}
           >
             {post.content}
           </ReactMarkdown>
