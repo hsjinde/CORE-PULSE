@@ -13,9 +13,27 @@ interface Project {
   tags: string[]
   accentColor: string
   gradient: string
+  sourceUrl?: string
+  demoUrl?: string
+  demoLabel?: string
 }
 
 const projects: Project[] = [
+  {
+    id: 'rnn-sparql-paper',
+    title: 'RNN SPARQL Optimizer',
+    subtitle: 'Research Paper / IEEE Published',
+    description: '發表於 IEEE Xplore 的研究論文。開發了一種基於遞迴神經網絡 (RNN) 的 SPARQL 查詢優化模型，顯著提升語義網大數據環境下的查詢效能。',
+    problem: '傳統的 SPARQL 查詢優化器在處理複雜、大規模的圖形數據時，難以準確預估路徑權重，導致查詢延遲過高。',
+    solution: '引入 LSTM 網絡學習查詢語法與執行路徑的特徵，利用 RNN 的序列處理能力動態調整查詢執行計畫。',
+    result: '實驗證明在多個基準數據集上，查詢反應時間平均降低了 35%，並成功發表於 IEEE 學術期刊。',
+    tags: ['RNN', 'SPARQL', 'Deep Learning', 'Semantic Web', 'Performance Optimization'],
+    accentColor: '#bf5af2',
+    gradient: 'radial-gradient(ellipse at top left, rgba(191,90,242,0.12) 0%, transparent 60%)',
+    sourceUrl: 'https://github.com/hsjinde/Traing-phase-Enhancing-SPARQL-Query-Performance-With-Recurrent-Neural-Networks',
+    demoUrl: 'https://ieeexplore.ieee.org/document/10230082',
+    demoLabel: 'Read Paper'
+  },
   {
     id: 'openclaw',
     title: 'OpenClaw',
@@ -25,8 +43,9 @@ const projects: Project[] = [
     solution: '在 VPS 部署 Ollama + FastAPI，以 Cloudflare Tunnel 替代 Nginx 反向代理，Zero Trust 控制存取。',
     result: '月費降低 78%，延遲 < 200ms，資料完全自主控制。',
     tags: ['Docker', 'Cloudflare Tunnel', 'Zero Trust', 'FastAPI', 'Ollama'],
-    accentColor: '#bf5af2',
-    gradient: 'radial-gradient(ellipse at top left, rgba(191,90,242,0.12) 0%, transparent 60%)',
+    accentColor: '#2997ff',
+    gradient: 'radial-gradient(ellipse at top left, rgba(41,151,255,0.12) 0%, transparent 60%)',
+    sourceUrl: 'https://github.com/hsjinde',
   },
   {
     id: 'sre-devops-lab',
@@ -39,18 +58,7 @@ const projects: Project[] = [
     tags: ['Python', 'Prometheus', 'Grafana', 'GitHub Actions', 'K8s'],
     accentColor: '#30d158',
     gradient: 'radial-gradient(ellipse at top right, rgba(48,209,88,0.10) 0%, transparent 60%)',
-  },
-  {
-    id: 'personal-website',
-    title: 'Core Pulse',
-    subtitle: 'Personal Brand Website',
-    description: '你正在看的這個網站。React + TypeScript + Tailwind v4 建構，部署於 Cloudflare Pages 全球 CDN，圖片由 R2 提供服務。',
-    problem: '需要一個能展現 SRE 技術深度與 AI 應用能力的個人品牌平台。',
-    solution: 'Apple 極簡美學 + Bento Grid 佈局，Framer Motion 打造滾動敘事體驗，GitHub Actions 自動化部署。',
-    result: 'Lighthouse 100 分，LCP < 1s，全球 CDN 加速，零出站費用圖床。',
-    tags: ['React', 'TypeScript', 'Cloudflare Pages', 'R2', 'Framer Motion'],
-    accentColor: '#2997ff',
-    gradient: 'radial-gradient(ellipse at bottom right, rgba(41,151,255,0.10) 0%, transparent 60%)',
+    sourceUrl: 'https://github.com/hsjinde',
   },
 ]
 
@@ -125,38 +133,46 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
             {/* Actions */}
             <div className="flex gap-3">
-              <a
-                href="#"
-                className="btn-ghost"
-                style={{
-                  padding: '8px 20px',
-                  fontSize: '0.875rem',
-                  borderColor: `${project.accentColor}40`,
-                  color: project.accentColor,
-                }}
-              >
-                <Code2 size={14} />
-                Source
-              </a>
-              <a
-                href="#"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 6,
-                  padding: '8px 20px',
-                  background: project.accentColor,
-                  color: '#fff',
-                  borderRadius: '980px',
-                  fontSize: '0.875rem',
-                  fontWeight: 500,
-                  textDecoration: 'none',
-                  transition: 'all 0.2s ease',
-                }}
-              >
-                <ExternalLink size={14} />
-                Live Demo
-              </a>
+              {project.sourceUrl && (
+                <a
+                  href={project.sourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-ghost"
+                  style={{
+                    padding: '8px 20px',
+                    fontSize: '0.875rem',
+                    borderColor: `${project.accentColor}40`,
+                    color: project.accentColor,
+                  }}
+                >
+                  <Code2 size={14} />
+                  Source
+                </a>
+              )}
+              {project.demoUrl && (
+                <a
+                  href={project.demoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 6,
+                    padding: '8px 20px',
+                    background: project.accentColor,
+                    color: '#fff',
+                    borderRadius: '980px',
+                    fontSize: '0.875rem',
+                    fontWeight: 500,
+                    textDecoration: 'none',
+                    transition: 'all 0.2s ease',
+                  }}
+                >
+                  <ExternalLink size={14} />
+                  {project.demoLabel || 'Live Demo'}
+                </a>
+              )}
             </div>
           </div>
 
@@ -254,7 +270,7 @@ export default function Projects() {
           className="text-center mt-8"
         >
           <a
-            href="https://github.com"
+            href="https://github.com/hsjinde"
             target="_blank"
             rel="noopener noreferrer"
             style={{

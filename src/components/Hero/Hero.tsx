@@ -125,7 +125,7 @@ export default function Hero() {
           transition={{ delay: 0.2, duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
           className="text-display mb-4"
         >
-          I build{' '}
+          I'm <span className="gradient-text-warm">Ethan</span>. I build{' '}
           <span className="gradient-text-blue">resilient</span>
           <br />
           AI systems.
@@ -162,8 +162,8 @@ export default function Hero() {
           className="text-body mx-auto mb-12"
           style={{ maxWidth: 560 }}
         >
-          專注於系統穩定性、極致性能與 AI 落地應用。
-          以 SRE 思維構建能夠自我修復的基礎設施。
+          SRE 工程師與 AI 系統開發者。致力於 RNN 查詢優化研究與高可用架構設計，
+          以 SRE 思維構建能夠自我修復的智能化基礎設施。
         </motion.p>
 
         {/* CTA Buttons */}
@@ -177,7 +177,7 @@ export default function Hero() {
             <Terminal size={16} />
             View Projects
           </a>
-          <a href="#contact" className="btn-ghost">
+          <a href="https://github.com/hsjinde" target="_blank" rel="noopener noreferrer" className="btn-ghost">
             <Code2 size={16} />
             GitHub
           </a>
@@ -191,13 +191,15 @@ export default function Hero() {
           className="flex items-center justify-center gap-6"
         >
           {[
-            { icon: Code2, label: 'GitHub', href: '#' },
+            { icon: Code2, label: 'GitHub', href: 'https://github.com/hsjinde' },
             { icon: Link2, label: 'LinkedIn', href: '#' },
             { icon: Terminal, label: 'Blog', href: '#blog' },
           ].map(({ icon: Icon, label, href }) => (
             <a
               key={label}
               href={href}
+              target={href.startsWith('http') ? '_blank' : undefined}
+              rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
               style={{
                 display: 'flex',
                 alignItems: 'center',
