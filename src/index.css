@@ -229,3 +229,82 @@ body {
 @media (max-width: 768px) {
   .text-display { font-size: clamp(2.5rem, 10vw, 4rem); }
 }
+
+/* ─── Custom Typography (Markdown) ─────────────────────────── */
+.prose {
+  color: var(--text-secondary);
+  line-height: 1.8;
+  font-size: 1.05rem;
+}
+.prose h1, .prose h2, .prose h3, .prose h4 {
+  color: var(--text-primary);
+  font-weight: 600;
+  margin-top: 2.5em;
+  margin-bottom: 1em;
+  letter-spacing: -0.01em;
+}
+.prose h2 {
+  font-size: 1.75rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.5em;
+}
+.prose h3 {
+  font-size: 1.35rem;
+}
+.prose p {
+  margin-bottom: 1.5em;
+}
+.prose a {
+  color: var(--accent-blue);
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.prose a:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+.prose ul, .prose ol {
+  margin-bottom: 1.5em;
+  padding-left: 1.5em;
+}
+.prose li {
+  margin-bottom: 0.5em;
+}
+.prose strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+.prose blockquote {
+  border-left: 4px solid var(--accent-blue);
+  padding-left: 1.25rem;
+  font-style: italic;
+  color: var(--text-tertiary);
+  margin-left: 0;
+  margin-right: 0;
+  background: rgba(41, 151, 255, 0.05);
+  padding: 1.25rem;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+.prose pre {
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1.25rem;
+  overflow-x: auto;
+  font-size: 0.9em;
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+.prose code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  font-size: 0.85em;
+  color: var(--accent-orange);
+}
+.prose pre code {
+  background: transparent;
+  padding: 0;
+  color: inherit;
+}

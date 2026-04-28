@@ -31,7 +31,7 @@ function PostCard({ post, index }: { post: Post; index: number }) {
         <div style={{ flex: 1 }}>
           {/* Meta */}
           <div className="flex flex-wrap items-center gap-3 mb-4 text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--text-tertiary)' }}>
-            <span style={{ 
+            <span style={{
               color: difficultyColor[post.difficulty],
               background: `${difficultyColor[post.difficulty]}15`,
               padding: '4px 10px',
@@ -57,7 +57,7 @@ function PostCard({ post, index }: { post: Post; index: number }) {
           {/* Tags */}
           <div className="flex flex-wrap gap-2">
             {post.tags.map(tag => (
-              <span key={tag} className="flex items-center gap-1.5" style={{ 
+              <span key={tag} className="flex items-center gap-1.5" style={{
                 color: 'var(--text-secondary)',
                 fontSize: '0.8125rem',
                 background: 'rgba(255,255,255,0.03)',
@@ -113,7 +113,7 @@ export default function Blog() {
           <BookOpen size={20} />
           <span className="text-label">Technical Notes</span>
         </motion.div>
-        
+
         <motion.h2
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -124,7 +124,7 @@ export default function Blog() {
         >
           SRE 與開發筆記
         </motion.h2>
-        
+
         <motion.p
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -137,8 +137,8 @@ export default function Blog() {
       </div>
 
       {/* Posts Grid */}
-      <div style={{ 
-        display: 'grid', 
+      <div style={{
+        display: 'grid',
         gap: '24px',
         gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 500px), 1fr))'
       }}>

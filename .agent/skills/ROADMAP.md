@@ -48,10 +48,16 @@
 - [x] 設定 Cloudflare Pages API Token（GitHub Secret）
 - [x] Push → Lint/Test → Build → Deploy → 清除 CDN 快取
 
-### ⏳ Phase 4：R2 圖床設定
+### ✅ Phase 4：R2 圖床設定
 - [x] 建立 `assets` R2 Bucket
 - [x] 綁定 `img.yourdomain.com` 子網域
 - [x] Cloudflare Worker 實作動態縮圖 + WebP/AVIF 轉換 (已實現 R2 Proxy + Edge Cache)
+
+### ✅ Phase 4.5：自建 Serverless CMS 系統
+- [x] 建立 `/admin` 受保護路由與前端 CMS 介面
+- [x] 實作 Markdown 即時預覽編輯器與自動化 URL Slug
+- [x] 整合 Cloudflare D1 邊緣資料庫 (無伺服器 SQLite)
+- [x] 開發 Pages Functions API 實現前後端完全解耦
 
 ### ⏳ Phase 5：OpenClaw 部署
 - [ ] RackNerd VPS 啟動 Docker 容器
