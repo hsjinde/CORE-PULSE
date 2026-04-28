@@ -37,32 +37,58 @@ function initDB(): Post[] {
 }
 
 export async function getPosts(): Promise<Post[]> {
-  // Simulate network delay
-  await new Promise(resolve => setTimeout(resolve, 300))
-  return initDB()
+  if (!import.meta.env.PROD) {
+    await new Promise(resolve => setTimeout(resolve, 300))
+    return initDB()
+  }
+  const res = await fetch('/api/posts')
+  if (!res.ok) throw new Error('Failed to fetch posts')
+  return res.json()
 }
 
 export async function getPostById(id: string): Promise<Post | undefined> {
-  await new Promise(resolve => setTimeout(resolve, 200))
-  const posts = initDB()
-  return posts.find(p => p.id === id)
+  if (!import.meta.env.PROD) {
+    await new Promise(resolve => setTimeout(resolve, 200))
+    const posts = initDB()
+    return posts.find(p => p.id === id)
+  }
+  const res = await fetch(`/api/posts/${id}`)
+  if (res.status === 404) return undefined
+  if (!res.ok) throw new Error('Failed to fetch post')
+  return res.json()
 }
 
 export async function savePost(post: Post): Promise<void> {
-  await new Promise(resolve => setTimeout(resolve, 500))
-  const posts = initDB()
-  const index = posts.findIndex(p => p.id === post.id)
-  if (index >= 0) {
-    posts[index] = post // update
-  } else {
-    posts.unshift(post) // insert new
+  if (!import.meta.env.PROD) {
+    await new Promise(resolve => setTimeout(resolve, 500))
+    const posts = initDB()
+    const index = posts.findIndex(p => p.id === post.id)
+    if (index >= 0) {
+      posts[index] = post
+    } else {
+      posts.unshift(post)
+    }
+    localStorage.setItem(DB_KEY, JSON.stringify(posts))
+    return
   }
-  localStorage.setItem(DB_KEY, JSON.stringify(posts))
+  
+  const res = await fetch('/api/posts', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(post)
+  })
+  if (!res.ok) throw new Error('Failed to save post')
 }
 
 export async function deletePost(id: string): Promise<void> {
-  await new Promise(resolve => setTimeout(resolve, 300))
-  const posts = initDB()
-  const newPosts = posts.filter(p => p.id !== id)
-  localStorage.setItem(DB_KEY, JSON.stringify(newPosts))
+  if (!import.meta.env.PROD) {
+    await new Promise(resolve => setTimeout(resolve, 300))
+    const posts = initDB()
+    const newPosts = posts.filter(p => p.id !== id)
+    localStorage.setItem(DB_KEY, JSON.stringify(newPosts))
+    return
+  }
+  
+  const res = await fetch(`/api/posts/${id}`, { method: 'DELETE' })
+  if (!res.ok) throw new Error('Failed to delete post')
 }

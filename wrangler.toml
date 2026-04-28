@@ -1,0 +1,8 @@
+name = "core-pulse"
+pages_build_output_dir = "dist"
+compatibility_date = "2024-04-05"
+
+[[d1_databases]]
+binding = "core_pulse_blog"
+database_name = "core-pulse-blog"
+database_id = "e3aa19cf-79fc-4d04-8a05-cada7626b559"
