@@ -1,3 +1,8 @@
+---
+name: core-pulse-cicd-strategy
+description: 系統化部署策略引導。當使用者提及 CI/CD、GitHub Actions、Cloudflare Pages 部署架構、安全性原則（例如最小權限）、或 Fail-Fast 機制時，務必觸發此技能以遵循專案既定的 SRE 運維標準與手動控制 Pages 部署的決策。
+---
+
 # 系統化部署策略：從 GitHub Actions 到 Cloudflare Pages
 
 在現代 SRE 與 DevOps 實踐中，建構一個穩定且可控的 CI/CD (持續整合與持續部署) 流程是系統基礎設施的核心。本指南詳細記錄了 `core-pulse` 專案如何透過 GitHub Actions 實現完全自動化的高品質發布流程。

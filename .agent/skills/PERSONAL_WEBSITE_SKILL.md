@@ -1,3 +1,8 @@
+---
+name: core-pulse-website-development
+description: 個人品牌網站（React 19 + Vite 5 + TS + Tailwind v4）開發指南。當使用者提到修改 UI 佈局（如 Hero Section、Bento Grid、Projects、Blog、Footer）、實作物理滾動（Lenis）、調整 Framer Motion 微互動或調整 Vite 配置時，務必觸發此技能以維持蘋果極簡美學與 SRE 指標透明度。
+---
+
 # PERSONAL WEBSITE SKILL (React + Vite + TS + Tailwind v4)
 
 ## 📌 目標 (Objective)

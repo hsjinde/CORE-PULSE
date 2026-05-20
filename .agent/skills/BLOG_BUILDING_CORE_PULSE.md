@@ -1,8 +1,10 @@
 ---
+name: core-pulse-blog-reference
+description: 專案核心部落格文章範本。當使用者提及 CORE PULSE 專案的建置歷程、SRE 架構思維、或想要撰寫/修改符合本專案風格的技術部落格文章時，務必觸發此技能以維持文字風格與技術細節的一致性。
 title: "打造現代化 SRE 個人品牌網站：從零到 Serverless 邊緣部署實戰"
 date: "2026-04-28"
 tags: ["SRE", "Cloudflare", "CI/CD", "React", "Serverless"]
-description: "這篇文章紀錄了 CORE PULSE 個人網站的誕生過程。從基礎的前端環境架設、蘋果風格的 UI 實作，到建構企業級的 GitHub Actions CI/CD 管線與 Cloudflare R2 邊緣圖床，完整展示 SRE 的架構思維。"
+blog_description: "這篇文章紀錄了 CORE PULSE 個人網站的誕生過程。從基礎的前端環境架設、蘋果風格的 UI 實作，到建構企業級的 GitHub Actions CI/CD 管線與 Cloudflare R2 邊緣圖床，完整展示 SRE 的架構思維。"
 ---
 
 # 打造現代化 SRE 個人品牌網站：從零到 Serverless 邊緣部署實戰

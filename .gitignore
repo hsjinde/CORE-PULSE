@@ -51,3 +51,6 @@ logs/
 *.njsproj
 *.sln
 *.sw?
+
+# Ignore local .agent skill folder not meant for repo
+.agent/skills/ui-ux-pro-max/

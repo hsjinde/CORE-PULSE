@@ -1,3 +1,8 @@
+---
+name: core-pulse-project-roadmap
+description: 專案開發進度與路線圖技能。當使用者詢問當前專案進度、提出要進入下一個開發階段（例如 Phase 5：OpenClaw 部署）、或要更新/檢查 Roadmap 與 GitHub Secrets 清單時，務必觸發此技能來進行記錄與引導。
+---
+
 # PROJECT ROADMAP SKILL
 
 ## 📌 目標 (Objective)
@@ -85,5 +90,3 @@
 | `TUNNEL_TOKEN` | Cloudflare Tunnel 認證 Token |
 
 ---
-
-## 當前進度：Phase 1+2 ✅ 完成 → 待執行 Phase 3（設定 GitHub Secrets）

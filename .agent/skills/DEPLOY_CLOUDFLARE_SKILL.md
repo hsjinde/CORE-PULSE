@@ -1,3 +1,8 @@
+---
+name: deploy-cloudflare-pages
+description: Cloudflare Pages 自動化部署技能。當使用者需要修改 GitHub Actions 工作流 (.github/workflows/deploy.yml)、設定或管理 Cloudflare Secrets (API Token, Account ID, Zone ID)、或執行快取清除 (Purge Cache) 時，務必觸發此技能。
+---
+
 # DEPLOY CLOUDFLARE SKILL
 
 ## 📌 目標 (Objective)
