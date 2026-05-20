@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { ExternalLink, Code2, ArrowRight } from 'lucide-react'
+import { ExternalLink, Code2, ArrowUpRight } from 'lucide-react'
 
 interface Project {
   id: string
@@ -12,7 +12,7 @@ interface Project {
   result: string
   tags: string[]
   accentColor: string
-  gradient: string
+  glowColor: string
   sourceUrl?: string
   demoUrl?: string
   demoLabel?: string
@@ -22,17 +22,17 @@ const projects: Project[] = [
   {
     id: 'rnn-sparql-paper',
     title: 'RNN SPARQL Optimizer',
-    subtitle: 'Research Paper / IEEE Published',
+    subtitle: 'Research Paper · IEEE Published',
     description: '發表於 IEEE Xplore 的研究論文。開發了一種基於遞迴神經網絡 (RNN) 的 SPARQL 查詢優化模型，顯著提升語義網大數據環境下的查詢效能。',
     problem: '傳統的 SPARQL 查詢優化器在處理複雜、大規模的圖形數據時，難以準確預估路徑權重，導致查詢延遲過高。',
     solution: '引入 LSTM 網絡學習查詢語法與執行路徑的特徵，利用 RNN 的序列處理能力動態調整查詢執行計畫。',
     result: '實驗證明在多個基準數據集上，查詢反應時間平均降低了 35%，並成功發表於 IEEE 學術期刊。',
     tags: ['RNN', 'SPARQL', 'Deep Learning', 'Semantic Web', 'Performance Optimization'],
     accentColor: '#bf5af2',
-    gradient: 'radial-gradient(ellipse at top left, rgba(191,90,242,0.12) 0%, transparent 60%)',
+    glowColor: 'radial-gradient(ellipse at top left, rgba(191,90,242,0.10) 0%, transparent 60%)',
     sourceUrl: 'https://github.com/hsjinde/Traing-phase-Enhancing-SPARQL-Query-Performance-With-Recurrent-Neural-Networks',
     demoUrl: 'https://ieeexplore.ieee.org/document/10230082',
-    demoLabel: 'Read Paper'
+    demoLabel: 'Read Paper',
   },
   {
     id: 'openclaw',
@@ -44,7 +44,7 @@ const projects: Project[] = [
     result: '月費降低 78%，延遲 < 200ms，資料完全自主控制。',
     tags: ['Docker', 'Cloudflare Tunnel', 'Zero Trust', 'FastAPI', 'Ollama'],
     accentColor: '#2997ff',
-    gradient: 'radial-gradient(ellipse at top left, rgba(41,151,255,0.12) 0%, transparent 60%)',
+    glowColor: 'radial-gradient(ellipse at top left, rgba(41,151,255,0.10) 0%, transparent 60%)',
     sourceUrl: 'https://github.com/hsjinde',
   },
   {
@@ -57,178 +57,203 @@ const projects: Project[] = [
     result: 'MTTR 降低 60%，自動化覆蓋率達 90%，構建 GitHub Portfolio。',
     tags: ['Python', 'Prometheus', 'Grafana', 'GitHub Actions', 'K8s'],
     accentColor: '#30d158',
-    gradient: 'radial-gradient(ellipse at top right, rgba(48,209,88,0.10) 0%, transparent 60%)',
+    glowColor: 'radial-gradient(ellipse at top right, rgba(48,209,88,0.09) 0%, transparent 60%)',
     sourceUrl: 'https://github.com/hsjinde',
   },
 ]
 
+function PSRBlock({ label, text, accentColor }: { label: string; text: string; accentColor: string }) {
+  return (
+    <div
+      style={{
+        padding: '14px 16px',
+        borderRadius: 'var(--radius-sm)',
+        background: 'rgba(255,255,255,0.03)',
+        border: '1px solid rgba(255,255,255,0.06)',
+        marginBottom: 10,
+      }}
+    >
+      <p
+        style={{
+          fontSize: '0.6875rem',
+          fontWeight: 700,
+          fontFamily: 'var(--font-body)',
+          color: accentColor,
+          textTransform: 'uppercase',
+          letterSpacing: '0.1em',
+          marginBottom: 6,
+        }}
+      >
+        {label}
+      </p>
+      <p style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', lineHeight: 1.65, fontFamily: 'var(--font-body)' }}>
+        {text}
+      </p>
+    </div>
+  )
+}
+
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
-  const isEven = index % 2 === 0
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 40 }}
+      initial={{ opacity: 0, y: 44 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.7, delay: index * 0.1, ease: [0.4, 0, 0.2, 1] }}
-      className="glass-card overflow-hidden"
-      style={{ marginBottom: 24 }}
+      style={{ marginBottom: 20 }}
     >
-      {/* Top accent bar */}
-      <div style={{ height: 3, background: `linear-gradient(90deg, ${project.accentColor}, transparent)` }} />
-
-      <div style={{ padding: '40px 48px' }}>
-        {/* Header */}
+      <div
+        className="glass-card"
+        style={{ overflow: 'hidden', position: 'relative' }}
+      >
+        {/* Ambient glow overlay */}
         <div
           style={{
-            display: 'flex',
-            flexDirection: isEven ? 'row' : 'row-reverse',
-            gap: 48,
-            alignItems: 'flex-start',
+            position: 'absolute',
+            inset: 0,
+            background: project.glowColor,
+            pointerEvents: 'none',
+            zIndex: 0,
           }}
-        >
-          {/* Left / Right: Text */}
-          <div style={{ flex: 1 }}>
-            <div className="flex items-center gap-3 mb-3">
-              <span
-                style={{
-                  width: 10,
-                  height: 10,
-                  borderRadius: '50%',
-                  background: project.accentColor,
-                  display: 'inline-block',
-                }}
-              />
-              <span className="text-label">{project.subtitle}</span>
-            </div>
-            <h3
-              className="text-headline mb-4"
-              style={{ fontSize: '2.25rem', color: 'var(--text-primary)' }}
-            >
-              {project.title}
-            </h3>
-            <p className="text-body mb-8">{project.description}</p>
+        />
 
-            {/* Tags */}
-            <div className="flex flex-wrap gap-2 mb-8">
-              {project.tags.map((tag) => (
-                <span
-                  key={tag}
-                  style={{
-                    padding: '4px 12px',
-                    borderRadius: '980px',
-                    fontSize: '0.75rem',
-                    fontWeight: 600,
-                    background: `${project.accentColor}12`,
-                    border: `1px solid ${project.accentColor}25`,
-                    color: project.accentColor,
-                  }}
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
+        {/* Top accent line */}
+        <div
+          style={{
+            height: 2,
+            background: `linear-gradient(90deg, ${project.accentColor}80, ${project.accentColor}cc, transparent)`,
+            position: 'relative',
+            zIndex: 1,
+          }}
+        />
 
-            {/* Actions */}
-            <div className="flex gap-3">
-              {project.sourceUrl && (
-                <a
-                  href={project.sourceUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-ghost"
-                  style={{
-                    padding: '8px 20px',
-                    fontSize: '0.875rem',
-                    borderColor: `${project.accentColor}40`,
-                    color: project.accentColor,
-                  }}
-                >
-                  <Code2 size={14} />
-                  Source
-                </a>
-              )}
-              {project.demoUrl && (
-                <a
-                  href={project.demoUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 6,
-                    padding: '8px 20px',
-                    background: project.accentColor,
-                    color: '#fff',
-                    borderRadius: '980px',
-                    fontSize: '0.875rem',
-                    fontWeight: 500,
-                    textDecoration: 'none',
-                    transition: 'all 0.2s ease',
-                  }}
-                >
-                  <ExternalLink size={14} />
-                  {project.demoLabel || 'Live Demo'}
-                </a>
-              )}
-            </div>
-          </div>
-
-          {/* Right / Left: PSR breakdown */}
+        <div style={{ padding: '40px 44px', position: 'relative', zIndex: 1 }}>
           <div
             style={{
-              flex: '0 0 340px',
-              background: 'rgba(255,255,255,0.03)',
-              border: '1px solid var(--border)',
-              borderRadius: 'var(--radius-md)',
-              padding: 24,
-              position: 'relative',
-              overflow: 'hidden',
+              display: 'grid',
+              gridTemplateColumns: '1fr 320px',
+              gap: 40,
+              alignItems: 'flex-start',
             }}
           >
-            <div
-              style={{
-                position: 'absolute',
-                inset: 0,
-                background: project.gradient,
-                pointerEvents: 'none',
-              }}
-            />
-            <div style={{ position: 'relative', zIndex: 1 }}>
-              {[
-                { label: 'Problem', text: project.problem, icon: '⚠️' },
-                { label: 'Solution', text: project.solution, icon: '💡' },
-                { label: 'Result', text: project.result, icon: '✨' },
-              ].map(({ label, text, icon }) => (
-                <div
-                  key={label}
+            {/* ── Left: Main info ── */}
+            <div>
+              {/* Subtitle pill */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+                <span
                   style={{
-                    marginBottom: 20,
-                    paddingBottom: 20,
-                    borderBottom: '1px solid var(--border)',
+                    width: 8,
+                    height: 8,
+                    borderRadius: '50%',
+                    background: project.accentColor,
+                    boxShadow: `0 0 8px ${project.accentColor}80`,
+                    flexShrink: 0,
                   }}
-                >
-                  <div className="flex items-center gap-2 mb-2">
-                    <span>{icon}</span>
-                    <span
-                      style={{
-                        fontSize: '0.75rem',
-                        fontWeight: 700,
-                        color: project.accentColor,
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.08em',
-                      }}
-                    >
-                      {label}
-                    </span>
-                  </div>
-                  <p style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                    {text}
-                  </p>
-                </div>
-              ))}
+                />
+                <span className="text-label">{project.subtitle}</span>
+              </div>
+
+              <h3
+                style={{
+                  fontFamily: 'var(--font-heading)',
+                  fontSize: 'clamp(1.75rem, 3vw, 2.5rem)',
+                  fontWeight: 800,
+                  letterSpacing: '-0.03em',
+                  color: 'var(--text-primary)',
+                  marginBottom: 16,
+                  lineHeight: 1.1,
+                }}
+              >
+                {project.title}
+              </h3>
+
+              <p className="text-body" style={{ marginBottom: 28, maxWidth: 520 }}>
+                {project.description}
+              </p>
+
+              {/* Tags */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 32 }}>
+                {project.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="skill-badge"
+                    style={{
+                      background: `${project.accentColor}12`,
+                      border: `1px solid ${project.accentColor}24`,
+                      color: project.accentColor,
+                    }}
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+
+              {/* Actions */}
+              <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+                {project.sourceUrl && (
+                  <a
+                    href={project.sourceUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-ghost"
+                    style={{
+                      padding: '9px 20px',
+                      fontSize: '0.875rem',
+                      borderColor: `${project.accentColor}30`,
+                      color: project.accentColor,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <Code2 size={14} />
+                    Source
+                  </a>
+                )}
+                {project.demoUrl && (
+                  <a
+                    href={project.demoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 7,
+                      padding: '9px 20px',
+                      background: project.accentColor,
+                      color: '#fff',
+                      borderRadius: 980,
+                      fontSize: '0.875rem',
+                      fontFamily: 'var(--font-body)',
+                      fontWeight: 500,
+                      textDecoration: 'none',
+                      cursor: 'pointer',
+                      transition: 'all 0.25s ease',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.filter = 'brightness(1.12)'
+                      e.currentTarget.style.boxShadow = `0 8px 28px ${project.accentColor}50`
+                      e.currentTarget.style.transform = 'translateY(-1px)'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.filter = 'none'
+                      e.currentTarget.style.boxShadow = 'none'
+                      e.currentTarget.style.transform = 'translateY(0)'
+                    }}
+                  >
+                    <ExternalLink size={14} />
+                    {project.demoLabel || 'Live Demo'}
+                  </a>
+                )}
+              </div>
+            </div>
+
+            {/* ── Right: PSR Panel ── */}
+            <div>
+              <PSRBlock label="Problem"  text={project.problem}  accentColor={project.accentColor} />
+              <PSRBlock label="Solution" text={project.solution} accentColor={project.accentColor} />
+              <PSRBlock label="Result"   text={project.result}   accentColor={project.accentColor} />
             </div>
           </div>
         </div>
@@ -239,19 +264,40 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
 export default function Projects() {
   const titleRef = useRef<HTMLDivElement>(null)
-  const inView = useInView(titleRef, { once: true, margin: '-80px' })
+  const inView   = useInView(titleRef, { once: true, margin: '-80px' })
 
   return (
-    <section id="projects" style={{ padding: '120px 0', background: 'var(--bg-primary)' }}>
+    <section
+      id="projects"
+      style={{
+        padding: '120px 0',
+        background: 'var(--bg-primary)',
+        position: 'relative',
+      }}
+    >
+      {/* Ambient top separator */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: 900,
+          height: 1,
+          background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent)',
+          pointerEvents: 'none',
+        }}
+      />
+
       <div className="section-container">
         <motion.div
           ref={titleRef}
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 28 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          transition={{ duration: 0.7 }}
+          style={{ textAlign: 'center', marginBottom: 64 }}
         >
-          <p className="text-label mb-3">Selected Work</p>
+          <p className="text-label" style={{ marginBottom: 14 }}>Selected Work</p>
           <h2 className="text-headline">
             Projects that{' '}
             <span className="gradient-text-warm">matter</span>
@@ -267,7 +313,7 @@ export default function Projects() {
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
           transition={{ delay: 0.5 }}
-          className="text-center mt-8"
+          style={{ textAlign: 'center', marginTop: 16 }}
         >
           <a
             href="https://github.com/hsjinde"
@@ -279,14 +325,28 @@ export default function Projects() {
               gap: 8,
               color: 'var(--accent-blue)',
               textDecoration: 'none',
+              fontFamily: 'var(--font-body)',
               fontSize: '0.9375rem',
               fontWeight: 500,
-              transition: 'gap 0.2s ease',
+              letterSpacing: '-0.01em',
+              padding: '10px 20px',
+              borderRadius: 980,
+              background: 'rgba(41,151,255,0.06)',
+              border: '1px solid rgba(41,151,255,0.16)',
+              transition: 'all 0.2s ease',
+              cursor: 'pointer',
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.gap = '12px')}
-            onMouseLeave={(e) => (e.currentTarget.style.gap = '8px')}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'rgba(41,151,255,0.10)'
+              e.currentTarget.style.borderColor = 'rgba(41,151,255,0.28)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'rgba(41,151,255,0.06)'
+              e.currentTarget.style.borderColor = 'rgba(41,151,255,0.16)'
+            }}
           >
-            View all on GitHub <ArrowRight size={16} />
+            View all on GitHub
+            <ArrowUpRight size={16} />
           </a>
         </motion.div>
       </div>
