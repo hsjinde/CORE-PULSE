@@ -1,14 +1,15 @@
 import { useRef, useEffect, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { BookOpen, Clock, Tag, ArrowRight } from 'lucide-react'
+import { BookOpen, Clock, Tag, ArrowRight, Terminal, Layers, SearchCode, GraduationCap } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { getPosts } from '@/services/api'
-import type { Post } from '@/services/api'
+import type { Post, PostType } from '@/services/api'
 
-const difficultyColor = {
-  Easy: '#30d158',
-  Medium: '#ff9f0a',
-  Hard: '#ff453a',
+const postTypeConfig: Record<PostType, { color: string; label: string; Icon: React.ElementType }> = {
+  Runbook:      { color: '#30d158', label: 'Runbook',      Icon: Terminal       },
+  Architecture: { color: '#2997ff', label: 'Architecture', Icon: Layers         },
+  DeepDive:     { color: '#bf5af2', label: 'Deep Dive',    Icon: SearchCode     },
+  Tutorial:     { color: '#ff9f0a', label: 'Tutorial',     Icon: GraduationCap  },
 }
 
 function PostCard({ post, index }: { post: Post; index: number }) {
@@ -31,15 +32,23 @@ function PostCard({ post, index }: { post: Post; index: number }) {
         <div style={{ flex: 1 }}>
           {/* Meta */}
           <div className="flex flex-wrap items-center gap-3 mb-4 text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--text-tertiary)' }}>
-            <span style={{
-              color: difficultyColor[post.difficulty],
-              background: `${difficultyColor[post.difficulty]}15`,
-              padding: '4px 10px',
-              borderRadius: '99px',
-              border: `1px solid ${difficultyColor[post.difficulty]}30`
-            }}>
-              {post.difficulty}
-            </span>
+            {(() => {
+              const cfg = postTypeConfig[post.postType] || postTypeConfig['Tutorial']
+              const Icon = cfg.Icon
+              return (
+                <span className="flex items-center gap-1.5" style={{
+                  color: cfg.color,
+                  background: `${cfg.color}15`,
+                  padding: '4px 10px',
+                  borderRadius: '99px',
+                  border: `1px solid ${cfg.color}30`,
+                  letterSpacing: '0.04em',
+                }}>
+                  <Icon size={12} strokeWidth={2.5} />
+                  {cfg.label}
+                </span>
+              )
+            })()}
             <span className="flex items-center gap-1.5"><Clock size={14} />{post.readTime}</span>
             <span className="flex items-center gap-1.5">{post.date}</span>
           </div>
