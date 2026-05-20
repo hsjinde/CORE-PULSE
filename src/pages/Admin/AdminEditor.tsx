@@ -19,7 +19,7 @@ export default function AdminEditor() {
     readTime: '5 min',
     tags: [],
     excerpt: '',
-    difficulty: 'Medium',
+    postType: 'Tutorial',
     coverImage: ''
   })
   const [tagInput, setTagInput] = useState('')
@@ -124,10 +124,13 @@ export default function AdminEditor() {
                   className="bg-black/50 border border-white/10 rounded px-4 py-2 text-white focus:outline-none"
                 />
                 <select 
-                  value={formData.difficulty} onChange={e => setFormData({...formData, difficulty: e.target.value as any})}
+                  value={formData.postType} onChange={e => setFormData({...formData, postType: e.target.value as any})}
                   className="bg-black/50 border border-white/10 rounded px-4 py-2 text-white focus:outline-none"
                 >
-                  <option>Easy</option><option>Medium</option><option>Hard</option>
+                  <option value="Tutorial">📖 Tutorial — 從零開始的教學</option>
+                  <option value="Runbook">🔧 Runbook — 可直接操作的步驟手冊</option>
+                  <option value="Architecture">🏗 Architecture — 系統架構 / 設計決策</option>
+                  <option value="DeepDive">🔬 Deep Dive — 原理深挖 / 技術探究</option>
                 </select>
               </div>
               <input 

@@ -4,11 +4,18 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeHighlight from 'rehype-highlight'
 import 'highlight.js/styles/github-dark-dimmed.css'
-import { ArrowLeft, Clock, Calendar } from 'lucide-react'
+import { ArrowLeft, Clock, Calendar, Terminal, Layers, SearchCode, GraduationCap } from 'lucide-react'
 import Navbar from '@/components/Navbar/Navbar'
 import Footer from '@/components/Footer/Footer'
 import { getPostById } from '@/services/api'
-import type { Post } from '@/services/api'
+import type { Post, PostType } from '@/services/api'
+
+const postTypeConfig: Record<PostType, { color: string; label: string; Icon: React.ElementType }> = {
+  Runbook:      { color: '#30d158', label: 'Runbook',      Icon: Terminal      },
+  Architecture: { color: '#2997ff', label: 'Architecture', Icon: Layers        },
+  DeepDive:     { color: '#bf5af2', label: 'Deep Dive',    Icon: SearchCode    },
+  Tutorial:     { color: '#ff9f0a', label: 'Tutorial',     Icon: GraduationCap },
+}
 
 // ─── Copy Code Block ─────────────────────────────────────────
 // Recursively extract plain text from React children
@@ -100,7 +107,27 @@ export default function BlogPost() {
         </button>
 
         <header className="mb-16">
-          <div className="flex items-center gap-4 text-sm text-gray-400 mb-6">
+          <div className="flex flex-wrap items-center gap-3 text-sm text-gray-400 mb-6">
+            {(() => {
+              const cfg = postTypeConfig[post.postType] || postTypeConfig['Tutorial']
+              const Icon = cfg.Icon
+              return (
+                <span className="flex items-center gap-1.5" style={{
+                  color: cfg.color,
+                  background: `${cfg.color}15`,
+                  padding: '4px 12px',
+                  borderRadius: '99px',
+                  border: `1px solid ${cfg.color}30`,
+                  fontSize: '0.75rem',
+                  fontWeight: 600,
+                  letterSpacing: '0.06em',
+                  textTransform: 'uppercase',
+                }}>
+                  <Icon size={12} strokeWidth={2.5} />
+                  {cfg.label}
+                </span>
+              )
+            })()}
             <span className="flex items-center gap-1.5"><Calendar size={14} />{post.date}</span>
             <span className="flex items-center gap-1.5"><Clock size={14} />{post.readTime}</span>
           </div>

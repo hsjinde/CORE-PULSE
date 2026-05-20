@@ -1,14 +1,15 @@
 import { useRef, useEffect, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { BookOpen, Clock, Tag, ArrowUpRight } from 'lucide-react'
+import { BookOpen, Clock, Tag, ArrowUpRight, Terminal, Layers, SearchCode, GraduationCap } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { getPosts } from '@/services/api'
-import type { Post } from '@/services/api'
+import type { Post, PostType } from '@/services/api'
 
-const difficultyConfig = {
-  Easy:   { color: 'var(--accent-green)',  bg: 'rgba(48,209,88,0.10)',  border: 'rgba(48,209,88,0.24)'  },
-  Medium: { color: 'var(--accent-orange)', bg: 'rgba(255,159,10,0.10)', border: 'rgba(255,159,10,0.24)' },
-  Hard:   { color: 'var(--accent-red)',    bg: 'rgba(255,69,58,0.10)',  border: 'rgba(255,69,58,0.24)'  },
+const postTypeConfig: Record<PostType, { color: string; label: string; Icon: React.ElementType }> = {
+  Runbook:      { color: '#30d158', label: 'Runbook',      Icon: Terminal       },
+  Architecture: { color: '#2997ff', label: 'Architecture', Icon: Layers         },
+  DeepDive:     { color: '#bf5af2', label: 'Deep Dive',    Icon: SearchCode     },
+  Tutorial:     { color: '#ff9f0a', label: 'Tutorial',     Icon: GraduationCap  },
 }
 
 function PostCard({ post, index }: { post: Post; index: number }) {
@@ -33,84 +34,98 @@ function PostCard({ post, index }: { post: Post; index: number }) {
         gap: 0,
       }}
     >
-      {/* Meta row */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 10, marginBottom: 16 }}>
-        <span
-          style={{
-            padding: '3px 10px',
-            borderRadius: 980,
-            fontSize: '0.6875rem',
-            fontWeight: 700,
-            fontFamily: 'var(--font-body)',
-            letterSpacing: '0.08em',
-            textTransform: 'uppercase',
-            color: diff.color,
-            background: diff.bg,
-            border: `1px solid ${diff.border}`,
-          }}
-        >
-          {post.difficulty}
-        </span>
-        <span
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 5,
-            fontSize: '0.75rem',
-            color: 'var(--text-tertiary)',
-            fontFamily: 'var(--font-body)',
-          }}
-        >
-          <Clock size={11} />
-          {post.readTime}
-        </span>
-        <span style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', fontFamily: 'var(--font-body)' }}>
-          {post.date}
-        </span>
-      </div>
-
-      {/* Title */}
-      <h3
-        className="text-title"
-        style={{
-          color: 'var(--text-primary)',
-          marginBottom: 10,
-          fontSize: '1.125rem',
-          fontFamily: 'var(--font-heading)',
-        }}
-      >
-        {post.title}
-      </h3>
-
-      {/* Excerpt */}
-      <p className="text-body" style={{ fontSize: '0.9rem', marginBottom: 20, flex: 1 }}>
-        {post.excerpt}
-      </p>
-
-      {/* Footer */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        {/* Tags */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-          {post.tags.slice(0, 3).map((tag) => (
+      <div className="flex items-start justify-between gap-4">
+        <div style={{ flex: 1 }}>
+          {/* Meta row */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+            {(() => {
+              const cfg = postTypeConfig[post.postType] || postTypeConfig['Tutorial']
+              const Icon = cfg.Icon
+              return (
+                <span
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 4,
+                    padding: '3px 10px',
+                    borderRadius: 980,
+                    fontSize: '0.6875rem',
+                    fontWeight: 700,
+                    fontFamily: 'var(--font-body)',
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                    color: cfg.color,
+                    background: `${cfg.color}15`,
+                    border: `1px solid ${cfg.color}30`,
+                  }}
+                >
+                  <Icon size={12} strokeWidth={2.5} />
+                  {cfg.label}
+                </span>
+              )
+            })()}
             <span
-              key={tag}
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: 4,
-                color: 'var(--text-tertiary)',
+                gap: 5,
                 fontSize: '0.75rem',
+                color: 'var(--text-tertiary)',
                 fontFamily: 'var(--font-body)',
-                background: 'rgba(255,255,255,0.04)',
-                padding: '3px 9px',
-                borderRadius: 6,
-                border: '1px solid rgba(255,255,255,0.06)',
               }}
             >
-              <Tag size={10} />
-              {tag}
+              <Clock size={11} />
+              {post.readTime}
             </span>
-          ))}
+            <span style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', fontFamily: 'var(--font-body)' }}>
+              {post.date}
+            </span>
+          </div>
+
+          {/* Title */}
+          <h3
+            className="text-title"
+            style={{
+              color: 'var(--text-primary)',
+              marginBottom: 10,
+              fontSize: '1.125rem',
+              fontFamily: 'var(--font-heading)',
+            }}
+          >
+            {post.title}
+          </h3>
+
+          {/* Excerpt */}
+          <p className="text-body" style={{ fontSize: '0.9rem', marginBottom: 20, flex: 1 }}>
+            {post.excerpt}
+          </p>
+
+          {/* Footer */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            {/* Tags */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+              {post.tags.slice(0, 3).map((tag) => (
+                <span
+                  key={tag}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 4,
+                    color: 'var(--text-tertiary)',
+                    fontSize: '0.75rem',
+                    fontFamily: 'var(--font-body)',
+                    background: 'rgba(255,255,255,0.04)',
+                    padding: '3px 9px',
+                    borderRadius: 6,
+                    border: '1px solid rgba(255,255,255,0.06)',
+                  }}
+                >
+                  <Tag size={10} />
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Read arrow */}
