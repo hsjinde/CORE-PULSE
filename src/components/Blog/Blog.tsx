@@ -1,91 +1,135 @@
 import { useRef, useEffect, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { BookOpen, Clock, Tag, ArrowRight } from 'lucide-react'
+import { BookOpen, Clock, Tag, ArrowUpRight } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { getPosts } from '@/services/api'
 import type { Post } from '@/services/api'
 
-const difficultyColor = {
-  Easy: '#30d158',
-  Medium: '#ff9f0a',
-  Hard: '#ff453a',
+const difficultyConfig = {
+  Easy:   { color: 'var(--accent-green)',  bg: 'rgba(48,209,88,0.10)',  border: 'rgba(48,209,88,0.24)'  },
+  Medium: { color: 'var(--accent-orange)', bg: 'rgba(255,159,10,0.10)', border: 'rgba(255,159,10,0.24)' },
+  Hard:   { color: 'var(--accent-red)',    bg: 'rgba(255,69,58,0.10)',  border: 'rgba(255,69,58,0.24)'  },
 }
 
 function PostCard({ post, index }: { post: Post; index: number }) {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '-40px' })
   const navigate = useNavigate()
+  const diff = difficultyConfig[post.difficulty] ?? difficultyConfig.Medium
 
   return (
     <motion.article
-      onClick={() => navigate(`/blog/${post.id}`)}
       ref={ref}
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 28 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.5, delay: index * 0.08 }}
+      transition={{ duration: 0.55, delay: index * 0.09, ease: [0.34, 1.1, 0.64, 1] }}
+      onClick={() => navigate(`/blog/${post.id}`)}
       className="glass-card"
-      style={{ padding: '28px 32px', cursor: 'pointer' }}
-      whileHover={{ y: -3 }}
+      style={{
+        padding: '28px 30px',
+        cursor: 'pointer',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 0,
+      }}
     >
-      <div className="flex items-start justify-between gap-4">
-        <div style={{ flex: 1 }}>
-          {/* Meta */}
-          <div className="flex flex-wrap items-center gap-3 mb-4 text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--text-tertiary)' }}>
-            <span style={{
-              color: difficultyColor[post.difficulty],
-              background: `${difficultyColor[post.difficulty]}15`,
-              padding: '4px 10px',
-              borderRadius: '99px',
-              border: `1px solid ${difficultyColor[post.difficulty]}30`
-            }}>
-              {post.difficulty}
+      {/* Meta row */}
+      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+        <span
+          style={{
+            padding: '3px 10px',
+            borderRadius: 980,
+            fontSize: '0.6875rem',
+            fontWeight: 700,
+            fontFamily: 'var(--font-body)',
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+            color: diff.color,
+            background: diff.bg,
+            border: `1px solid ${diff.border}`,
+          }}
+        >
+          {post.difficulty}
+        </span>
+        <span
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 5,
+            fontSize: '0.75rem',
+            color: 'var(--text-tertiary)',
+            fontFamily: 'var(--font-body)',
+          }}
+        >
+          <Clock size={11} />
+          {post.readTime}
+        </span>
+        <span style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', fontFamily: 'var(--font-body)' }}>
+          {post.date}
+        </span>
+      </div>
+
+      {/* Title */}
+      <h3
+        className="text-title"
+        style={{
+          color: 'var(--text-primary)',
+          marginBottom: 10,
+          fontSize: '1.125rem',
+          fontFamily: 'var(--font-heading)',
+        }}
+      >
+        {post.title}
+      </h3>
+
+      {/* Excerpt */}
+      <p className="text-body" style={{ fontSize: '0.9rem', marginBottom: 20, flex: 1 }}>
+        {post.excerpt}
+      </p>
+
+      {/* Footer */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        {/* Tags */}
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+          {post.tags.slice(0, 3).map((tag) => (
+            <span
+              key={tag}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 4,
+                color: 'var(--text-tertiary)',
+                fontSize: '0.75rem',
+                fontFamily: 'var(--font-body)',
+                background: 'rgba(255,255,255,0.04)',
+                padding: '3px 9px',
+                borderRadius: 6,
+                border: '1px solid rgba(255,255,255,0.06)',
+              }}
+            >
+              <Tag size={10} />
+              {tag}
             </span>
-            <span className="flex items-center gap-1.5"><Clock size={14} />{post.readTime}</span>
-            <span className="flex items-center gap-1.5">{post.date}</span>
-          </div>
-
-          {/* Title */}
-          <h3 className="text-title mb-3" style={{ color: 'var(--text-primary)' }}>
-            {post.title}
-          </h3>
-
-          {/* Excerpt */}
-          <p className="text-body mb-6" style={{ fontSize: '0.95rem' }}>
-            {post.excerpt}
-          </p>
-
-          {/* Tags */}
-          <div className="flex flex-wrap gap-2">
-            {post.tags.map(tag => (
-              <span key={tag} className="flex items-center gap-1.5" style={{
-                color: 'var(--text-secondary)',
-                fontSize: '0.8125rem',
-                background: 'rgba(255,255,255,0.03)',
-                padding: '4px 10px',
-                borderRadius: '6px',
-                border: '1px solid rgba(255,255,255,0.05)'
-              }}>
-                <Tag size={12} />
-                {tag}
-              </span>
-            ))}
-          </div>
+          ))}
         </div>
 
-        {/* Read Indicator */}
-        <div style={{
-          width: '40px',
-          height: '40px',
-          borderRadius: '50%',
-          background: 'rgba(255,255,255,0.03)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: 'var(--text-secondary)',
-          border: '1px solid rgba(255,255,255,0.05)',
-          flexShrink: 0
-        }}>
-          <ArrowRight size={18} />
+        {/* Read arrow */}
+        <div
+          style={{
+            width: 36,
+            height: 36,
+            borderRadius: '50%',
+            background: 'rgba(255,255,255,0.05)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'var(--text-tertiary)',
+            border: '1px solid rgba(255,255,255,0.08)',
+            flexShrink: 0,
+            transition: 'all 0.2s ease',
+          }}
+        >
+          <ArrowUpRight size={16} />
         </div>
       </div>
     </motion.article>
@@ -100,51 +144,75 @@ export default function Blog() {
   }, [])
 
   return (
-    <section id="blog" className="section-container" style={{ padding: '120px 24px' }}>
-      {/* Section Header */}
-      <div style={{ marginBottom: '64px', maxWidth: '600px' }}>
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="flex items-center gap-2 mb-4"
-          style={{ color: 'var(--accent-blue)' }}
-        >
-          <BookOpen size={20} />
-          <span className="text-label">Technical Notes</span>
-        </motion.div>
+    <section
+      id="blog"
+      style={{
+        padding: '120px 0',
+        background: 'var(--bg-secondary)',
+        position: 'relative',
+      }}
+    >
+      {/* Top separator */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: 900,
+          height: 1,
+          background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent)',
+          pointerEvents: 'none',
+        }}
+      />
 
-        <motion.h2
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.1 }}
-          className="text-headline mb-6"
-          style={{ color: 'var(--text-primary)' }}
-        >
-          SRE 與開發筆記
-        </motion.h2>
+      <div className="section-container">
+        {/* Header */}
+        <div style={{ marginBottom: 64, maxWidth: 620 }}>
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16, color: 'var(--accent-blue)' }}
+          >
+            <BookOpen size={18} />
+            <span className="text-label">Technical Notes</span>
+          </motion.div>
 
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.2 }}
-          className="text-body"
-        >
-          紀錄系統架構設計、演算法解題思維以及基礎設施自動化的實戰經驗。
-        </motion.p>
-      </div>
+          <motion.h2
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.08 }}
+            className="text-headline"
+            style={{ color: 'var(--text-primary)', marginBottom: 16 }}
+          >
+            SRE 與開發筆記
+          </motion.h2>
 
-      {/* Posts Grid */}
-      <div style={{
-        display: 'grid',
-        gap: '24px',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 500px), 1fr))'
-      }}>
-        {posts.map((post, index) => (
-          <PostCard key={post.id} post={post} index={index} />
-        ))}
+          <motion.p
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.16 }}
+            className="text-body"
+          >
+            紀錄系統架構設計、演算法解題思維以及基礎設施自動化的實戰經驗。
+          </motion.p>
+        </div>
+
+        {/* Posts grid */}
+        <div
+          style={{
+            display: 'grid',
+            gap: '16px',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 460px), 1fr))',
+          }}
+        >
+          {posts.map((post, index) => (
+            <PostCard key={post.id} post={post} index={index} />
+          ))}
+        </div>
       </div>
     </section>
   )

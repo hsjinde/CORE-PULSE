@@ -1,28 +1,59 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
-import { ArrowDown, Code2, Link2, Terminal } from 'lucide-react'
+import { ArrowDown, Code2, ExternalLink, Terminal } from 'lucide-react'
 
-const roles = ['SRE Engineer', 'AI Systems Developer', 'Infrastructure Architect', 'Reliability Engineer']
+const roles = [
+  'SRE Engineer',
+  'AI Systems Developer',
+  'Infrastructure Architect',
+  'Reliability Engineer',
+]
+
+/* ── Floating Orb ─────────────────────────────────────────────── */
+function GlowOrb({
+  x, y, size, color, mouseX, mouseY, factor,
+}: {
+  x: string; y: string; size: number; color: string;
+  mouseX: number; mouseY: number; factor: number
+}) {
+  return (
+    <motion.div
+      className="absolute rounded-full pointer-events-none"
+      style={{
+        width: size,
+        height: size,
+        left: x,
+        top: y,
+        background: `radial-gradient(circle, ${color} 0%, transparent 70%)`,
+        filter: 'blur(1px)',
+      }}
+      animate={{ x: mouseX * factor, y: mouseY * factor }}
+      transition={{ type: 'spring', stiffness: 30, damping: 18, mass: 0.8 }}
+    />
+  )
+}
 
 export default function Hero() {
-  const [roleIndex, setRoleIndex] = useState(0)
+  const [roleIndex,   setRoleIndex]   = useState(0)
   const [displayText, setDisplayText] = useState('')
-  const [isDeleting, setIsDeleting] = useState(false)
+  const [isDeleting,  setIsDeleting]  = useState(false)
+  const [mouseOffset, setMouseOffset] = useState({ x: 0, y: 0 })
   const containerRef = useRef<HTMLDivElement>(null)
 
+  /* ── Scroll parallax ─── */
   const { scrollY } = useScroll()
-  const rawY = useTransform(scrollY, [0, 600], [0, -120])
-  const y = useSpring(rawY, { stiffness: 80, damping: 20 })
-  const opacity = useTransform(scrollY, [0, 400], [1, 0])
+  const rawY  = useTransform(scrollY, [0, 700], [0, -130])
+  const y     = useSpring(rawY, { stiffness: 70, damping: 18 })
+  const opacity = useTransform(scrollY, [0, 450], [1, 0])
 
-  // Typewriter effect
+  /* ── Typewriter ─────── */
   useEffect(() => {
     const current = roles[roleIndex]
     const timeout = setTimeout(() => {
       if (!isDeleting) {
         setDisplayText(current.slice(0, displayText.length + 1))
         if (displayText.length + 1 === current.length) {
-          setTimeout(() => setIsDeleting(true), 2000)
+          setTimeout(() => setIsDeleting(true), 2200)
         }
       } else {
         setDisplayText(current.slice(0, displayText.length - 1))
@@ -31,17 +62,17 @@ export default function Hero() {
           setRoleIndex((i) => (i + 1) % roles.length)
         }
       }
-    }, isDeleting ? 40 : 80)
+    }, isDeleting ? 35 : 75)
     return () => clearTimeout(timeout)
   }, [displayText, isDeleting, roleIndex])
 
-  // Mouse parallax
-  const [mouseOffset, setMouseOffset] = useState({ x: 0, y: 0 })
+  /* ── Mouse parallax ─── */
   useEffect(() => {
     const handleMouse = (e: MouseEvent) => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 20
-      const y = (e.clientY / window.innerHeight - 0.5) * 20
-      setMouseOffset({ x, y })
+      setMouseOffset({
+        x: (e.clientX / window.innerWidth  - 0.5) * 24,
+        y: (e.clientY / window.innerHeight - 0.5) * 24,
+      })
     }
     window.addEventListener('mousemove', handleMouse)
     return () => window.removeEventListener('mousemove', handleMouse)
@@ -51,105 +82,129 @@ export default function Hero() {
     <section
       ref={containerRef}
       id="hero"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
-      style={{ background: 'var(--gradient-hero)' }}
+      className="relative min-h-screen flex items-center justify-center overflow-hidden noise-overlay"
+      style={{ background: 'var(--bg-primary)' }}
     >
-      {/* Background grid */}
+      {/* ── Deep ambient background ─── */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: `
+            radial-gradient(ellipse 80% 60% at 20% 30%, rgba(41,151,255,0.09) 0%, transparent 65%),
+            radial-gradient(ellipse 60% 50% at 80% 70%, rgba(191,90,242,0.08) 0%, transparent 65%),
+            radial-gradient(ellipse 50% 40% at 50% 50%, rgba(0,0,0,0.6) 0%, transparent 100%)
+          `,
+        }}
+      />
+
+      {/* ── Subtle grid ─────────── */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           backgroundImage: `
-            linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)
+            linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)
           `,
-          backgroundSize: '60px 60px',
+          backgroundSize: '64px 64px',
+          maskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 100%)',
+          WebkitMaskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 100%)',
         }}
       />
 
-      {/* Ambient glow orbs */}
-      <motion.div
-        className="absolute rounded-full blur-3xl pointer-events-none"
-        style={{
-          width: 600,
-          height: 600,
-          background: 'radial-gradient(circle, rgba(41,151,255,0.12) 0%, transparent 70%)',
-          top: '10%',
-          left: '10%',
-          x: mouseOffset.x * -1.5,
-          y: mouseOffset.y * -1.5,
-        }}
-        animate={{ x: mouseOffset.x * -1.5, y: mouseOffset.y * -1.5 }}
-        transition={{ type: 'spring', stiffness: 40, damping: 15 }}
-      />
-      <motion.div
-        className="absolute rounded-full blur-3xl pointer-events-none"
-        style={{
-          width: 400,
-          height: 400,
-          background: 'radial-gradient(circle, rgba(191,90,242,0.08) 0%, transparent 70%)',
-          bottom: '20%',
-          right: '15%',
-        }}
-        animate={{ x: mouseOffset.x * 1.2, y: mouseOffset.y * 1.2 }}
-        transition={{ type: 'spring', stiffness: 30, damping: 15 }}
-      />
+      {/* ── Parallax glow orbs ─── */}
+      <GlowOrb x="5%"  y="12%" size={700} color="rgba(41,151,255,0.10)"  mouseX={mouseOffset.x} mouseY={mouseOffset.y} factor={-1.8} />
+      <GlowOrb x="55%" y="55%" size={500} color="rgba(191,90,242,0.08)"  mouseX={mouseOffset.x} mouseY={mouseOffset.y} factor={ 1.4} />
+      <GlowOrb x="30%" y="70%" size={350} color="rgba(48,209,88,0.06)"   mouseX={mouseOffset.x} mouseY={mouseOffset.y} factor={-1.0} />
 
-      {/* Main content */}
+      {/* ── Main Content ────────── */}
       <motion.div
         className="relative z-10 text-center section-container"
-        style={{ y, opacity }}
+        style={{ y, opacity, paddingTop: 80 }}
       >
-        {/* Badge */}
+        {/* Status badge */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1, duration: 0.6 }}
-          className="inline-flex items-center gap-2 mb-8"
+          initial={{ opacity: 0, y: 20, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0,  scale: 1    }}
+          transition={{ delay: 0.15, duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
           style={{
-            padding: '6px 16px',
-            borderRadius: '980px',
-            background: 'rgba(41, 151, 255, 0.12)',
-            border: '1px solid rgba(41, 151, 255, 0.25)',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 8,
+            marginBottom: 40,
+            padding: '7px 18px',
+            borderRadius: 980,
+            background: 'rgba(48,209,88,0.08)',
+            border: '1px solid rgba(48,209,88,0.22)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
           }}
         >
           <span className="status-dot" />
-          <span style={{ fontSize: '0.8125rem', color: 'var(--accent-blue)', fontWeight: 500 }}>
+          <span style={{ fontSize: '0.8125rem', fontFamily: 'var(--font-body)', color: 'var(--accent-green)', fontWeight: 500 }}>
             Available for opportunities
           </span>
         </motion.div>
 
-        {/* Name */}
+        {/* Main heading */}
         <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
-          className="text-display mb-4"
+          initial={{ opacity: 0, y: 36 }}
+          animate={{ opacity: 1, y: 0  }}
+          transition={{ delay: 0.25, duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
+          className="text-display mb-6"
         >
-          I'm <span className="gradient-text-warm">Ethan</span>. I build{' '}
-          <span className="gradient-text-blue">resilient</span>
+          I'm{' '}
+          <span
+            style={{
+              background: 'linear-gradient(135deg, #ffd700 0%, #ff9f0a 60%, #ff6b35 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            }}
+          >
+            Ethan
+          </span>
+          {'.'} I build
           <br />
+          <span
+            style={{
+              background: 'linear-gradient(135deg, #5eb8ff 0%, #2997ff 50%, #bf5af2 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            }}
+          >
+            resilient
+          </span>{' '}
           AI systems.
         </motion.h1>
 
-        {/* Typewriter role */}
+        {/* Typewriter */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5, duration: 0.5 }}
-          className="text-title mb-8"
-          style={{ color: 'var(--text-secondary)', minHeight: '2rem' }}
+          className="text-title"
+          style={{
+            color: 'var(--text-tertiary)',
+            minHeight: '2.4rem',
+            marginBottom: 32,
+            fontFamily: 'var(--font-body)',
+            fontWeight: 400,
+            letterSpacing: '-0.01em',
+          }}
         >
-          <span style={{ color: 'var(--text-tertiary)' }}>{'// '}</span>
-          <span>{displayText}</span>
+          <span style={{ color: 'rgba(41,151,255,0.45)', fontFamily: 'ui-monospace, monospace', fontSize: '0.9em' }}>{'// '}</span>
+          <span style={{ color: 'var(--text-secondary)' }}>{displayText}</span>
           <span
             style={{
               display: 'inline-block',
-              width: '2px',
-              height: '1.2em',
+              width: 2,
+              height: '1.1em',
               background: 'var(--accent-blue)',
-              marginLeft: '2px',
+              marginLeft: 2,
               verticalAlign: 'middle',
-              animation: 'fade-in 0.8s ease infinite alternate',
+              borderRadius: 1,
+              animation: 'glow-pulse 0.8s ease-in-out infinite alternate',
             }}
           />
         </motion.div>
@@ -157,10 +212,10 @@ export default function Hero() {
         {/* Description */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.6 }}
-          className="text-body mx-auto mb-12"
-          style={{ maxWidth: 560 }}
+          animate={{ opacity: 1, y: 0  }}
+          transition={{ delay: 0.62, duration: 0.6 }}
+          className="text-body mx-auto"
+          style={{ maxWidth: 540, marginBottom: 48 }}
         >
           SRE 工程師與 AI 系統開發者。致力於 RNN 查詢優化研究與高可用架構設計，
           以 SRE 思維構建能夠自我修復的智能化基礎設施。
@@ -169,31 +224,36 @@ export default function Hero() {
         {/* CTA Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.75, duration: 0.6 }}
-          className="flex items-center justify-center gap-4 flex-wrap mb-16"
+          animate={{ opacity: 1, y: 0  }}
+          transition={{ delay: 0.78, duration: 0.6 }}
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 14, flexWrap: 'wrap', marginBottom: 64 }}
         >
           <a href="#projects" className="btn-primary">
-            <Terminal size={16} />
+            <Terminal size={15} />
             View Projects
           </a>
-          <a href="https://github.com/hsjinde" target="_blank" rel="noopener noreferrer" className="btn-ghost">
-            <Code2 size={16} />
+          <a
+            href="https://github.com/hsjinde"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-ghost"
+          >
+            <Code2 size={15} />
             GitHub
           </a>
         </motion.div>
 
-        {/* Social links */}
+        {/* Social row */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1, duration: 0.5 }}
-          className="flex items-center justify-center gap-6"
+          transition={{ delay: 1.0, duration: 0.5 }}
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 28 }}
         >
           {[
-            { icon: Code2, label: 'GitHub', href: 'https://github.com/hsjinde' },
-            { icon: Link2, label: 'LinkedIn', href: '#' },
-            { icon: Terminal, label: 'Blog', href: '#blog' },
+            { icon: Code2,        label: 'GitHub',   href: 'https://github.com/hsjinde' },
+            { icon: ExternalLink, label: 'LinkedIn', href: '#' },
+            { icon: Terminal,     label: 'Blog',     href: '#blog' },
           ].map(({ icon: Icon, label, href }) => (
             <a
               key={label}
@@ -203,12 +263,15 @@ export default function Hero() {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '6px',
+                gap: 7,
                 color: 'var(--text-tertiary)',
                 textDecoration: 'none',
+                fontFamily: 'var(--font-body)',
                 fontSize: '0.875rem',
                 fontWeight: 500,
+                letterSpacing: '-0.01em',
                 transition: 'color 0.2s ease',
+                cursor: 'pointer',
               }}
               onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--text-primary)')}
               onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-tertiary)')}
@@ -220,19 +283,26 @@ export default function Hero() {
         </motion.div>
       </motion.div>
 
-      {/* Scroll indicator */}
+      {/* ── Scroll indicator ── */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.5, duration: 0.5 }}
+        transition={{ delay: 1.6, duration: 0.5 }}
         className="absolute bottom-10 left-1/2 -translate-x-1/2"
-        style={{ color: 'var(--text-tertiary)' }}
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: 6,
+          color: 'var(--text-tertiary)',
+        }}
       >
+        <span style={{ fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', fontFamily: 'var(--font-body)' }}>Scroll</span>
         <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+          animate={{ y: [0, 9, 0] }}
+          transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
         >
-          <ArrowDown size={20} />
+          <ArrowDown size={16} />
         </motion.div>
       </motion.div>
     </section>

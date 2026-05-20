@@ -1,40 +1,59 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Terminal, Code2, Menu, X } from 'lucide-react'
+import { Terminal, Code2, X, AlignRight } from 'lucide-react'
 
 const navLinks = [
-  { href: '#skills', label: 'Skills' },
-  { href: '#projects', label: 'Projects' },
-  { href: '#blog', label: 'Blog' },
-  { href: '#contact', label: 'Contact' },
+  { href: '#skills',   label: 'Skills'    },
+  { href: '#projects', label: 'Projects'  },
+  { href: '#blog',     label: 'Blog'      },
+  { href: '#contact',  label: 'Contact'   },
 ]
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false)
-  const [mobileOpen, setMobileOpen] = useState(false)
+  const [scrolled,    setScrolled]    = useState(false)
+  const [mobileOpen,  setMobileOpen]  = useState(false)
+  const [activeHash,  setActiveHash]  = useState('')
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50)
+    const onScroll = () => setScrolled(window.scrollY > 60)
     window.addEventListener('scroll', onScroll)
     return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  /* Track active section */
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => { if (e.isIntersecting) setActiveHash('#' + e.target.id) })
+      },
+      { threshold: 0.4 }
+    )
+    document.querySelectorAll('section[id], footer[id]').forEach((el) => obs.observe(el))
+    return () => obs.disconnect()
   }, [])
 
   return (
     <motion.header
       initial={{ y: -80, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+      animate={{ y: 0,   opacity: 1 }}
+      transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
       style={{
         position: 'fixed',
         top: 0,
         left: 0,
         right: 0,
-        zIndex: 100,
-        padding: '0 24px',
-        transition: 'all 0.3s ease',
-        background: scrolled ? 'rgba(0,0,0,0.75)' : 'transparent',
-        backdropFilter: scrolled ? 'blur(20px) saturate(180%)' : 'none',
-        borderBottom: scrolled ? '1px solid var(--border)' : '1px solid transparent',
+        zIndex: 200,
+        transition: 'background 0.4s ease, border-color 0.4s ease, backdrop-filter 0.4s ease',
+        ...(scrolled ? {
+          background:     'rgba(0, 0, 0, 0.60)',
+          backdropFilter: 'blur(60px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(60px) saturate(180%)',
+          borderBottom:   '1px solid rgba(255,255,255,0.07)',
+        } : {
+          background:     'transparent',
+          backdropFilter: 'none',
+          borderBottom:   '1px solid transparent',
+        }),
       }}
     >
       <div
@@ -43,122 +62,203 @@ export default function Navbar() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          height: 60,
-          padding: '0 24px',
+          height: 64,
         }}
       >
-        {/* Logo */}
+        {/* ── Logo ─────────────────────────────────── */}
         <a
           href="#hero"
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: 8,
+            gap: 9,
             textDecoration: 'none',
             color: 'var(--text-primary)',
           }}
         >
-          <Terminal size={18} style={{ color: 'var(--accent-blue)' }} />
-          <span style={{ fontWeight: 700, letterSpacing: '-0.02em' }}>Core Pulse</span>
+          {/* Icon glass pill */}
+          <div
+            style={{
+              width: 32,
+              height: 32,
+              borderRadius: 10,
+              background: 'rgba(41,151,255,0.14)',
+              border: '1px solid rgba(41,151,255,0.30)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backdropFilter: 'blur(12px)',
+              WebkitBackdropFilter: 'blur(12px)',
+            }}
+          >
+            <Terminal size={15} color="var(--accent-blue)" strokeWidth={2} />
+          </div>
+          <span
+            style={{
+              fontFamily: 'var(--font-heading)',
+              fontWeight: 700,
+              fontSize: '1rem',
+              letterSpacing: '-0.03em',
+            }}
+          >
+            Core Pulse
+          </span>
         </a>
 
-        {/* Desktop nav */}
+        {/* ── Desktop Nav ───────────────────────────── */}
         <nav
-          style={{ display: 'flex', alignItems: 'center', gap: 32 }}
           className="hidden md:flex"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 2,
+            background: 'rgba(255,255,255,0.04)',
+            border: '1px solid rgba(255,255,255,0.07)',
+            borderRadius: 980,
+            padding: '4px 6px',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+          }}
         >
-          {navLinks.map(({ href, label }) => (
-            <a
-              key={label}
-              href={href}
-              style={{
-                fontSize: '0.9rem',
-                fontWeight: 500,
-                color: 'var(--text-secondary)',
-                textDecoration: 'none',
-                transition: 'color 0.2s ease',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--text-primary)')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-secondary)')}
-            >
-              {label}
-            </a>
-          ))}
+          {navLinks.map(({ href, label }) => {
+            const isActive = activeHash === href
+            return (
+              <a
+                key={label}
+                href={href}
+                style={{
+                  position: 'relative',
+                  padding: '6px 16px',
+                  borderRadius: 980,
+                  fontSize: '0.875rem',
+                  fontFamily: 'var(--font-body)',
+                  fontWeight: 500,
+                  letterSpacing: '-0.01em',
+                  color: isActive ? '#fff' : 'var(--text-secondary)',
+                  textDecoration: 'none',
+                  background: isActive ? 'rgba(255,255,255,0.10)' : 'transparent',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseEnter={(e) => {
+                  if (!isActive) e.currentTarget.style.color = 'var(--text-primary)'
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) e.currentTarget.style.color = 'var(--text-secondary)'
+                }}
+              >
+                {label}
+              </a>
+            )
+          })}
+        </nav>
+
+        {/* ── GitHub CTA ────────────────────────────── */}
+        <div className="hidden md:flex" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <a
-            href="#"
+            href="https://github.com/hsjinde"
             target="_blank"
             rel="noopener noreferrer"
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: 6,
-              padding: '7px 16px',
-              borderRadius: '980px',
-              border: '1px solid var(--border)',
+              gap: 7,
+              padding: '8px 18px',
+              borderRadius: 980,
+              background: 'rgba(255,255,255,0.07)',
+              border: '1px solid rgba(255,255,255,0.12)',
               fontSize: '0.875rem',
+              fontFamily: 'var(--font-body)',
               fontWeight: 500,
               color: 'var(--text-secondary)',
               textDecoration: 'none',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
               transition: 'all 0.2s ease',
+              cursor: 'pointer',
             }}
             onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'rgba(255,255,255,0.12)'
               e.currentTarget.style.color = 'var(--text-primary)'
-              e.currentTarget.style.borderColor = 'var(--border-hover)'
+              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.22)'
             }}
             onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'rgba(255,255,255,0.07)'
               e.currentTarget.style.color = 'var(--text-secondary)'
-              e.currentTarget.style.borderColor = 'var(--border)'
+              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)'
             }}
           >
             <Code2 size={14} />
             GitHub
           </a>
-        </nav>
+        </div>
 
-        {/* Mobile menu toggle */}
+        {/* ── Mobile Hamburger ──────────────────────── */}
         <button
           className="md:hidden"
           onClick={() => setMobileOpen(!mobileOpen)}
+          aria-label="Toggle menu"
           style={{
-            background: 'none',
-            border: 'none',
+            background: 'rgba(255,255,255,0.06)',
+            border: '1px solid rgba(255,255,255,0.10)',
+            borderRadius: 10,
             color: 'var(--text-primary)',
             cursor: 'pointer',
-            padding: 4,
+            padding: '7px 8px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            transition: 'all 0.2s ease',
           }}
-          aria-label="Toggle menu"
         >
-          {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+          {mobileOpen ? <X size={18} /> : <AlignRight size={18} />}
         </button>
       </div>
 
-      {/* Mobile drawer */}
+      {/* ── Mobile Drawer ─────────────────────────── */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
+            initial={{ opacity: 0, y: -12, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0,   scale: 1     }}
+            exit={{    opacity: 0, y: -8,   scale: 0.98  }}
+            transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
             style={{
-              background: 'rgba(0,0,0,0.92)',
-              backdropFilter: 'blur(20px)',
-              borderTop: '1px solid var(--border)',
+              margin: '8px 16px',
+              borderRadius: 20,
+              background: 'rgba(10, 10, 10, 0.85)',
+              backdropFilter: 'blur(60px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(60px) saturate(180%)',
+              border: '1px solid rgba(255,255,255,0.10)',
               overflow: 'hidden',
+              boxShadow: '0 24px 64px rgba(0,0,0,0.7)',
             }}
           >
-            <div style={{ padding: '16px 24px', display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <div style={{ padding: '8px 8px' }}>
               {navLinks.map(({ href, label }) => (
                 <a
                   key={label}
                   href={href}
                   onClick={() => setMobileOpen(false)}
                   style={{
-                    padding: '12px 0',
+                    display: 'block',
+                    padding: '13px 20px',
                     fontSize: '1rem',
+                    fontFamily: 'var(--font-body)',
                     fontWeight: 500,
                     color: 'var(--text-secondary)',
                     textDecoration: 'none',
-                    borderBottom: '1px solid var(--border)',
+                    borderRadius: 12,
+                    transition: 'all 0.15s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = 'rgba(255,255,255,0.06)'
+                    e.currentTarget.style.color = 'var(--text-primary)'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = 'transparent'
+                    e.currentTarget.style.color = 'var(--text-secondary)'
                   }}
                 >
                   {label}
