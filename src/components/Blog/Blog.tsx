@@ -16,7 +16,6 @@ function PostCard({ post, index }: { post: Post; index: number }) {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '-40px' })
   const navigate = useNavigate()
-  const diff = difficultyConfig[post.difficulty] ?? difficultyConfig.Medium
 
   return (
     <motion.article
