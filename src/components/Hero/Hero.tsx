@@ -193,7 +193,7 @@ export default function Hero() {
             letterSpacing: '-0.01em',
           }}
         >
-          <span style={{ color: 'rgba(41,151,255,0.45)', fontFamily: 'ui-monospace, monospace', fontSize: '0.9em' }}>{'// '}</span>
+          <span className="hidden md:inline" style={{ color: 'rgba(41,151,255,0.45)', fontFamily: 'ui-monospace, monospace', fontSize: '0.9em' }}>{'// '}</span>
           <span style={{ color: 'var(--text-secondary)' }}>{displayText}</span>
           <span
             style={{
@@ -226,7 +226,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0  }}
           transition={{ delay: 0.78, duration: 0.6 }}
-          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 14, flexWrap: 'wrap', marginBottom: 64 }}
+          className="hero-cta-row"
         >
           <a href="#projects" className="btn-primary">
             <Terminal size={15} />
@@ -248,7 +248,7 @@ export default function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.0, duration: 0.5 }}
-          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 28 }}
+          className="hero-social-row"
         >
           {[
             { icon: Code2,        label: 'GitHub',   href: 'https://github.com/hsjinde' },
