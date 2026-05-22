@@ -160,8 +160,8 @@ export default function Blog() {
   return (
     <section
       id="blog"
+      className="section-padding"
       style={{
-        padding: '120px 0',
         background: 'var(--bg-secondary)',
         position: 'relative',
       }}

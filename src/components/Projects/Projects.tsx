@@ -130,15 +130,8 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           }}
         />
 
-        <div style={{ padding: '40px 44px', position: 'relative', zIndex: 1 }}>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 320px',
-              gap: 40,
-              alignItems: 'flex-start',
-            }}
-          >
+        <div className="project-card-inner" style={{ position: 'relative', zIndex: 1 }}>
+          <div className="project-card-grid">
             {/* ── Left: Main info ── */}
             <div>
               {/* Subtitle pill */}
@@ -269,8 +262,8 @@ export default function Projects() {
   return (
     <section
       id="projects"
+      className="section-padding"
       style={{
-        padding: '120px 0',
         background: 'var(--bg-primary)',
         position: 'relative',
       }}

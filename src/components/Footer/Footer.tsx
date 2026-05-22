@@ -72,14 +72,7 @@ export default function Footer() {
           transition={{ duration: 0.7 }}
         >
           {/* ── Top grid ── */}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr 1fr',
-              gap: 48,
-              marginBottom: 56,
-            }}
-          >
+          <div className="footer-grid">
             {/* Col 1: Brand */}
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 18 }}>

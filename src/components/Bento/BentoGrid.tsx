@@ -112,8 +112,8 @@ export default function BentoGrid() {
   return (
     <section
       id="skills"
+      className="section-padding"
       style={{
-        padding: '120px 0',
         background: 'var(--bg-secondary)',
         position: 'relative',
       }}
@@ -146,16 +146,9 @@ export default function BentoGrid() {
         </motion.div>
 
         {/* Bento Grid */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(12, 1fr)',
-            gridAutoRows: 'auto',
-            gap: '14px',
-          }}
-        >
+        <div className="bento-grid">
           {/* ── Card 1: SRE Status (4 cols) ── */}
-          <div style={{ gridColumn: 'span 4' }}>
+          <div className="bento-col-4">
             <BentoCard
               delay={0.05}
               className="h-full"
@@ -180,7 +173,7 @@ export default function BentoGrid() {
           </div>
 
           {/* ── Card 2: Core Stack (8 cols) ── */}
-          <div style={{ gridColumn: 'span 8' }}>
+          <div className="bento-col-8">
             <BentoCard delay={0.1} className="h-full">
               <div className="flex items-center gap-2" style={{ marginBottom: 20 }}>
                 <Code2 size={15} style={{ color: 'var(--accent-blue)' }} />
@@ -218,7 +211,7 @@ export default function BentoGrid() {
           </div>
 
           {/* ── Card 3: AI / OpenClaw (5 cols) ── */}
-          <div style={{ gridColumn: 'span 5' }}>
+          <div className="bento-col-5">
             <BentoCard
               delay={0.15}
               className="h-full"
@@ -252,7 +245,7 @@ export default function BentoGrid() {
           </div>
 
           {/* ── Card 4: Infrastructure (4 cols) ── */}
-          <div style={{ gridColumn: 'span 4' }}>
+          <div className="bento-col-4">
             <BentoCard delay={0.2} className="h-full">
               <div className="flex items-center gap-2" style={{ marginBottom: 20 }}>
                 <Server size={15} style={{ color: 'var(--accent-green)' }} />
@@ -305,7 +298,7 @@ export default function BentoGrid() {
           </div>
 
           {/* ── Card 5: CI/CD (3 cols) ── */}
-          <div style={{ gridColumn: 'span 3' }}>
+          <div className="bento-col-3">
             <BentoCard delay={0.25} className="h-full">
               <div className="flex items-center gap-2" style={{ marginBottom: 20 }}>
                 <GitBranch size={15} style={{ color: 'var(--accent-orange)' }} />
@@ -346,7 +339,7 @@ export default function BentoGrid() {
           </div>
 
           {/* ── Card 6: Performance (6 cols) ── */}
-          <div style={{ gridColumn: 'span 6' }}>
+          <div className="bento-col-6">
             <BentoCard
               delay={0.3}
               glowColor="radial-gradient(ellipse at bottom left, rgba(41,151,255,0.07) 0%, transparent 65%)"
@@ -355,7 +348,7 @@ export default function BentoGrid() {
                 <Zap size={15} style={{ color: 'var(--accent-blue)' }} />
                 <span className="text-label">Performance Metrics</span>
               </div>
-              <div style={{ display: 'flex', gap: 32, position: 'relative', zIndex: 1 }}>
+              <div className="bento-metrics-row">
                 {[
                   { metric: 'LCP', value: '0.8s',  label: 'Largest Contentful Paint', color: 'var(--accent-green)'  },
                   { metric: 'FID', value: '<1ms',  label: 'First Input Delay',        color: 'var(--accent-green)'  },
@@ -382,13 +375,13 @@ export default function BentoGrid() {
           </div>
 
           {/* ── Card 7: Build Stats (6 cols) ── */}
-          <div style={{ gridColumn: 'span 6' }}>
+          <div className="bento-col-6">
             <BentoCard delay={0.35}>
               <div className="flex items-center gap-2" style={{ marginBottom: 20 }}>
                 <Cpu size={15} style={{ color: 'var(--accent-purple)' }} />
                 <span className="text-label">By the Numbers</span>
               </div>
-              <div style={{ display: 'flex', gap: 40 }}>
+              <div className="bento-metrics-row">
                 {[
                   { label: 'Projects', value: 12,  suffix: ''  },
                   { label: 'Commits',  value: 847, suffix: '+' },

@@ -34,7 +34,7 @@ export default function AdminDashboard() {
   return (
     <div style={{ background: 'var(--bg-primary)', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Navbar />
-      <main style={{ flex: 1, padding: '120px 24px', maxWidth: '1000px', margin: '0 auto', width: '100%' }}>
+      <main className="admin-main">
         <div className="flex items-center justify-between mb-12">
           <h1 className="text-3xl font-bold text-white">Content Management</h1>
           <div className="flex gap-4">
@@ -48,7 +48,8 @@ export default function AdminDashboard() {
         </div>
 
         <div className="glass-card overflow-hidden">
-          <table className="w-full text-left border-collapse">
+          <div className="admin-table-scroll">
+          <table className="w-full text-left border-collapse" style={{ minWidth: 600 }}>
             <thead>
               <tr className="border-b border-white/10 text-gray-400 text-sm">
                 <th className="p-4 font-medium">Title</th>
@@ -91,6 +92,7 @@ export default function AdminDashboard() {
               )}
             </tbody>
           </table>
+          </div>
         </div>
       </main>
       <Footer />

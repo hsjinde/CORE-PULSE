@@ -109,7 +109,6 @@ export default function Navbar() {
         <nav
           className="hidden md:flex"
           style={{
-            display: 'flex',
             alignItems: 'center',
             gap: 2,
             background: 'rgba(255,255,255,0.04)',
@@ -153,7 +152,7 @@ export default function Navbar() {
         </nav>
 
         {/* ── GitHub CTA ────────────────────────────── */}
-        <div className="hidden md:flex" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <div className="hidden md:flex" style={{ alignItems: 'center', gap: 12 }}>
           <a
             href="https://github.com/hsjinde"
             target="_blank"
@@ -194,7 +193,7 @@ export default function Navbar() {
 
         {/* ── Mobile Hamburger ──────────────────────── */}
         <button
-          className="md:hidden"
+          className="flex md:hidden"
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Toggle menu"
           style={{
@@ -204,7 +203,6 @@ export default function Navbar() {
             color: 'var(--text-primary)',
             cursor: 'pointer',
             padding: '7px 8px',
-            display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             backdropFilter: 'blur(20px)',

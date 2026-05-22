@@ -86,7 +86,7 @@ export default function BlogPost() {
   return (
     <div style={{ background: 'var(--bg-primary)', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Navbar />
-      <main style={{ flex: 1, padding: '120px 24px', maxWidth: '850px', margin: '0 auto', width: '100%' }}>
+      <main className="blogpost-main">
         <button 
           onClick={() => navigate('/')} 
           style={{ 
