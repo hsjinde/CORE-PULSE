@@ -6,6 +6,8 @@
 Thumbs.db
 .DS_Store
 
+design-style-description.txt
+
 # Node.js
 node_modules/
 npm-debug.log*
@@ -54,3 +56,4 @@ logs/
 
 # Ignore local .agent skill folder not meant for repo
 .agent/skills/ui-ux-pro-max/
+.claude/
