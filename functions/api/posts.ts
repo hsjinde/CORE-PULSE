@@ -18,7 +18,7 @@ export const onRequestPost = async (context: any) => {
   const tagsStr = JSON.stringify(post.tags || []);
   
   await context.env.core_pulse_blog.prepare(`
-    INSERT INTO posts (id, title, content, date, readTime, tags, excerpt, difficulty, coverImage)
+    INSERT INTO posts (id, title, content, date, readTime, tags, excerpt, postType, coverImage)
     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)
     ON CONFLICT(id) DO UPDATE SET
       title=excluded.title,
@@ -27,10 +27,10 @@ export const onRequestPost = async (context: any) => {
       readTime=excluded.readTime,
       tags=excluded.tags,
       excerpt=excluded.excerpt,
-      difficulty=excluded.difficulty,
+      postType=excluded.postType,
       coverImage=excluded.coverImage
   `).bind(
-    post.id, post.title, post.content, post.date, post.readTime, tagsStr, post.excerpt, post.difficulty, post.coverImage || ''
+    post.id, post.title, post.content, post.date, post.readTime, tagsStr, post.excerpt, post.postType, post.coverImage || ''
   ).run();
 
   return Response.json({ success: true });

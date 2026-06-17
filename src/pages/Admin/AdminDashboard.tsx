@@ -47,9 +47,9 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <div className="glass-card overflow-hidden">
+        <div className="glass-card" style={{ overflow: 'clip' }}>
           <div className="admin-table-scroll">
-          <table className="w-full text-left border-collapse" style={{ minWidth: 600 }}>
+          <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-white/10 text-gray-400 text-sm">
                 <th className="p-4 font-medium">Title</th>

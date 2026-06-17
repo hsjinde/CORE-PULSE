@@ -519,7 +519,7 @@ body {
 
   .blogpost-main { padding: 80px 16px; }
 
-  .admin-main { padding: 80px 16px; }
+  .admin-main { padding: 100px 16px 80px; }
 
   .prose { font-size: 0.9375rem; }
   .prose h2 { font-size: 1.5rem; }
@@ -538,7 +538,7 @@ body {
 /* ─── Admin Dashboard ────────────────────────────────────────── */
 .admin-main {
   flex: 1;
-  padding: 120px 24px;
+  padding: 140px 24px 80px;
   max-width: 1000px;
   margin: 0 auto;
   width: 100%;
@@ -547,6 +547,50 @@ body {
 .admin-table-scroll {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  padding: 8px 12px;
+}
+
+/* Admin table — prevent text clipping */
+.admin-table-scroll table {
+  table-layout: fixed;
+  width: 100%;
+  min-width: 640px;
+}
+
+.admin-table-scroll th,
+.admin-table-scroll td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+}
+
+/* Title column gets the most space */
+.admin-table-scroll th:first-child,
+.admin-table-scroll td:first-child {
+  width: 45%;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+}
+
+/* Date column */
+.admin-table-scroll th:nth-child(2),
+.admin-table-scroll td:nth-child(2) {
+  width: 20%;
+}
+
+/* Status column */
+.admin-table-scroll th:nth-child(3),
+.admin-table-scroll td:nth-child(3) {
+  width: 15%;
+}
+
+/* Actions column */
+.admin-table-scroll th:last-child,
+.admin-table-scroll td:last-child {
+  width: 20%;
 }
 
 /* ─── Prose (Blog) ────────────────────────────────────────────── */

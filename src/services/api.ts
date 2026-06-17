@@ -1,4 +1,4 @@
-export type PostType = 'Runbook' | 'Architecture' | 'DeepDive' | 'Tutorial'
+export type PostType = 'Learning' | 'Tools' | 'Work' | 'Daily'
 
 export interface Post {
   id: string
@@ -135,7 +135,7 @@ export const onRequestPost = async (context) => {
       readTime: '10 min',
       tags: ['SRE', 'CI/CD', 'Cloudflare', 'Serverless'],
       excerpt: '紀錄了 CORE PULSE 專案的誕生過程。從前端環境架設、GitHub Actions CI/CD 管線，到實作 R2 邊緣圖床與 D1 Serverless 資料庫，完整展示 SRE 架構思維。',
-      postType: 'Architecture',
+      postType: 'Work',
       coverImage: 'https://img.19980803.xyz/blog-cover-1.png'
     }
   ]
