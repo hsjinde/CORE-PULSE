@@ -19,7 +19,7 @@ export default function AdminEditor() {
     readTime: '5 min',
     tags: [],
     excerpt: '',
-    postType: 'Tutorial',
+    postType: 'Learning',
     coverImage: ''
   })
   const [tagInput, setTagInput] = useState('')
@@ -127,10 +127,10 @@ export default function AdminEditor() {
                   value={formData.postType} onChange={e => setFormData({...formData, postType: e.target.value as any})}
                   className="bg-black/50 border border-white/10 rounded px-4 py-2 text-white focus:outline-none"
                 >
-                  <option value="Tutorial">📖 Tutorial — 從零開始的教學</option>
-                  <option value="Runbook">🔧 Runbook — 可直接操作的步驟手冊</option>
-                  <option value="Architecture">🏗 Architecture — 系統架構 / 設計決策</option>
-                  <option value="DeepDive">🔬 Deep Dive — 原理深挖 / 技術探究</option>
+                  <option value="Learning">📖 個人學習 — 個人學習筆記</option>
+                  <option value="Tools">🔧 好工具推薦 — 工具推薦</option>
+                  <option value="Work">💼 工作專案 — 工作相關專案</option>
+                  <option value="Daily">☕ 日常 — 日常生活</option>
                 </select>
               </div>
               <input 

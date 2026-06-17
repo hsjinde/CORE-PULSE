@@ -4,17 +4,17 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeHighlight from 'rehype-highlight'
 import 'highlight.js/styles/github-dark-dimmed.css'
-import { ArrowLeft, Clock, Calendar, Terminal, Layers, SearchCode, GraduationCap } from 'lucide-react'
+import { ArrowLeft, Clock, Calendar, GraduationCap, Wrench, Briefcase, Coffee } from 'lucide-react'
 import Navbar from '@/components/Navbar/Navbar'
 import Footer from '@/components/Footer/Footer'
 import { getPostById } from '@/services/api'
 import type { Post, PostType } from '@/services/api'
 
 const postTypeConfig: Record<PostType, { color: string; label: string; Icon: React.ElementType }> = {
-  Runbook:      { color: '#30d158', label: 'Runbook',      Icon: Terminal      },
-  Architecture: { color: '#2997ff', label: 'Architecture', Icon: Layers        },
-  DeepDive:     { color: '#bf5af2', label: 'Deep Dive',    Icon: SearchCode    },
-  Tutorial:     { color: '#ff9f0a', label: 'Tutorial',     Icon: GraduationCap },
+  Learning: { color: '#ff9f0a', label: '個人學習', Icon: GraduationCap },
+  Tools:    { color: '#30d158', label: '好工具推薦', Icon: Wrench        },
+  Work:     { color: '#2997ff', label: '工作專案', Icon: Briefcase      },
+  Daily:    { color: '#bf5af2', label: '日常',     Icon: Coffee         },
 }
 
 // ─── Copy Code Block ─────────────────────────────────────────
@@ -109,7 +109,7 @@ export default function BlogPost() {
         <header className="mb-16">
           <div className="flex flex-wrap items-center gap-3 text-sm text-gray-400 mb-6">
             {(() => {
-              const cfg = postTypeConfig[post.postType] || postTypeConfig['Tutorial']
+              const cfg = postTypeConfig[post.postType] || postTypeConfig['Learning']
               const Icon = cfg.Icon
               return (
                 <span className="flex items-center gap-1.5" style={{

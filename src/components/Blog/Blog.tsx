@@ -1,15 +1,15 @@
 import { useRef, useEffect, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { BookOpen, Clock, Tag, ArrowUpRight, Terminal, Layers, SearchCode, GraduationCap } from 'lucide-react'
+import { BookOpen, Clock, Tag, ArrowUpRight, GraduationCap, Wrench, Briefcase, Coffee } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { getPosts } from '@/services/api'
 import type { Post, PostType } from '@/services/api'
 
 const postTypeConfig: Record<PostType, { color: string; label: string; Icon: React.ElementType }> = {
-  Runbook:      { color: '#30d158', label: 'Runbook',      Icon: Terminal       },
-  Architecture: { color: '#2997ff', label: 'Architecture', Icon: Layers         },
-  DeepDive:     { color: '#bf5af2', label: 'Deep Dive',    Icon: SearchCode     },
-  Tutorial:     { color: '#ff9f0a', label: 'Tutorial',     Icon: GraduationCap  },
+  Learning: { color: '#ff9f0a', label: '個人學習', Icon: GraduationCap },
+  Tools:    { color: '#30d158', label: '好工具推薦', Icon: Wrench        },
+  Work:     { color: '#2997ff', label: '工作專案', Icon: Briefcase      },
+  Daily:    { color: '#bf5af2', label: '日常',     Icon: Coffee         },
 }
 
 function PostCard({ post, index }: { post: Post; index: number }) {
@@ -38,7 +38,7 @@ function PostCard({ post, index }: { post: Post; index: number }) {
           {/* Meta row */}
           <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 10, marginBottom: 16 }}>
             {(() => {
-              const cfg = postTypeConfig[post.postType] || postTypeConfig['Tutorial']
+              const cfg = postTypeConfig[post.postType] || postTypeConfig['Learning']
               const Icon = cfg.Icon
               return (
                 <span
@@ -190,7 +190,7 @@ export default function Blog() {
             style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16, color: 'var(--accent-blue)' }}
           >
             <BookOpen size={18} />
-            <span className="text-label">Technical Notes</span>
+            <span className="text-label">Personal Notes</span>
           </motion.div>
 
           <motion.h2
@@ -201,7 +201,7 @@ export default function Blog() {
             className="text-headline"
             style={{ color: 'var(--text-primary)', marginBottom: 16 }}
           >
-            SRE 與開發筆記
+            個人筆記
           </motion.h2>
 
           <motion.p
@@ -211,7 +211,7 @@ export default function Blog() {
             transition={{ delay: 0.16 }}
             className="text-body"
           >
-            紀錄系統架構設計、演算法解題思維以及基礎設施自動化的實戰經驗。
+            紀錄個人學習、工具推薦、工作專案與日常生活的各種筆記。
           </motion.p>
         </div>
 

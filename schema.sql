@@ -7,12 +7,12 @@ CREATE TABLE posts (
   readTime TEXT NOT NULL,
   tags TEXT NOT NULL,
   excerpt TEXT NOT NULL,
-  difficulty TEXT NOT NULL,
+  postType TEXT NOT NULL,
   coverImage TEXT
 );
 
 -- Insert a default hello world post so the dashboard isn't empty
-INSERT INTO posts (id, title, content, date, readTime, tags, excerpt, difficulty, coverImage)
+INSERT INTO posts (id, title, content, date, readTime, tags, excerpt, postType, coverImage)
 VALUES (
   'hello-d1', 
   'Cloudflare D1 資料庫上線測試', 
@@ -21,6 +21,6 @@ VALUES (
   '5 min', 
   '["Database", "Cloudflare"]', 
   '測試資料庫是否成功連接。', 
-  'Easy', 
+  'Learning', 
   ''
 );
