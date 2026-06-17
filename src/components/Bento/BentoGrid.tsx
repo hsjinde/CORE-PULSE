@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from 'react'
 import { motion, useInView } from 'framer-motion'
 import {
   Server, Shield, Cpu, Activity, Globe, Code2,
-  Container, GitBranch, Zap, Bot,
+  GitBranch, Bot,
 } from 'lucide-react'
 
 /* ─── Types ──────────────────────────────────────────────────── */
@@ -181,18 +181,17 @@ export default function BentoGrid() {
               </div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
                 {[
-                  { label: 'React / TypeScript', color: 'var(--accent-blue)' },
                   { label: 'Python',             color: 'var(--accent-green)' },
-                  { label: 'Go',                 color: '#5ac8fa' },
+                  { label: 'C / Java',           color: '#5ac8fa' },
                   { label: 'Docker',             color: '#2496ED' },
-                  { label: 'Kubernetes',         color: 'var(--accent-blue)' },
-                  { label: 'Terraform',          color: 'var(--accent-purple)' },
-                  { label: 'Prometheus',         color: 'var(--accent-orange)' },
-                  { label: 'Grafana',            color: '#F46800' },
-                  { label: 'PostgreSQL',         color: '#4ea7d8' },
-                  { label: 'Redis',              color: 'var(--accent-red)' },
-                  { label: 'Nginx',              color: 'var(--accent-green)' },
-                  { label: 'Cloudflare',         color: 'var(--accent-orange)' },
+                  { label: 'GitHub Actions',     color: 'var(--accent-purple)' },
+                  { label: 'GitLab CI',          color: 'var(--accent-orange)' },
+                  { label: 'Cloudflare',         color: '#F46800' },
+                  { label: 'SQLite / Django',    color: '#4ea7d8' },
+                  { label: 'React / Tailwind',   color: 'var(--accent-blue)' },
+                  { label: 'PyTorch',            color: 'var(--accent-red)' },
+                  { label: 'TensorFlow',         color: 'var(--accent-orange)' },
+                  { label: 'LLM / RAG',          color: 'var(--accent-green)' },
                 ].map((s) => (
                   <span
                     key={s.label}
@@ -220,16 +219,17 @@ export default function BentoGrid() {
             >
               <div className="flex items-center gap-2 relative z-10" style={{ marginBottom: 14 }}>
                 <Bot size={15} style={{ color: 'var(--accent-purple)' }} />
-                <span className="text-label">OpenClaw AI</span>
+                <span className="text-label">AI Agent Infrastructure</span>
               </div>
               <p className="text-title relative z-10" style={{ color: 'var(--text-primary)', marginBottom: 8, fontFamily: 'var(--font-heading)' }}>
-                AI Assistant
+                LLM & Knowledge Base
               </p>
               <p className="text-body relative z-10" style={{ fontSize: '0.8125rem', marginBottom: 20 }}>
-                自建 LLM 推理後端，透過 Cloudflare Tunnel 安全暴露。
+                利用 CLIProxyAPI 統一管理 API，並整合 Obsidian 作為個人的 AI 知識庫與 RAG 後端。
               </p>
               <a
-                href="#"
+                href="https://github.com/hsjinde/my-note"
+                target="_blank" rel="noreferrer"
                 className="btn-ghost relative z-10"
                 style={{
                   padding: '8px 18px',
@@ -237,9 +237,10 @@ export default function BentoGrid() {
                   borderColor: 'rgba(191,90,242,0.28)',
                   color: 'var(--accent-purple)',
                   cursor: 'pointer',
+                  textDecoration: 'none'
                 }}
               >
-                Try OpenClaw →
+                View Architecture →
               </a>
             </BentoCard>
           </div>
@@ -248,15 +249,15 @@ export default function BentoGrid() {
           <div className="bento-col-4">
             <BentoCard delay={0.2} className="h-full">
               <div className="flex items-center gap-2" style={{ marginBottom: 20 }}>
-                <Server size={15} style={{ color: 'var(--accent-green)' }} />
-                <span className="text-label">Infrastructure</span>
+                <Shield size={15} style={{ color: 'var(--accent-green)' }} />
+                <span className="text-label">Security & DevSecOps</span>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
                 {[
-                  { icon: Globe,     label: 'Cloudflare Pages', status: 'CDN',     color: 'var(--accent-orange)' },
-                  { icon: Container, label: 'RackNerd VPS',     status: 'Docker',  color: 'var(--accent-blue)'   },
-                  { icon: Shield,    label: 'Zero Trust',       status: 'Active',  color: 'var(--accent-green)'  },
-                  { icon: Activity,  label: 'Uptime Monitor',   status: '99.97%',  color: 'var(--accent-green)'  },
+                  { icon: Shield,    label: 'CVE Analysis',     status: 'Active',  color: 'var(--accent-red)'    },
+                  { icon: Activity,  label: 'Defense Evasion',  status: 'Testing', color: 'var(--accent-purple)' },
+                  { icon: Server,    label: 'System Security',  status: 'Deep',    color: 'var(--accent-blue)'   },
+                  { icon: Globe,     label: 'Zero Trust CDN',   status: 'CF',      color: 'var(--accent-orange)' },
                 ].map(({ icon: Icon, label, status, color }) => (
                   <div key={label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -306,11 +307,11 @@ export default function BentoGrid() {
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 {[
-                  { step: 'Push',       ok: true  },
-                  { step: 'Lint / Test',ok: true  },
-                  { step: 'Build',      ok: true  },
-                  { step: 'CF Deploy',  ok: true  },
-                  { step: 'CDN Purge',  ok: false },
+                  { step: 'Code Push',    ok: true  },
+                  { step: 'Security Scan',ok: true  },
+                  { step: 'Test / Build', ok: true  },
+                  { step: 'Dockerize',    ok: true  },
+                  { step: 'Auto Fix',     ok: false },
                 ].map(({ step, ok }) => (
                   <div key={step} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontFamily: 'var(--font-body)' }}>{step}</span>
@@ -345,14 +346,14 @@ export default function BentoGrid() {
               glowColor="radial-gradient(ellipse at bottom left, rgba(41,151,255,0.07) 0%, transparent 65%)"
             >
               <div className="flex items-center gap-2 relative z-10" style={{ marginBottom: 20 }}>
-                <Zap size={15} style={{ color: 'var(--accent-blue)' }} />
-                <span className="text-label">Performance Metrics</span>
+                <Code2 size={15} style={{ color: 'var(--accent-blue)' }} />
+                <span className="text-label">Academic Research</span>
               </div>
               <div className="bento-metrics-row">
                 {[
-                  { metric: 'LCP', value: '0.8s',  label: 'Largest Contentful Paint', color: 'var(--accent-green)'  },
-                  { metric: 'FID', value: '<1ms',  label: 'First Input Delay',        color: 'var(--accent-green)'  },
-                  { metric: 'CLS', value: '0.01',  label: 'Cumulative Layout Shift',  color: 'var(--accent-green)'  },
+                  { metric: 'NLP / RNN', value: 'IEEE',   label: 'Published Paper',        color: 'var(--accent-green)'  },
+                  { metric: 'SPARQL',    value: 'Query',  label: 'Performance Enhance',    color: 'var(--accent-blue)'   },
+                  { metric: 'YOLO',      value: 'Vision', label: 'Object Detection',       color: 'var(--accent-purple)' },
                 ].map(({ metric, value, label, color }) => (
                   <div key={metric}>
                     <p className="text-label" style={{ marginBottom: 6 }}>{metric}</p>
@@ -383,9 +384,9 @@ export default function BentoGrid() {
               </div>
               <div className="bento-metrics-row">
                 {[
-                  { label: 'Projects', value: 12,  suffix: ''  },
-                  { label: 'Commits',  value: 847, suffix: '+' },
-                  { label: 'Services', value: 8,   suffix: ''  },
+                  { label: 'Repositories', value: 23,  suffix: ''  },
+                  { label: 'Automations',  value: 15,  suffix: '+' },
+                  { label: 'Models',       value: 5,   suffix: '+' },
                 ].map(({ label, value, suffix }) => (
                   <div key={label}>
                     <p
