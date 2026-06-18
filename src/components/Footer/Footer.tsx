@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { Code2, ExternalLink, Mail, Terminal, Clock, Activity } from 'lucide-react'
 
@@ -25,39 +25,6 @@ function BuildInfo() {
 export default function Footer() {
   const ref    = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '-40px' })
-  const [email, setEmail]  = useState('')
-  const [sent,  setSent]   = useState(false)
-  const [focus, setFocus]  = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-
-  const handleContact = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!email || isSubmitting) return
-
-    setIsSubmitting(true)
-    try {
-      const response = await fetch('https://formspree.io/f/mgobbenp', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email })
-      })
-
-      if (response.ok) {
-        setSent(true)
-      } else {
-        alert('抱歉，寄送失敗，請稍後再試。')
-      }
-    } catch (error) {
-      console.error('Email send error:', error)
-      alert('發生錯誤，請檢查網路連線。')
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
-
   const socialLinks = [
     { icon: Code2,        href: 'https://github.com/hsjinde',        label: 'GitHub'   },
     { icon: ExternalLink, href: 'https://linkedin.com/in/hsjinde',   label: 'LinkedIn' },
