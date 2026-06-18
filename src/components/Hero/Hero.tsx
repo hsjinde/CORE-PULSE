@@ -3,10 +3,10 @@ import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
 import { ArrowDown, Code2, ExternalLink, Terminal } from 'lucide-react'
 
 const roles = [
-  'SRE Engineer',
-  'AI Systems Developer',
-  'Infrastructure Architect',
-  'Reliability Engineer',
+  'SRE / DevOps Engineer',
+  'Cloud Architecture Builder',
+  'Backend Developer',
+  'AI Solutions Architect',
 ]
 
 /* ── Floating Orb ─────────────────────────────────────────────── */
@@ -175,7 +175,7 @@ export default function Hero() {
           >
             resilient
           </span>{' '}
-          AI systems.
+          cloud &amp; AI systems.
         </motion.h1>
 
         {/* Typewriter */}
@@ -217,8 +217,8 @@ export default function Hero() {
           className="text-body mx-auto"
           style={{ maxWidth: 540, marginBottom: 48 }}
         >
-          SRE 工程師與 AI 系統開發者。致力於 RNN 查詢優化研究與高可用架構設計，
-          以 SRE 思維構建能夠自我修復的智能化基礎設施。
+          專注於系統高可用性、自動化維運與後端架構設計。身為 AI 解決方案與雲端架構建構者，
+          我致力於將 AI 模型落地，並以 SRE 思維打造穩健且可擴展的基礎設施。
         </motion.p>
 
         {/* CTA Buttons */}
@@ -231,6 +231,20 @@ export default function Hero() {
           <a href="#projects" className="btn-primary">
             <Terminal size={15} />
             View Projects
+          </a>
+          <a
+            href="/resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-ghost"
+            style={{
+              borderColor: 'rgba(48,209,88,0.4)',
+              color: 'var(--accent-green)',
+              background: 'rgba(48,209,88,0.05)'
+            }}
+          >
+            <ArrowDown size={15} />
+            Download Resume
           </a>
           <a
             href="https://github.com/hsjinde"

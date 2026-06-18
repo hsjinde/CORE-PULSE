@@ -60,7 +60,7 @@ export default function Footer() {
 
   const socialLinks = [
     { icon: Code2,        href: 'https://github.com/hsjinde',        label: 'GitHub'   },
-    { icon: ExternalLink, href: '#',                                   label: 'LinkedIn' },
+    { icon: ExternalLink, href: 'https://linkedin.com/in/hsjinde',   label: 'LinkedIn' },
     { icon: Mail,         href: 'mailto:ethan19980803@gmail.com',     label: 'Email'    },
   ]
 
@@ -131,7 +131,7 @@ export default function Footer() {
               </div>
 
               <p className="text-body" style={{ fontSize: '0.875rem', marginBottom: 22 }}>
-                SRE Engineer &amp; AI Systems Developer.<br />
+                Cloud Architecture Builder &amp; AI Solutions Developer.<br />
                 Building resilient infrastructure for the future.
               </p>
 
@@ -207,68 +207,49 @@ export default function Footer() {
               </nav>
             </div>
 
-            {/* Col 3: Contact Form */}
+            {/* Col 3: Contact */}
             <div>
               <p className="text-label" style={{ marginBottom: 20 }}>Get in Touch</p>
-              {!sent ? (
-                <form onSubmit={handleContact}>
-                  <p className="text-body" style={{ fontSize: '0.875rem', marginBottom: 18 }}>
-                    有合作機會或技術討論？歡迎聯絡。
-                  </p>
-                  <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
-                    <input
-                      type="email"
-                      id="footer-email"
-                      placeholder="your@email.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                      style={{
-                        flex: 1,
-                        padding: '11px 16px',
-                        borderRadius: 14,
-                        border: `1px solid ${focus ? 'rgba(41,151,255,0.50)' : 'var(--border)'}`,
-                        background: focus ? 'rgba(41,151,255,0.06)' : 'var(--glass-2)',
-                        color: 'var(--text-primary)',
-                        fontFamily: 'var(--font-body)',
-                        fontSize: '0.875rem',
-                        outline: 'none',
-                        backdropFilter: 'blur(20px)',
-                        WebkitBackdropFilter: 'blur(20px)',
-                        transition: 'all 0.2s ease',
-                      }}
-                      onFocus={() => setFocus(true)}
-                      onBlur={() => setFocus(false)}
-                    />
-                    <button
-                      type="submit"
-                      className="btn-primary"
-                      style={{ padding: '11px 16px', flexShrink: 0 }}
-                    >
-                      <Mail size={15} />
-                    </button>
-                  </div>
-                </form>
-              ) : (
-                <motion.div
-                  initial={{ opacity: 0, y: 10, scale: 0.97 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
+              <p className="text-body" style={{ fontSize: '0.875rem', marginBottom: 18 }}>
+                有合作機會或技術討論？歡迎直接來信聯絡！
+              </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <a
+                  href="mailto:ethan19980803@gmail.com"
+                  className="btn-primary"
                   style={{
-                    padding: '16px 20px',
-                    borderRadius: 14,
-                    background: 'rgba(48,209,88,0.08)',
-                    border: '1px solid rgba(48,209,88,0.22)',
-                    color: 'var(--accent-green)',
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '0.875rem',
-                    textAlign: 'center',
-                    backdropFilter: 'blur(20px)',
-                    WebkitBackdropFilter: 'blur(20px)',
+                    justifyContent: 'center',
+                    padding: '12px 16px',
+                    fontSize: '0.9rem',
+                    textDecoration: 'none'
                   }}
                 >
-                  Message received — I'll get back to you soon.
-                </motion.div>
-              )}
+                  <Mail size={16} />
+                  Send me an Email
+                </a>
+                <div style={{ display: 'flex', gap: 10, marginTop: 4 }}>
+                  <a
+                    href="https://linkedin.com/in/hsjinde"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-ghost"
+                    style={{ flex: 1, justifyContent: 'center', padding: '10px', textDecoration: 'none' }}
+                  >
+                    <ExternalLink size={15} />
+                    LinkedIn
+                  </a>
+                  <a
+                    href="https://github.com/hsjinde"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-ghost"
+                    style={{ flex: 1, justifyContent: 'center', padding: '10px', textDecoration: 'none' }}
+                  >
+                    <Code2 size={15} />
+                    GitHub
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
 
