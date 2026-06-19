@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
 import { ArrowLeft, Save } from 'lucide-react'
 import { getPostById, savePost } from '@/services/api'
-import type { Post } from '@/services/api'
+import type { Post, PostType } from '@/services/api'
 
 export default function AdminEditor() {
   const { id } = useParams<{ id: string }>()
@@ -124,7 +124,7 @@ export default function AdminEditor() {
                   className="bg-black/50 border border-white/10 rounded px-4 py-2 text-white focus:outline-none"
                 />
                 <select 
-                  value={formData.postType} onChange={e => setFormData({...formData, postType: e.target.value as any})}
+                  value={formData.postType} onChange={e => setFormData({...formData, postType: e.target.value as PostType})}
                   className="bg-black/50 border border-white/10 rounded px-4 py-2 text-white focus:outline-none"
                 >
                   <option value="Learning">📖 個人學習 — 個人學習筆記</option>

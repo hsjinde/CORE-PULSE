@@ -57,3 +57,6 @@ logs/
 # Ignore local .agent skill folder not meant for repo
 .agent/skills/ui-ux-pro-max/
 .claude/
+
+# wrangler
+.wrangler/
