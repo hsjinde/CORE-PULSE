@@ -36,11 +36,15 @@ function AnimatedCounter({ target, suffix = '' }: { target: number; suffix?: str
 }
 
 /* ─── Mini Uptime Chart ──────────────────────────────────────── */
+const UPTIME_BARS = Array.from({ length: 30 }, (_, i) => {
+  // Deterministic values to avoid Math.random() during render
+  const height = 55 + ((i * 7 + 13) % 45);
+  const ok = (i * 3 + 1) % 17 !== 0;
+  return { height, ok };
+});
+
 function UptimeChart() {
-  const bars = Array.from({ length: 30 }, () => ({
-    height: 55 + Math.random() * 45,
-    ok: Math.random() > 0.04,
-  }))
+  const bars = UPTIME_BARS;
 
   return (
     <div style={{ display: 'flex', alignItems: 'flex-end', gap: 3, height: 48 }}>

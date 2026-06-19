@@ -1,8 +1,22 @@
 interface Env {
-  core_pulse_blog: any;
+  core_pulse_blog: {
+    prepare: (query: string) => {
+      bind: (...args: (string | number | boolean | null)[]) => {
+        first: () => Promise<Record<string, unknown> | null>;
+        run: () => Promise<unknown>;
+      };
+    };
+  };
 }
 
-export const onRequestGet = async (context: any) => {
+interface EventContext {
+  env: Env;
+  params: {
+    id: string;
+  };
+}
+
+export const onRequestGet = async (context: EventContext) => {
   const id = context.params.id;
   const post = await context.env.core_pulse_blog.prepare('SELECT * FROM posts WHERE id = ?').bind(id).first();
   
@@ -10,11 +24,14 @@ export const onRequestGet = async (context: any) => {
     return new Response('Not found', { status: 404 });
   }
   
-  post.tags = JSON.parse(post.tags);
-  return Response.json(post);
+  const parsedPost = {
+    ...post,
+    tags: JSON.parse(post.tags as string)
+  };
+  return Response.json(parsedPost);
 };
 
-export const onRequestDelete = async (context: any) => {
+export const onRequestDelete = async (context: EventContext) => {
   const id = context.params.id;
   await context.env.core_pulse_blog.prepare('DELETE FROM posts WHERE id = ?').bind(id).run();
   
