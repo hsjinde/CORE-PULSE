@@ -10,19 +10,21 @@ export default function AdminDashboard() {
   const navigate = useNavigate()
   const [posts, setPosts] = useState<Post[]>([])
 
-  const loadPosts = async () => {
-    const data = await getPosts()
-    setPosts(data)
-  }
-
   useEffect(() => {
-    loadPosts()
+    let active = true
+    getPosts().then(data => {
+      if (active) setPosts(data)
+    })
+    return () => {
+      active = false
+    }
   }, [])
 
   const handleDelete = async (id: string) => {
     if (confirm('Are you sure you want to delete this post?')) {
       await deletePost(id)
-      await loadPosts()
+      const data = await getPosts()
+      setPosts(data)
     }
   }
 
