@@ -22,8 +22,8 @@ const postTypeConfig: Record<PostType, { color: string; label: string; Icon: Rea
 function extractText(node: React.ReactNode): string {
   if (typeof node === 'string') return node
   if (Array.isArray(node)) return node.map(extractText).join('')
-  if (node && typeof node === 'object' && 'props' in (node as Record<string, unknown>)) {
-    return extractText((node as { props?: { children?: React.ReactNode } }).props?.children)
+  if (node && typeof node === 'object' && 'props' in (node as unknown as Record<string, unknown>)) {
+    return extractText((node as unknown as { props?: { children?: React.ReactNode } }).props?.children)
   }
   return ''
 }
