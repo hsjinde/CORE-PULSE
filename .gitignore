@@ -60,3 +60,6 @@ logs/
 
 # wrangler
 .wrangler/
+
+# Playwright MCP (local browser session artifacts)
+.playwright-mcp/
