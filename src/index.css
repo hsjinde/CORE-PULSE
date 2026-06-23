@@ -38,6 +38,8 @@
   --text-primary:     #f5f5f7;
   --text-secondary:   rgba(245, 245, 247, 0.56);
   --text-tertiary:    rgba(245, 245, 247, 0.30);
+  --text-reading:     rgba(245, 245, 247, 0.82); /* 文章正文專用 — WCAG AAA 對比度 ~10:1 */
+  --bg-article:       #070707;                   /* 閱讀區微暖背景，柔化純黑降低眼睛疲勞 */
 
   /* Accent palette — Apple system colors */
   --accent-blue:      #2997ff;
@@ -521,7 +523,7 @@ body {
 
   .admin-main { padding: 100px 16px 80px; }
 
-  .prose { font-size: 0.9375rem; }
+  .prose { font-size: 1rem; }
   .prose h2 { font-size: 1.5rem; }
   .prose h3 { font-size: 1.125rem; }
 }
@@ -533,6 +535,7 @@ body {
   max-width: 850px;
   margin: 0 auto;
   width: 100%;
+  background: var(--bg-article);
 }
 
 /* ─── Admin Dashboard ────────────────────────────────────────── */
@@ -596,9 +599,11 @@ body {
 /* ─── Prose (Blog) ────────────────────────────────────────────── */
 .prose {
   font-family: var(--font-body);
-  color: var(--text-secondary);
-  line-height: 1.85;
-  font-size: 1.0625rem;
+  color: var(--text-reading);
+  line-height: 1.9;
+  font-size: 1.125rem;
+  font-feature-settings: "kern" 1, "liga" 1;
+  letter-spacing: 0.01em;
 }
 .prose h1, .prose h2, .prose h3, .prose h4 {
   font-family: var(--font-heading);
@@ -628,8 +633,8 @@ body {
   border-left: 3px solid var(--accent-blue);
   padding: 1.25rem 1.5rem;
   font-style: italic;
-  color: var(--text-tertiary);
-  margin: 0;
+  color: var(--text-secondary);
+  margin: 1.5em 0;
   background: rgba(41, 151, 255, 0.06);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
