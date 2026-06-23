@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -17,8 +17,7 @@ const postTypeConfig: Record<PostType, { color: string; label: string; Icon: Rea
   Daily:    { color: '#bf5af2', label: '日常',     Icon: Coffee         },
 }
 
-// ─── Copy Code Block ─────────────────────────────────────────
-// Recursively extract plain text from React children
+// ─── Text extraction ─────────────────────────────────────────
 function extractText(node: React.ReactNode): string {
   if (typeof node === 'string') return node
   if (Array.isArray(node)) return node.map(extractText).join('')
@@ -28,6 +27,16 @@ function extractText(node: React.ReactNode): string {
   return ''
 }
 
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+}
+
+// ─── Copy Code Block ─────────────────────────────────────────
 function PreBlock({ children }: { children?: React.ReactNode }) {
   const [copied, setCopied] = useState(false)
 
@@ -43,11 +52,47 @@ function PreBlock({ children }: { children?: React.ReactNode }) {
     <pre>
       <div className="prose-code-wrapper">
         <button onClick={handleCopy} className="prose-copy-btn" aria-label="Copy code">
-          {copied ? '✓ Copied' : 'Copy'}
+          {copied ? 'Copied' : 'Copy'}
         </button>
         {children}
       </div>
     </pre>
+  )
+}
+
+// ─── Table of Contents ───────────────────────────────────────
+interface TocItem {
+  level: number
+  text: string
+  id: string
+}
+
+function extractToc(content: string): TocItem[] {
+  const lines = content.split('\n')
+  const items: TocItem[] = []
+  for (const line of lines) {
+    const match = line.match(/^(#{2,3})\s+(.+)$/)
+    if (match) {
+      const level = match[1].length
+      const text = match[2]
+        .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+        .replace(/[*_`]/g, '')
+      const id = slugify(text)
+      items.push({ level, text, id })
+    }
+  }
+  return items
+}
+
+// ─── Heading with anchor ID ──────────────────────────────────
+function HeadingWithAnchor({ level, children }: { level: 2 | 3; children?: React.ReactNode }) {
+  const text = extractText(children)
+  const id = slugify(text)
+  const Tag = `h${level}` as 'h2' | 'h3'
+  return (
+    <Tag id={id}>
+      <a href={`#${id}`}>{children}</a>
+    </Tag>
   )
 }
 
@@ -56,6 +101,8 @@ export default function BlogPost() {
   const navigate = useNavigate()
   const [post, setPost] = useState<Post | null>(null)
   const [loading, setLoading] = useState(true)
+  const [progress, setProgress] = useState(0)
+  const [activeHeading, setActiveHeading] = useState<string>('')
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -75,99 +122,164 @@ export default function BlogPost() {
     fetchPost()
   }, [id])
 
+  // Reading progress
+  useEffect(() => {
+    function handleScroll() {
+      const scrollTop = window.scrollY
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight
+      const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0
+      setProgress(Math.min(100, Math.max(0, pct)))
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll()
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  // Active heading observer
+  useEffect(() => {
+    if (!post) return
+    const headings = document.querySelectorAll('.prose h2[id], .prose h3[id]')
+    if (headings.length === 0) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)
+        if (visible.length > 0) {
+          setActiveHeading(visible[0].target.id)
+        }
+      },
+      { rootMargin: '-100px 0px -60% 0px', threshold: 0 }
+    )
+
+    headings.forEach((h) => observer.observe(h))
+    if (headings[0]) setActiveHeading(headings[0].id)
+
+    return () => observer.disconnect()
+  }, [post])
+
+  const toc = useMemo(() => (post ? extractToc(post.content) : []), [post])
+
   if (loading) {
-    return <div className="text-white p-24 text-center">Loading...</div>
+    return (
+      <div style={{ background: 'var(--bg-primary)', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ color: 'var(--text-secondary)', fontFamily: 'var(--font-body)' }}>Loading...</div>
+      </div>
+    )
   }
 
   if (!post) {
-    return <div className="text-white p-24 text-center">Post not found</div>
+    return (
+      <div style={{ background: 'var(--bg-primary)', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ color: 'var(--text-secondary)', fontFamily: 'var(--font-body)' }}>Post not found</div>
+      </div>
+    )
   }
+
+  const cfg = postTypeConfig[post.postType] || postTypeConfig['Learning']
+  const Icon = cfg.Icon
 
   return (
     <div style={{ background: 'var(--bg-primary)', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <div
+        className="blogpost-progress-bar"
+        style={{ transform: `scaleX(${progress / 100})` }}
+      />
       <Navbar />
-      <main className="blogpost-main">
-        <button 
-          onClick={() => navigate('/')} 
-          style={{ 
-            display: 'inline-flex', 
-            alignItems: 'center', 
-            gap: '8px', 
-            color: 'var(--text-tertiary)', 
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            marginBottom: '40px',
-            fontSize: '0.9rem',
-            transition: 'color 0.2s'
-          }}
-        >
-          <ArrowLeft size={16} />
-          Back to Home
-        </button>
 
-        <header className="mb-16">
-          <div className="flex flex-wrap items-center gap-3 text-sm text-gray-400 mb-6">
-            {(() => {
-              const cfg = postTypeConfig[post.postType] || postTypeConfig['Learning']
-              const Icon = cfg.Icon
-              return (
-                <span className="flex items-center gap-1.5" style={{
-                  color: cfg.color,
-                  background: `${cfg.color}15`,
-                  padding: '4px 12px',
-                  borderRadius: '99px',
-                  border: `1px solid ${cfg.color}30`,
-                  fontSize: '0.75rem',
-                  fontWeight: 600,
-                  letterSpacing: '0.06em',
-                  textTransform: 'uppercase',
-                }}>
-                  <Icon size={12} strokeWidth={2.5} />
-                  {cfg.label}
-                </span>
-              )
-            })()}
-            <span className="flex items-center gap-1.5"><Calendar size={14} />{post.date}</span>
-            <span className="flex items-center gap-1.5"><Clock size={14} />{post.readTime}</span>
-          </div>
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-white mb-8 leading-[1.15]">
-            {post.title}
-          </h1>
-          
-          <div className="flex flex-wrap gap-2 mb-10">
-            {post.tags.map(tag => (
-              <span key={tag} className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-xs text-gray-300">
-                {tag}
-              </span>
-            ))}
-          </div>
-
-          {post.coverImage && (
-            <div className="rounded-2xl overflow-hidden shadow-2xl mb-16 relative aspect-[16/9] md:aspect-[21/9]">
-              <img 
-                src={post.coverImage} 
-                alt={post.title}
-                className="w-full h-full object-cover"
-              />
-            </div>
-          )}
-        </header>
-        
-        <article className="prose">
-          <ReactMarkdown 
-            remarkPlugins={[remarkGfm]}
-            rehypePlugins={[rehypeHighlight]}
-            components={{
-              pre({ children }) {
-                return <PreBlock>{children}</PreBlock>
-              }
-            }}
+      <main className="blogpost-layout">
+        <article className="blogpost-main-content">
+          <button
+            onClick={() => navigate('/')}
+            className="blogpost-back-btn"
           >
-            {post.content}
-          </ReactMarkdown>
+            <ArrowLeft size={16} />
+            Back to Home
+          </button>
+
+          <header className="blogpost-header">
+            <div className="blogpost-meta-row">
+              <span
+                className="blogpost-category-badge"
+                style={{
+                  color: cfg.color,
+                  borderColor: `${cfg.color}40`,
+                  background: `${cfg.color}12`,
+                }}
+              >
+                <Icon size={12} strokeWidth={2.5} />
+                {cfg.label}
+              </span>
+              <span className="blogpost-meta">
+                <Calendar size={14} />
+                {post.date}
+              </span>
+              <span className="blogpost-meta">
+                <Clock size={14} />
+                {post.readTime}
+              </span>
+            </div>
+
+            <h1 className="blogpost-title">{post.title}</h1>
+
+            <div className="blogpost-tags">
+              {post.tags.map((tag) => (
+                <span key={tag} className="blogpost-tag">
+                  {tag}
+                </span>
+              ))}
+            </div>
+
+            {post.coverImage && (
+              <div className="blogpost-cover">
+                <img src={post.coverImage} alt={post.title} />
+              </div>
+            )}
+          </header>
+
+          <div className="prose">
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[rehypeHighlight]}
+              components={{
+                pre({ children }) {
+                  return <PreBlock>{children}</PreBlock>
+                },
+                h2({ children }) {
+                  return <HeadingWithAnchor level={2}>{children}</HeadingWithAnchor>
+                },
+                h3({ children }) {
+                  return <HeadingWithAnchor level={3}>{children}</HeadingWithAnchor>
+                },
+              }}
+            >
+              {post.content}
+            </ReactMarkdown>
+          </div>
         </article>
+
+        {toc.length > 0 && (
+          <aside className="blogpost-toc">
+            <div className="blogpost-toc-title">Contents</div>
+            <ul className="blogpost-toc-list">
+              {toc.map((item, index) => (
+                <li key={`${item.id}-${index}`}>
+                  <a
+                    href={`#${item.id}`}
+                    className={`blogpost-toc-link level-${item.level} ${activeHeading === item.id ? 'active' : ''}`}
+                    onClick={(e) => {
+                      e.preventDefault()
+                      document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                    }}
+                  >
+                    {item.text}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </aside>
+        )}
       </main>
+
       <Footer />
     </div>
   )
