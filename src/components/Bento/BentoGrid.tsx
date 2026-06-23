@@ -183,7 +183,7 @@ export default function BentoGrid() {
                 <Code2 size={15} style={{ color: 'var(--accent-blue)' }} />
                 <span className="text-label">Core Stack</span>
               </div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
                 {[
                   { label: 'Python',             color: 'var(--accent-green)' },
                   { label: 'C / Java',           color: '#5ac8fa' },
@@ -204,6 +204,8 @@ export default function BentoGrid() {
                       background: `${s.color}14`,
                       border: `1px solid ${s.color}28`,
                       color: s.color,
+                      padding: '7px 18px',
+                      fontSize: '0.875rem',
                     }}
                   >
                     {s.label}

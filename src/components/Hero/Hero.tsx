@@ -215,7 +215,7 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0  }}
           transition={{ delay: 0.62, duration: 0.6 }}
           className="text-body mx-auto"
-          style={{ maxWidth: 540, marginBottom: 48 }}
+          style={{ maxWidth: 540, marginBottom: 48, textAlign: 'center' }}
         >
           專注於系統高可用性、自動化維運與後端架構設計。身為 AI 解決方案與雲端架構建構者，
           我致力於將 AI 模型落地，並以 SRE 思維打造穩健且可擴展的基礎設施。

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Terminal, Code2, X, AlignRight } from 'lucide-react'
 
@@ -66,8 +67,8 @@ export default function Navbar() {
         }}
       >
         {/* ── Logo ─────────────────────────────────── */}
-        <a
-          href="#hero"
+        <Link
+          to="/"
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -79,9 +80,9 @@ export default function Navbar() {
           {/* Icon glass pill */}
           <div
             style={{
-              width: 32,
-              height: 32,
-              borderRadius: 10,
+              width: 38,
+              height: 38,
+              borderRadius: 12,
               background: 'rgba(41,151,255,0.14)',
               border: '1px solid rgba(41,151,255,0.30)',
               display: 'flex',
@@ -91,19 +92,19 @@ export default function Navbar() {
               WebkitBackdropFilter: 'blur(12px)',
             }}
           >
-            <Terminal size={15} color="var(--accent-blue)" strokeWidth={2} />
+            <Terminal size={18} color="var(--accent-blue)" strokeWidth={2} />
           </div>
           <span
             style={{
               fontFamily: 'var(--font-heading)',
               fontWeight: 700,
-              fontSize: '1rem',
+              fontSize: '1.15rem',
               letterSpacing: '-0.03em',
             }}
           >
             Core Pulse
           </span>
-        </a>
+        </Link>
 
         {/* ── Desktop Nav ───────────────────────────── */}
         <nav
