@@ -1,6 +1,6 @@
-import { useRef, useEffect, useState } from 'react'
-import { motion, useInView } from 'framer-motion'
-import { BookOpen, Clock, Tag, ArrowUpRight, GraduationCap, Wrench, Briefcase, Coffee } from 'lucide-react'
+import { useRef, useEffect, useState, useMemo } from 'react'
+import { motion, useInView, AnimatePresence } from 'framer-motion'
+import { BookOpen, Clock, Tag, ArrowUpRight, GraduationCap, Wrench, Briefcase, Coffee, Search, X, FileText } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { getPosts } from '@/services/api'
 import type { Post, PostType } from '@/services/api'
@@ -11,6 +11,16 @@ const postTypeConfig: Record<PostType, { color: string; label: string; Icon: Rea
   Work:     { color: '#2997ff', label: '工作專案', Icon: Briefcase      },
   Daily:    { color: '#bf5af2', label: '日常',     Icon: Coffee         },
 }
+
+type FilterType = 'All' | PostType
+
+const filterTabs: { key: FilterType; label: string; color?: string; Icon?: React.ElementType }[] = [
+  { key: 'All',      label: '全部'       },
+  { key: 'Learning', label: '個人學習', color: '#ff9f0a', Icon: GraduationCap },
+  { key: 'Tools',    label: '好工具推薦', color: '#30d158', Icon: Wrench        },
+  { key: 'Work',     label: '工作專案', color: '#2997ff', Icon: Briefcase      },
+  { key: 'Daily',    label: '日常',     color: '#bf5af2', Icon: Coffee         },
+]
 
 function PostCard({ post, index }: { post: Post; index: number }) {
   const ref = useRef<HTMLDivElement>(null)
@@ -80,10 +90,30 @@ function PostCard({ post, index }: { post: Post; index: number }) {
 
 export default function Blog() {
   const [posts, setPosts] = useState<Post[]>([])
+  const [query, setQuery] = useState('')
+  const [activeFilter, setActiveFilter] = useState<FilterType>('All')
 
   useEffect(() => {
     getPosts().then(setPosts)
   }, [])
+
+  const filteredPosts = useMemo(() => {
+    const q = query.toLowerCase().trim()
+    return posts.filter(post => {
+      // 類型篩選
+      if (activeFilter !== 'All' && post.postType !== activeFilter) return false
+      // 文字搜尋：標題、摘要、標籤
+      if (q) {
+        const haystack = [
+          post.title,
+          post.excerpt,
+          ...post.tags,
+        ].join(' ').toLowerCase()
+        if (!haystack.includes(q)) return false
+      }
+      return true
+    })
+  }, [posts, query, activeFilter])
 
   return (
     <section
@@ -110,7 +140,7 @@ export default function Blog() {
 
       <div className="section-container">
         {/* Header */}
-        <div style={{ marginBottom: 64, maxWidth: 620 }}>
+        <div style={{ marginBottom: 48, maxWidth: 620 }}>
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -143,18 +173,118 @@ export default function Blog() {
           </motion.p>
         </div>
 
-        {/* Posts grid */}
-        <div
-          style={{
-            display: 'grid',
-            gap: '20px',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 460px), 1fr))',
-          }}
+        {/* ── Search + Filter Bar ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.22 }}
+          className="blog-search-bar"
         >
-          {posts.map((post, index) => (
-            <PostCard key={post.id} post={post} index={index} />
-          ))}
-        </div>
+          {/* Search input */}
+          <div className="blog-search-input-wrap">
+            <Search size={16} className="blog-search-icon" />
+            <input
+              id="blog-search-input"
+              type="text"
+              className="blog-search-input"
+              placeholder="搜尋筆記標題、摘要或標籤…"
+              value={query}
+              onChange={e => setQuery(e.target.value)}
+              autoComplete="off"
+              spellCheck={false}
+            />
+            {query && (
+              <button
+                className="blog-search-clear"
+                onClick={() => setQuery('')}
+                aria-label="清除搜尋"
+              >
+                <X size={14} />
+              </button>
+            )}
+          </div>
+
+          {/* Filter tabs */}
+          <div className="blog-filter-tabs" role="tablist" aria-label="筆記類型篩選">
+            {filterTabs.map(tab => {
+              const isActive = activeFilter === tab.key
+              const TabIcon = tab.Icon
+              return (
+                <button
+                  key={tab.key}
+                  role="tab"
+                  aria-selected={isActive}
+                  className={`blog-filter-tab${isActive ? ' active' : ''}`}
+                  style={isActive && tab.color ? {
+                    color: tab.color,
+                    borderColor: `${tab.color}50`,
+                    background: `${tab.color}15`,
+                    boxShadow: `0 0 12px ${tab.color}20`,
+                  } : undefined}
+                  onClick={() => setActiveFilter(tab.key)}
+                >
+                  {TabIcon && <TabIcon size={13} strokeWidth={2.2} />}
+                  {tab.label}
+                </button>
+              )
+            })}
+          </div>
+        </motion.div>
+
+        {/* Result count hint */}
+        {(query || activeFilter !== 'All') && (
+          <motion.p
+            key={`${query}-${activeFilter}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="blog-search-hint"
+          >
+            找到 <strong>{filteredPosts.length}</strong> 篇筆記
+            {query && <> ・關鍵字「<em>{query}</em>」</>}
+          </motion.p>
+        )}
+
+        {/* Posts grid */}
+        <AnimatePresence mode="popLayout">
+          {filteredPosts.length > 0 ? (
+            <motion.div
+              key="grid"
+              layout
+              style={{
+                display: 'grid',
+                gap: '20px',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 460px), 1fr))',
+              }}
+            >
+              {filteredPosts.map((post, index) => (
+                <PostCard key={post.id} post={post} index={index} />
+              ))}
+            </motion.div>
+          ) : (
+            <motion.div
+              key="empty"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="blog-empty-state"
+            >
+              <div className="blog-empty-icon">
+                <FileText size={32} />
+              </div>
+              <p className="blog-empty-title">找不到相符的筆記</p>
+              <p className="blog-empty-desc">
+                試試其他關鍵字，或切換類型篩選看看
+              </p>
+              <button
+                className="blog-empty-reset"
+                onClick={() => { setQuery(''); setActiveFilter('All') }}
+              >
+                清除篩選條件
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </section>
   )
