@@ -182,6 +182,7 @@ export async function savePost(post: Post): Promise<void> {
   const res = await fetch('/api/posts', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
     body: JSON.stringify(post)
   })
   if (!res.ok) throw new Error('Failed to save post')
@@ -196,6 +197,6 @@ export async function deletePost(id: string): Promise<void> {
     return
   }
   
-  const res = await fetch(`/api/posts/${id}`, { method: 'DELETE' })
+  const res = await fetch(`/api/posts/${id}`, { method: 'DELETE', credentials: 'include' })
   if (!res.ok) throw new Error('Failed to delete post')
 }
