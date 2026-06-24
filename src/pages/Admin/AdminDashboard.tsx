@@ -28,9 +28,15 @@ export default function AdminDashboard() {
     }
   }
 
-  const handleLogout = () => {
-    localStorage.removeItem('admin_auth')
-    navigate('/admin')
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/auth/logout', {
+        method: 'POST',
+        credentials: 'include',
+      })
+    } finally {
+      navigate('/admin')
+    }
   }
 
   return (

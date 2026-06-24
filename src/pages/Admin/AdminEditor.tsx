@@ -35,6 +35,9 @@ export default function AdminEditor() {
 
   const handleSave = async () => {
     if (!formData.title) return alert('請輸入文章標題 (Title is required)')
+    if (formData.coverImage && !isValidImageUrl(formData.coverImage)) {
+      return alert('封面圖片 URL 無效，請使用 HTTPS 網址或以 / 開頭的相對路徑。')
+    }
     
     setIsSaving(true)
     try {
@@ -52,6 +55,18 @@ export default function AdminEditor() {
       alert('儲存失敗，請重試！')
     } finally {
       setIsSaving(false)
+    }
+  }
+
+  // SEV-6 fix: only allow HTTPS URLs or root-relative paths
+  const isValidImageUrl = (url: string): boolean => {
+    if (!url) return true // empty is fine
+    if (url.startsWith('/')) return true
+    try {
+      const parsed = new URL(url)
+      return parsed.protocol === 'https:'
+    } catch {
+      return false
     }
   }
 
@@ -136,6 +151,7 @@ export default function AdminEditor() {
               <input 
                 type="text" placeholder="Cover Image URL (/cover.png)" 
                 value={formData.coverImage} onChange={e => setFormData({...formData, coverImage: e.target.value})}
+                style={{ borderColor: formData.coverImage && !isValidImageUrl(formData.coverImage) ? 'rgba(239,68,68,0.6)' : undefined }}
                 className="w-full bg-black/50 border border-white/10 rounded px-4 py-2 text-white focus:outline-none focus:border-blue-500"
               />
               <div className="flex flex-col gap-2">
