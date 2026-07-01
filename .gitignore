@@ -26,6 +26,7 @@ build/
 .env.local
 .env.production
 .env.staging
+.dev.vars
 
 # TypeScript cache
 *.tsbuildinfo
