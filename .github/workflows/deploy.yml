@@ -61,6 +61,9 @@ jobs:
           name: dist
           path: dist/
 
+      - name: Generate wiki for Functions
+        run: node scripts/gen-wiki.cjs
+
       - name: Deploy to Cloudflare Pages
         run: npx wrangler@3 pages deploy dist/ --project-name=core-pulse --commit-dirty=true
         env:
