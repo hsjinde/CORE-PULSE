@@ -6,3 +6,14 @@ compatibility_date = "2024-04-05"
 binding = "core_pulse_blog"
 database_name = "core-pulse-blog"
 database_id = "e3aa19cf-79fc-4d04-8a05-cada7626b559"
+
+# ── Chat mascot env vars (non-secret; secrets via `wrangler pages secret put`) ──
+# LLM_PROVIDER       = "openai"
+# LLM_MODEL          = "gpt-4o-mini"
+# LLM_BASE_URL       = "https://cli.19980803.xyz/v1/chat/completions"
+# RATE_LIMIT_DAILY   = "30"
+# WIKI_TOKEN_BUDGET  = "16000"
+# TURNSTILE_ENABLED  = "false"
+# Secrets (DO NOT put here):
+#   LLM_API_KEY
+#   RATE_LIMIT_SALT
