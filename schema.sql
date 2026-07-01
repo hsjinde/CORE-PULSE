@@ -24,3 +24,13 @@ VALUES (
   'Learning', 
   ''
 );
+
+-- ── LLM Wiki Mascot: chat rate limiting ────────────────────────
+CREATE TABLE IF NOT EXISTS chat_rate_limits (
+  ip_hash  TEXT NOT NULL,
+  date     TEXT NOT NULL,            -- 'YYYY-MM-DD' UTC
+  count    INTEGER NOT NULL DEFAULT 0,
+  last_ts  INTEGER NOT NULL,         -- unix ms
+  PRIMARY KEY (ip_hash, date)
+);
+CREATE INDEX IF NOT EXISTS idx_chat_rl_last_ts ON chat_rate_limits(last_ts);
