@@ -17,6 +17,7 @@ export interface Env {
   // 變數
   LLM_PROVIDER?: string;      // 'openai'（MVP 預設）
   LLM_MODEL?: string;         // 預設 'gpt-4o-mini'
+  LLM_BASE_URL?: string;      // 自訂 OpenAI-compatible endpoint（預設 https://api.openai.com/v1/chat/completions）
   RATE_LIMIT_DAILY?: string;  // 預設 '30'
   WIKI_TOKEN_BUDGET?: string; // 預設 '16000'
   TURNSTILE_ENABLED?: string; // 預設 'false'
