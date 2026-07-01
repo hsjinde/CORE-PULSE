@@ -1,4 +1,4 @@
-import type { Env, EventContext, ChatMessage } from './chat-shared';
+import type { EventContext, ChatMessage } from './chat-shared';
 import {
   MAX_BODY_BYTES,
   MAX_HISTORY_TURNS,
