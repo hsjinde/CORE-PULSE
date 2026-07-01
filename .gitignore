@@ -30,6 +30,7 @@ build/
 
 # TypeScript cache
 *.tsbuildinfo
+functions/api/_wiki-gen.ts
 
 # Python
 __pycache__/
