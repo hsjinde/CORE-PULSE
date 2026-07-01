@@ -6,7 +6,7 @@ Started: 2026-07-01
 
 ## Tasks
 
-- [ ] Task 0.1: Install deps + configs (vitest, playwright, lottie-react)
+- [x] Task 0.1: Install deps + configs (vitest, playwright, lottie-react) — commit 0c8a182
 - [ ] Task 0.2: Seed wiki markdown + content guide
 - [ ] Task 1.1: D1 schema migration (chat_rate_limits)
 - [ ] Task 1.2: chat-shared.ts (types, CORS, constants)
@@ -34,10 +34,19 @@ Started: 2026-07-01
 
 ## Completed
 
-(none yet)
+- Task 0.1: deps + configs (commit 0c8a182)
+- Task 0.2: wiki markdown + guide (commit cf835e5)
+- Task 1.1: D1 schema (commit 0ab4b3b, local migration deferred — needs Node 22)
+- Task 1.2-1.7: backend modules + tests (commit 824e7d4, 21/21 tests)
+- Task 1.8: main chat.ts handler (commit e846918, build verified, wiki not in bundle)
+- Task 2.1-2.7: frontend widget (commit 623ea4e, 30/30 tests)
 
-## Notes
+## Blocked (needs user)
 
-- Tasks 1.9, 2.7 (visual check), 4.1, 4.2, 5.2, 5.3 require real OpenAI API key or user interaction — will pause for user input at those points.
-- Working directory: D:\CORE PULSE
-- Branch: feat/llm-wiki-mascot (off main @ 85444fb)
+- Task 1.9: Cloudflare secrets (LLM_API_KEY, RATE_LIMIT_SALT) + remote D1 migration
+  → Needs: `npx wrangler pages secret put LLM_API_KEY` + `wrangler d1 execute --remote`
+  → Needs: Node 22+ (wrangler requirement)
+- Task 3.1: Real Lottie asset (optional — SVG placeholder works)
+  → Needs: Lottie JSON file at src/components/Mascot/MascotLottie.json
+- Task 4.1-4.2: E2E tests (need real API key in .dev.vars + dev server)
+- Task 5.2-5.3: Preview deploy + manual QA + merge to main + prod
