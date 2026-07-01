@@ -1,27 +1,11 @@
 // build-time inline wiki markdown 進 Pages Function
 // 注意：本檔在 wrangler build 時會被打包進 functions bundle，不會進 client bundle
 // 改 wiki = 改 src/content/wiki/*.md + npm run build + 部署
+//
+// wiki markdown 透過 scripts/gen-wiki.cjs 在 build/test/dev 前生成 _wiki-gen.ts
+// （因為 wrangler 的 esbuild bundler 不支援 Vite 的 ?raw import）
 
-import identityMd   from '../../src/content/wiki/identity.md?raw';
-import skillsMd     from '../../src/content/wiki/skills.md?raw';
-import experienceMd from '../../src/content/wiki/experience.md?raw';
-import projectsMd   from '../../src/content/wiki/projects.md?raw';
-import philosophyMd from '../../src/content/wiki/philosophy.md?raw';
-import contactMd    from '../../src/content/wiki/contact.md?raw';
-
-interface WikiDoc {
-  name: string;
-  md: string;
-}
-
-const WIKI_FILES: WikiDoc[] = [
-  { name: 'identity',   md: identityMd   },
-  { name: 'skills',     md: skillsMd     },
-  { name: 'experience', md: experienceMd },
-  { name: 'projects',   md: projectsMd   },
-  { name: 'philosophy', md: philosophyMd },
-  { name: 'contact',    md: contactMd    },
-];
+import { WIKI_FILES } from './_wiki-gen';
 
 export interface Frontmatter {
   title?: string;
