@@ -7,5 +7,4 @@ sensitivity: public
 
 我是 hsjinde，一位 SRE Engineer / AI Systems Developer。
 
-> TODO（使用者填空）：一段 30~60 字的自我介紹，涵蓋現職、所在地區、年限。
-> 範例：我目前擔任 SRE Engineer，專注於 Cloudflare 邊緣基礎設施、AI 系統整合與可觀測性工程，在台灣工作，約 N 年經驗。
+我目前專注於 Cloudflare 邊緣基礎設施、AI 系統整合與可觀測性工程。在台灣工作，擅長把前端工程、後端服務與基礎設施串成一套完整的可觀測系統。我的個人品牌網站 CORE PULSE 就是我工程能力的展示品——從 React 19 前端到 Cloudflare Pages 部署、D1 資料庫、R2 圖床，全部自己一手打造。
