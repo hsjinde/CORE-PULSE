@@ -1,7 +1,7 @@
 import type { Env, ChatMessage, Delta, Usage } from './chat-shared';
 import { DEFAULT_LLM_MODEL } from './chat-shared';
 
-const OPENAI_URL = 'https://api.openai.com/v1/chat/completions';
+const DEFAULT_OPENAI_URL = 'https://api.openai.com/v1/chat/completions';
 
 export async function* streamOpenAI(
   env: Env,
@@ -9,7 +9,8 @@ export async function* streamOpenAI(
   fetchImpl: typeof fetch = fetch
 ): AsyncGenerator<Delta, Usage, void> {
   const model = env.LLM_MODEL || DEFAULT_LLM_MODEL;
-  const res = await fetchImpl(OPENAI_URL, {
+  const url = env.LLM_BASE_URL || DEFAULT_OPENAI_URL;
+  const res = await fetchImpl(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
