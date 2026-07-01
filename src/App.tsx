@@ -5,6 +5,7 @@ import BlogPost from '@/pages/BlogPost'
 import AdminLogin from '@/pages/Admin/AdminLogin'
 import AdminDashboard from '@/pages/Admin/AdminDashboard'
 import AdminEditor from '@/pages/Admin/AdminEditor'
+import MascotWidget from '@/components/Mascot/MascotWidget'
 
 type AuthState = 'loading' | 'authenticated' | 'unauthenticated'
 
@@ -81,6 +82,7 @@ export default function App() {
           }
         />
       </Routes>
+      <MascotWidget />
     </BrowserRouter>
   )
 }

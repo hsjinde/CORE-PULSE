@@ -1,0 +1,8 @@
+.mascot-avatar-btn:hover {
+  transform: translateY(-3px);
+  border-color: var(--border-active) !important;
+}
+.mascot-avatar-btn:focus-visible {
+  outline: 2px solid var(--accent-blue);
+  outline-offset: 3px;
+}
