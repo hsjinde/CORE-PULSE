@@ -1,4 +1,4 @@
-import { verifySession } from '../auth';
+import { verifySession } from '../auth-shared';
 
 interface Env {
   core_pulse_blog: {
