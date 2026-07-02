@@ -44,7 +44,7 @@ test('mascot: stop button aborts stream', async ({ page }) => {
   await expect(page.getByText(/已停止/)).toBeVisible({ timeout: 3000 });
 });
 
-test('mascot: session reset on reload', async ({ page }) => {
+test('mascot: session memory persists across reload', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: /開啟.*對話/ }).click();
   const input = page.getByLabel('訊息輸入框');
@@ -55,9 +55,8 @@ test('mascot: session reset on reload', async ({ page }) => {
     expect(text.length).toBeGreaterThan(20);
   }).toPass({ timeout: 15000 });
 
-  // 重整後訊息應清空
+  // 重整後訊息應保留（sessionStorage 同 session 內不丟）
   await page.reload();
   await page.getByRole('button', { name: /開啟.*對話/ }).click();
-  await expect(page.getByText('嗨，我是 hsjinde')).toBeVisible();
-  await expect(page.getByText('你是誰？')).toHaveCount(0);
+  await expect(page.getByText('你是誰？')).toBeVisible({ timeout: 5000 });
 });
