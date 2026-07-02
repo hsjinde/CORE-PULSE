@@ -11,8 +11,7 @@ export default function MascotAvatar({ state, onClick, ariaLabel }: Props) {
   // ── Playful Motion Personality: bounce, overshoot, elastic ──
   // ── Motion Design: Three Pillars — Emotional=Joy, Narrative=Penguin alive, Craft=Squash&Stretch ──
 
-  const isIdle = state === 'idle';
-  const isThinking = state === 'thinking';
+
   const isTalking = state === 'talking';
 
   return (
