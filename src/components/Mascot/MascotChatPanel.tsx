@@ -54,8 +54,9 @@ export default function MascotChatPanel({ chat }: Props) {
           aria-label="與 hsjinde 吉祥物對話"
           style={{
             position: 'absolute',
-            top: 0, right: 0,
-            width: 'min(380px, 92vw)',
+            bottom: 0, right: 0,
+            transformOrigin: 'bottom right',
+            width: 'min(380px, calc(100vw - 48px))',
             height: 'min(60vh, 600px)',
             display: 'flex',
             flexDirection: 'column',

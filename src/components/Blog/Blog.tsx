@@ -122,6 +122,7 @@ export default function Blog() {
       style={{
         background: 'var(--bg-secondary)',
         position: 'relative',
+        overflow: 'hidden',
       }}
     >
       {/* Top separator */}

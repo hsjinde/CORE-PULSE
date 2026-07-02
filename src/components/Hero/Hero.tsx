@@ -164,7 +164,7 @@ export default function Hero() {
             Ethan
           </span>
           {'.'} I build
-          <br />
+          <br className="hidden md:inline" />
           <span
             style={{
               background: 'linear-gradient(135deg, #5eb8ff 0%, #2997ff 50%, #bf5af2 100%)',

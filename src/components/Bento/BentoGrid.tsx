@@ -120,6 +120,7 @@ export default function BentoGrid() {
       style={{
         background: 'var(--bg-secondary)',
         position: 'relative',
+        overflow: 'hidden',
       }}
     >
       {/* Section top glow */}

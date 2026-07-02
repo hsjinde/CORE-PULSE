@@ -266,6 +266,7 @@ export default function Projects() {
       style={{
         background: 'var(--bg-primary)',
         position: 'relative',
+        overflow: 'hidden',
       }}
     >
       {/* Ambient top separator */}

@@ -28,7 +28,7 @@ export default function MascotWidget() {
     <div
       style={{
         position: 'fixed',
-        top: '32px', right: '32px',
+        bottom: '24px', right: '24px',
         zIndex: 9999,
         pointerEvents: 'none', // 容器不擋；內部元素各自啟用
       }}
@@ -36,7 +36,7 @@ export default function MascotWidget() {
       <div style={{ position: 'relative', pointerEvents: 'auto' }}>
         <MascotChatPanel chat={chat} />
         {!chat.isOpen && (
-          <div style={{ position: 'absolute', top: 0, right: 0 }}>
+          <div style={{ position: 'absolute', bottom: 0, right: 0 }}>
             <MascotAvatar
               state={mascotState}
               onClick={() => chat.setOpen(true)}
@@ -45,7 +45,7 @@ export default function MascotWidget() {
           </div>
         )}
         {chat.isOpen && (
-          <div style={{ position: 'absolute', top: 0, right: 0 }}>
+          <div style={{ position: 'absolute', bottom: 0, right: 0 }}>
             <MascotAvatar
               state={mascotState}
               onClick={() => chat.setOpen(false)}
