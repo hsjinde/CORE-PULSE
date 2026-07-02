@@ -20,11 +20,11 @@
   # - style-src 'self' 'unsafe-inline' https://fonts.googleapis.com : allow Google Fonts CSS
   # - font-src 'self' https://fonts.gstatic.com : allow Google Fonts files
   # - img-src 'self' https: data: : allow HTTPS images (blog cover images)
-  # - connect-src 'self' https://cli.19980803.xyz : fetch() to LLM endpoint
+  # - connect-src 'self'          : fetch() calls only to same origin
   # - frame-ancestors 'none'      : double-blocks clickjacking (with X-Frame-Options)
   # - base-uri 'self'             : prevents base tag hijacking
   # - form-action 'self'          : form submissions only to self
-  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self' https://cli.19980803.xyz; frame-ancestors 'none'; base-uri 'self'; form-action 'self';
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';
 
 /api/*
   # API routes: allow CORS for credentialed requests but tighten framing

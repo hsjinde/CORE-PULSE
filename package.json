@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "node scripts/gen-wiki.cjs && vite",
-    "build": "node scripts/gen-wiki.cjs && node scripts/gen-client-config.cjs && tsc -b && vite build",
+    "build": "node scripts/gen-wiki.cjs && tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "node scripts/gen-wiki.cjs && vitest run",
