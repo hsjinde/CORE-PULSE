@@ -17,9 +17,13 @@ export default function MascotChatPanel({ chat }: Props) {
   // 自動捲到底
   useEffect(() => {
     if (listRef.current) {
-      listRef.current.scrollTop = listRef.current.scrollHeight;
+      requestAnimationFrame(() => {
+        if (listRef.current) {
+          listRef.current.scrollTop = listRef.current.scrollHeight;
+        }
+      });
     }
-  }, [chat.messages, chat.status]);
+  }, [chat.messages, chat.status, chat.isOpen]);
 
   // 開啟時自動 focus input
   useEffect(() => {
