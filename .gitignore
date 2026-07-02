@@ -30,6 +30,8 @@ build/
 
 # TypeScript cache
 *.tsbuildinfo
+.env.production
+src/services/llm-config.ts
 functions/api/_wiki-gen.ts
 
 # Python

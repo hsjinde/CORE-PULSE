@@ -14,7 +14,8 @@ export async function* streamOpenAI(
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${env.LLM_API_KEY}`,
+      'Authorization': `Bearer ${env.LLM_API_KEY || env.LLM_API_KEY_TEST || ''}`,
+      'User-Agent': 'core-pulse-mascot/1.0',
     },
     body: JSON.stringify({
       model,

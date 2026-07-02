@@ -28,10 +28,9 @@ export function streamChat(opts: StreamChatOpts): StreamChatHandle {
             .filter(m => m.role === 'user' || m.role === 'assistant')
             .map(m => ({ role: m.role, content: m.content })),
         }),
-        signal: controller.signal,
+        signal: opts.signal || controller.signal,
       });
 
-      // 非 SSE 的錯誤（如 429 / 413 / 503）
       if (!res.ok) {
         let msg = `http_${res.status}`;
         try {
@@ -42,20 +41,19 @@ export function streamChat(opts: StreamChatOpts): StreamChatHandle {
         return;
       }
 
-      if (!res.body) {
-        opts.onError('no_body');
+      const reader = res.body?.getReader();
+      if (!reader) {
+        opts.onError('no_reader');
         return;
       }
 
-      const reader = res.body.getReader();
       const decoder = new TextDecoder();
       let buffer = '';
-
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
         buffer += decoder.decode(value, { stream: true });
-        let idx: number;
+        let idx;
         while ((idx = buffer.indexOf('\n\n')) >= 0) {
           const chunk = buffer.slice(0, idx);
           buffer = buffer.slice(idx + 2);

@@ -12,6 +12,32 @@ import { enforceRateLimit } from './chat-rate-limit';
 import { assembleSystemPrompt } from './chat-prompts';
 import { streamOpenAI } from './chat-llm-openai';
 
+// ── GET /api/chat?action=config ──────────────────────────────
+
+export const onRequestGet = async (context: EventContext): Promise<Response> => {
+  const { request, env } = context;
+  const origin = request.headers.get('Origin');
+  const url = new URL(request.url);
+
+  if (url.searchParams.get('action') === 'config') {
+    return jsonResponse({
+      baseUrl: env.LLM_BASE_URL || 'https://api.openai.com/v1/chat/completions',
+      hasKey: !!(env.LLM_API_KEY || env.LLM_API_KEY_TEST),
+      model: env.LLM_MODEL || 'gpt-5.4-mini',
+    }, 200, corsHeaders(origin));
+  }
+
+  if (url.searchParams.get('action') === 'debug') {
+    const allKeys = Object.keys(env);
+    const stringKeys = allKeys.filter(k => typeof (env as Record<string, unknown>)[k] === 'string');
+    const hasLLM = stringKeys.includes('LLM_BASE_URL');
+    const hasKey = stringKeys.includes('LLM_API_KEY');
+    return jsonResponse({ stringKeys, totalKeys: allKeys.length, hasLLM_BASE_URL: hasLLM, hasLLM_API_KEY: hasKey }, 200, corsHeaders(origin));
+  }
+
+  return new Response('Not found', { status: 404 });
+};
+
 // ── CORS preflight ──────────────────────────────────────────
 
 export const onRequestOptions = async (context: EventContext): Promise<Response> => {
