@@ -104,9 +104,13 @@ export default function MascotChatPanel({ chat }: Props) {
             role="log"
             aria-live="polite"
             style={{
-              flex: 1, overflowY: 'auto',
+              flex: 1, 
+              overflowY: 'auto',
+              minHeight: 0,
+              overscrollBehavior: 'contain',
               padding: '16px 14px',
-              display: 'flex', flexDirection: 'column',
+              display: 'flex', 
+              flexDirection: 'column',
             }}
           >
             {chat.messages.length === 0 && (

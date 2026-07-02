@@ -25,7 +25,8 @@ export function streamChat(opts: StreamChatOpts): StreamChatHandle {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           messages: opts.messages
-            .filter(m => m.role === 'user' || m.role === 'assistant')
+            .filter(m => (m.role === 'user' || m.role === 'assistant') && m.content.trim() !== '')
+            .slice(-12)
             .map(m => ({ role: m.role, content: m.content })),
         }),
         signal: opts.signal || controller.signal,

@@ -8,6 +8,7 @@ interface Props {
 
 export default function MascotAvatar({ state, onClick, ariaLabel }: Props) {
   // ── Playful Motion Personality: bounce, overshoot, elastic ──
+  // ── Motion Design: Three Pillars — Emotional=Joy, Narrative=Penguin alive, Craft=Squash&Stretch ──
 
   const isIdle = state === 'idle';
   const isThinking = state === 'thinking';
@@ -62,7 +63,7 @@ export default function MascotAvatar({ state, onClick, ariaLabel }: Props) {
           </circle>
         )}
 
-        {/* ═══ PRIMARY LAYER — face ═══ */}
+        {/* ═══ PRIMARY LAYER — Penguin ═══ */}
         <g>
           {/* Disney «Squash & Stretch»: breathing body */}
           {isIdle && (
@@ -71,106 +72,109 @@ export default function MascotAvatar({ state, onClick, ariaLabel }: Props) {
               calcMode="spline" keySplines="0.4 0 0.2 1; 0.4 0 0.2 1" />
           )}
 
-          {/* Head bubble */}
-          <circle cx="16" cy="14" r="11" fill="var(--glass-2)" stroke="var(--border)" strokeWidth="1.2" />
+          {/* ═══ Feet & Shadow (Secondary) ═══ */}
+          <g>
+            {/* Left Foot */}
+            <ellipse cx="11" cy="25" rx="3.5" ry="1.5" fill="#FF9F0A" />
+            {/* Right Foot */}
+            <ellipse cx="21" cy="25" rx="3.5" ry="1.5" fill="#FF9F0A" />
+            
+            {/* Talking: Wobble feet */}
+            {isTalking && (
+              <animateTransform attributeName="transform" type="rotate"
+                values="-2 16 25; 2 16 25; -2 16 25" dur="0.4s" repeatCount="indefinite" />
+            )}
+          </g>
 
-          {/* Talking: pulsing ring (Disney «Follow Through») */}
+          {/* ═══ Wings (Secondary) ═══ */}
+          <g>
+            {/* Left Wing */}
+            <path d="M 7 13 Q 2 17 5 21 Q 8 17 7 13" fill="#1C1C1E">
+              {isTalking && (
+                <animateTransform attributeName="transform" type="rotate" values="0 7 13; 15 7 13; 0 7 13" dur="0.5s" repeatCount="indefinite" />
+              )}
+            </path>
+            {/* Right Wing */}
+            <path d="M 25 13 Q 30 17 27 21 Q 24 17 25 13" fill="#1C1C1E">
+              {isTalking && (
+                <animateTransform attributeName="transform" type="rotate" values="0 25 13; -15 25 13; 0 25 13" dur="0.5s" repeatCount="indefinite" begin="0.25s" />
+              )}
+            </path>
+          </g>
+
+          {/* ═══ Body ═══ */}
+          {/* Black Back */}
+          <rect x="6" y="5" width="20" height="21" rx="10" fill="#1C1C1E" />
+          
+          {/* White Belly */}
+          <rect x="8" y="10" width="16" height="15" rx="7.5" fill="#FFFFFF" />
+
+          {/* Talking: Pulsing Aura (Follow Through) */}
           {isTalking && (
-            <circle cx="16" cy="14" r="11" fill="none" stroke="var(--accent-purple)" strokeWidth="0.8">
-              <animate attributeName="r" values="11;13;11" dur="0.5s" repeatCount="indefinite" />
+            <rect x="6" y="5" width="20" height="21" rx="10" fill="none" stroke="var(--accent-purple)" strokeWidth="0.8">
+              <animateTransform attributeName="transform" type="scale" values="1;1.08;1" dur="0.5s" repeatCount="indefinite" />
               <animate attributeName="opacity" values="0.5;0;0.5" dur="0.5s" repeatCount="indefinite" />
-            </circle>
+            </rect>
           )}
 
-          {/* ═══ Eyes (Disney «Appeal + Exaggeration») ═══ */}
+          {/* ═══ Eyes ═══ */}
           <g>
-            {/* Eye whites */}
-            <ellipse cx="11.5" cy="12" rx="2.8" ry="3.8" fill="var(--text-primary)" />
-            <ellipse cx="20.5" cy="12" rx="2.8" ry="3.8" fill="var(--text-primary)" />
+            {/* Left Eye */}
+            <circle cx="12" cy="13" r="2.2" fill="#1C1C1E" />
+            <circle cx="11.4" cy="12.4" r="0.7" fill="#FFFFFF" />
+            
+            {/* Right Eye */}
+            <circle cx="20" cy="13" r="2.2" fill="#1C1C1E" />
+            <circle cx="19.4" cy="12.4" r="0.7" fill="#FFFFFF" />
 
-            {/* Blinking (both eyes, staggered timing) */}
+            {/* Blinking */}
             {isIdle && (
               <>
-                <ellipse cx="11.5" cy="12" rx="2.8" ry="3.8" fill="var(--text-primary)">
-                  <animate attributeName="ry" values="3.8;0.3;3.8" dur="3.5s" repeatCount="indefinite" begin="0.8s"
+                <ellipse cx="12" cy="13" rx="2.2" ry="2.2" fill="#1C1C1E">
+                  <animate attributeName="ry" values="2.2;0.2;2.2" dur="3.5s" repeatCount="indefinite" begin="0.8s"
                     calcMode="spline" keySplines="0.4 0 0.6 1; 0.4 0 0.6 1" />
                 </ellipse>
-                <ellipse cx="20.5" cy="12" rx="2.8" ry="3.8" fill="var(--text-primary)">
-                  <animate attributeName="ry" values="3.8;0.3;3.8" dur="3.5s" repeatCount="indefinite" begin="1.0s"
+                <ellipse cx="20" cy="13" rx="2.2" ry="2.2" fill="#1C1C1E">
+                  <animate attributeName="ry" values="2.2;0.2;2.2" dur="3.5s" repeatCount="indefinite" begin="1.0s"
                     calcMode="spline" keySplines="0.4 0 0.6 1; 0.4 0 0.6 1" />
                 </ellipse>
               </>
             )}
 
-            {/* Pupils */}
-            <ellipse cx="12.2" cy="11.5" rx="1.4" ry="2" fill="var(--bg-primary)" />
-            <ellipse cx="21.2" cy="11.5" rx="1.4" ry="2" fill="var(--bg-primary)" />
-
-            {/* Eye shine */}
-            <circle cx="11.2" cy="10.2" r="0.9" fill="white" opacity="0.7" />
-            <circle cx="20.2" cy="10.2" r="0.9" fill="white" opacity="0.7" />
-
-            {/* Thinking: eyes shift sideways */}
+            {/* Thinking Eyes */}
             {isThinking && (
-              <>
-                <ellipse cx="11.5" cy="12" rx="2.8" ry="3.8" fill="var(--text-primary)">
-                  <animateTransform attributeName="transform" type="translate" values="0,0; -1,0; 0,0" dur="1.5s" repeatCount="indefinite" />
-                </ellipse>
-                <ellipse cx="20.5" cy="12" rx="2.8" ry="3.8" fill="var(--text-primary)">
-                  <animateTransform attributeName="transform" type="translate" values="0,0; 1,0; 0,0" dur="1.5s" repeatCount="indefinite" />
-                </ellipse>
-              </>
+              <animateTransform attributeName="transform" type="translate" values="0,0; -1,0; 1,0; 0,0" dur="2s" repeatCount="indefinite" />
             )}
           </g>
 
-          {/* ═══ Cheeks (Secondary Layer — «Appeal») ═══ */}
-          <g opacity="0.4">
-            <ellipse cx="9" cy="18.5" rx="3.2" ry="2.2" fill="var(--accent-purple)">
-              {isTalking && <animate attributeName="opacity" values="0.3;0.55;0.3" dur="0.5s" repeatCount="indefinite" />}
-            </ellipse>
-            <ellipse cx="23" cy="18.5" rx="3.2" ry="2.2" fill="var(--accent-purple)">
-              {isTalking && <animate attributeName="opacity" values="0.3;0.55;0.3" dur="0.5s" repeatCount="indefinite" begin="0.25s" />}
-            </ellipse>
-          </g>
-
-          {/* ═══ Ears (Secondary Layer — bob on idle, wiggle on talking) ═══ */}
-          <g>
-            <circle cx="9" cy="8" r="2.2" fill="var(--glass-3)" stroke="var(--border)" strokeWidth="0.6">
-              {isIdle && <animate attributeName="cy" values="8;7.2;8" dur="2.8s" repeatCount="indefinite" />}
-              {isTalking && <animate attributeName="cy" values="8;7;8" dur="0.4s" repeatCount="indefinite" />}
-            </circle>
-            <circle cx="23" cy="8" r="2.2" fill="var(--glass-3)" stroke="var(--border)" strokeWidth="0.6">
-              {isIdle && <animate attributeName="cy" values="8;7.2;8" dur="2.8s" repeatCount="indefinite" begin="0.3s" />}
-              {isTalking && <animate attributeName="cy" values="8;7;8" dur="0.4s" repeatCount="indefinite" begin="0.2s" />}
-            </circle>
-          </g>
-
-          {/* ═══ Mouth (Primary — expressive) ═══ */}
+          {/* ═══ Beak (Mouth) ═══ */}
           {isTalking ? (
-            <ellipse cx="16" cy="21.5" rx="3" ry="1" fill="var(--accent-purple)">
-              <animate attributeName="ry" values="1;3.5;1;3;1" dur="0.3s" repeatCount="indefinite"
-                calcMode="spline" keySplines="0.25 0.1 0.25 1; 0.25 0.1 0.25 1; 0.25 0.1 0.25 1" />
-              <animate attributeName="rx" values="3;3.8;3;3.5;3" dur="0.3s" repeatCount="indefinite"
-                calcMode="spline" keySplines="0.25 0.1 0.25 1; 0.25 0.1 0.25 1; 0.25 0.1 0.25 1" />
+            <ellipse cx="16" cy="16" rx="3.5" ry="2" fill="#FF9F0A">
+              <animate attributeName="ry" values="1.5;3.5;1.5" dur="0.3s" repeatCount="indefinite" />
+              <animate attributeName="rx" values="3.5;4;3.5" dur="0.3s" repeatCount="indefinite" />
             </ellipse>
           ) : isThinking ? (
+            <ellipse cx="16" cy="16" rx="2.5" ry="1.5" fill="#FF9F0A" />
+          ) : (
+            <path d="M 13 16 Q 16 18 19 16 Q 16 15 13 16 Z" fill="#FF9F0A" />
+          )}
+
+          {/* ═══ Thinking Indicators (Ambient) ═══ */}
+          {isThinking && (
             <g>
-              <circle cx="12.5" cy="21.5" r="1.2" fill="var(--accent-orange)">
+              <circle cx="12.5" cy="22" r="1.2" fill="var(--accent-orange)">
                 <animate attributeName="opacity" values="0.2;1;0.2" dur="1s" begin="0s" repeatCount="indefinite" />
                 <animate attributeName="r" values="1.2;1.8;1.2" dur="1s" begin="0s" repeatCount="indefinite" />
               </circle>
-              <circle cx="16" cy="21.5" r="1.2" fill="var(--accent-orange)">
+              <circle cx="16" cy="22" r="1.2" fill="var(--accent-orange)">
                 <animate attributeName="opacity" values="0.2;0.2;1;0.2" dur="1s" begin="0.15s" repeatCount="indefinite" />
                 <animate attributeName="r" values="1.2;1.8;1.2" dur="1s" begin="0.15s" repeatCount="indefinite" />
               </circle>
-              <circle cx="19.5" cy="21.5" r="1.2" fill="var(--accent-orange)">
+              <circle cx="19.5" cy="22" r="1.2" fill="var(--accent-orange)">
                 <animate attributeName="opacity" values="0.2;0.2;0.2;1;0.2" dur="1s" begin="0.3s" repeatCount="indefinite" />
                 <animate attributeName="r" values="1.2;1.8;1.2" dur="1s" begin="0.3s" repeatCount="indefinite" />
               </circle>
             </g>
-          ) : (
-            /* Idle: curved smile */
-            <path d="M 12.5 20.5 Q 16 24.5 19.5 20.5" stroke="var(--text-primary)" strokeWidth="1.5" fill="none" strokeLinecap="round" />
           )}
         </g>
       </svg>
