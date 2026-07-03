@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import Lenis from 'lenis'
+import { registerLenis } from '@/lib/lenisController'
 import Navbar from '@/components/Navbar/Navbar'
 import Hero from '@/components/Hero/Hero'
 import BentoGrid from '@/components/Bento/BentoGrid'
@@ -19,6 +20,8 @@ export default function Home() {
       touchMultiplier: 2,
     })
 
+    registerLenis(lenis)
+
     function raf(time: number) {
       lenis.raf(time)
       requestAnimationFrame(raf)
@@ -26,7 +29,10 @@ export default function Home() {
 
     requestAnimationFrame(raf)
 
-    return () => lenis.destroy()
+    return () => {
+      registerLenis(null)
+      lenis.destroy()
+    }
   }, [])
 
   return (
