@@ -296,6 +296,13 @@ export default function Projects() {
             Projects that{' '}
             <span className="gradient-text-warm">matter</span>
           </h2>
+          <motion.span
+            className="headline-accent"
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.25, ease: [0.34, 1.1, 0.64, 1] }}
+          />
         </motion.div>
 
         {projects.map((project, i) => (

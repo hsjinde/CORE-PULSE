@@ -148,6 +148,12 @@ export default function BentoGrid() {
         >
           <p className="text-label" style={{ marginBottom: 14 }}>Technical Arsenal</p>
           <h2 className="text-headline gradient-text-blue">Skills &amp; Infrastructure</h2>
+          <motion.span
+            className="headline-accent"
+            initial={{ scaleX: 0 }}
+            animate={titleInView ? { scaleX: 1 } : {}}
+            transition={{ duration: 0.7, delay: 0.25, ease: [0.34, 1.1, 0.64, 1] }}
+          />
         </motion.div>
 
         {/* Bento Grid */}

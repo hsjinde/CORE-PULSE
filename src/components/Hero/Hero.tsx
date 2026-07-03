@@ -11,25 +11,26 @@ const roles = [
 
 /* ── Floating Orb ─────────────────────────────────────────────── */
 function GlowOrb({
-  x, y, size, color, mouseX, mouseY, factor,
+  x, y, size, color, mouseX, mouseY, factor, floatDuration = 9,
 }: {
   x: string; y: string; size: number; color: string;
-  mouseX: number; mouseY: number; factor: number
+  mouseX: number; mouseY: number; factor: number; floatDuration?: number
 }) {
   return (
     <motion.div
-      className="absolute rounded-full pointer-events-none"
-      style={{
-        width: size,
-        height: size,
-        left: x,
-        top: y,
-        background: `radial-gradient(circle, ${color} 0%, transparent 70%)`,
-        filter: 'blur(1px)',
-      }}
+      className="absolute pointer-events-none"
+      style={{ width: size, height: size, left: x, top: y, filter: 'blur(1px)' }}
       animate={{ x: mouseX * factor, y: mouseY * factor }}
       transition={{ type: 'spring', stiffness: 30, damping: 18, mass: 0.8 }}
-    />
+    >
+      <div
+        className="orb-float"
+        style={{
+          background: `radial-gradient(circle, ${color} 0%, transparent 70%)`,
+          ['--float-duration' as string]: `${floatDuration}s`,
+        }}
+      />
+    </motion.div>
   )
 }
 
@@ -112,9 +113,9 @@ export default function Hero() {
       />
 
       {/* ── Parallax glow orbs ─── */}
-      <GlowOrb x="5%"  y="12%" size={700} color="rgba(41,151,255,0.10)"  mouseX={mouseOffset.x} mouseY={mouseOffset.y} factor={-1.8} />
-      <GlowOrb x="55%" y="55%" size={500} color="rgba(191,90,242,0.08)"  mouseX={mouseOffset.x} mouseY={mouseOffset.y} factor={ 1.4} />
-      <GlowOrb x="30%" y="70%" size={350} color="rgba(48,209,88,0.06)"   mouseX={mouseOffset.x} mouseY={mouseOffset.y} factor={-1.0} />
+      <GlowOrb x="5%"  y="12%" size={700} color="rgba(41,151,255,0.10)"  mouseX={mouseOffset.x} mouseY={mouseOffset.y} factor={-1.8} floatDuration={9}  />
+      <GlowOrb x="55%" y="55%" size={500} color="rgba(191,90,242,0.08)"  mouseX={mouseOffset.x} mouseY={mouseOffset.y} factor={ 1.4} floatDuration={12} />
+      <GlowOrb x="30%" y="70%" size={350} color="rgba(48,209,88,0.06)"   mouseX={mouseOffset.x} mouseY={mouseOffset.y} factor={-1.0} floatDuration={7}  />
 
       {/* ── Main Content ────────── */}
       <motion.div
@@ -153,28 +154,10 @@ export default function Hero() {
           className="text-display mb-6"
         >
           I'm{' '}
-          <span
-            style={{
-              background: 'linear-gradient(135deg, #ffd700 0%, #ff9f0a 60%, #ff6b35 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}
-          >
-            Ethan
-          </span>
+          <span className="hero-gradient-warm">Ethan</span>
           {'.'} I build
           <br className="hidden md:inline" />
-          <span
-            style={{
-              background: 'linear-gradient(135deg, #5eb8ff 0%, #2997ff 50%, #bf5af2 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}
-          >
-            resilient
-          </span>{' '}
+          <span className="hero-gradient-cool">resilient</span>{' '}
           cloud &amp; AI systems.
         </motion.h1>
 

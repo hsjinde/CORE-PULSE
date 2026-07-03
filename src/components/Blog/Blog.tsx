@@ -163,6 +163,15 @@ export default function Blog() {
             個人筆記
           </motion.h2>
 
+          <motion.span
+            className="headline-accent align-left"
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.2, ease: [0.34, 1.1, 0.64, 1] }}
+            style={{ marginBottom: 16 }}
+          />
+
           <motion.p
             initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
