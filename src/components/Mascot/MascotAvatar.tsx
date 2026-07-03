@@ -1,5 +1,6 @@
 import type { MascotState } from './mascot.types';
-import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import Lottie from 'lottie-react';
+import { useEffect, useState } from 'react';
 
 interface Props {
   state: MascotState;
@@ -11,8 +12,15 @@ export default function MascotAvatar({ state, onClick, ariaLabel }: Props) {
   // ── Playful Motion Personality: bounce, overshoot, elastic ──
   // ── Motion Design: Three Pillars — Emotional=Joy, Narrative=Penguin alive, Craft=Squash&Stretch ──
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [animationData, setAnimationData] = useState<any>(null);
 
-  const isTalking = state === 'talking';
+  useEffect(() => {
+    fetch('/mascot.json')
+      .then(res => res.json())
+      .then(data => setAnimationData(data))
+      .catch(err => console.error('[MascotAvatar] Failed to load mascot.json:', err));
+  }, []);
 
   return (
     <button
@@ -32,22 +40,20 @@ export default function MascotAvatar({ state, onClick, ariaLabel }: Props) {
       }}
     >
       <div style={{ width: 120, height: 120, display: 'flex', alignItems: 'center', justifyContent: 'center', transform: 'scale(1.5)' }}>
-        <DotLottieReact
-          src="/mascot.lottie"
-          loop
-          autoplay
-        />
+        {animationData ? (
+          <Lottie
+            animationData={animationData}
+            loop
+            autoplay
+            style={{ width: '100%', height: '100%' }}
+          />
+        ) : (
+          /* 載入中佔位符，避免閃爍 */
+          <div style={{ width: 60, height: 60, opacity: 0.3 }} />
+        )}
       </div>
 
-      {/* ═══ Status dot (Ambient — pulsing green) ═══ */}
-      <span className="status-dot" style={{
-        position: 'absolute', bottom: 2, right: 2,
-        width: 9, height: 9,
-        borderRadius: '50%',
-        border: '2px solid var(--bg-primary)',
-        boxShadow: '0 0 8px rgba(48,209,88,0.5)',
-        animation: isTalking ? 'mascot-dot-bounce 0.5s ease-in-out infinite' : undefined,
-      }} />
+
     </button>
   );
 }
