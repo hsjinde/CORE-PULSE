@@ -6,12 +6,13 @@
   <img src="https://img.shields.io/badge/Vite-5-646CFF?style=flat-square&logo=vite" />
   <img src="https://img.shields.io/badge/Tailwind_CSS-v4-06B6D4?style=flat-square&logo=tailwindcss" />
   <img src="https://img.shields.io/badge/Cloudflare_Pages-Deploy-F38020?style=flat-square&logo=cloudflare" />
+  <img src="https://img.shields.io/badge/Cloudflare_D1-Serverless-F38020?style=flat-square&logo=cloudflare" />
 </div>
 
 <br />
 
-> **SRE Engineer / AI Systems Developer** 的個人品牌網站。  
-> Apple 極簡風格 × Bento Grid 佈局 × Cloudflare 混合雲基礎設施。
+> **SRE Engineer / AI Systems Developer** 的個人品牌網站。
+> Apple 極簡風格 × Bento Grid 佈局 × Cloudflare 混合雲基礎設施 × Serverless CMS × LLM 聊天吉祥物。
 
 ---
 
@@ -22,7 +23,9 @@
 | **Hero** | 打字機角色輪播、滑鼠視差 3D 偏移、環境光球動畫 |
 | **Bento Grid** | 技能矩陣、SRE Uptime 圖表、OpenClaw AI 入口、CI/CD 管線 |
 | **Projects** | 蘋果式產品頁：Problem → Solution → Result |
-| **Blog/Notes** | LeetCode 演算法筆記 + SRE 技術文章 |
+| **Blog/Notes** | LeetCode 演算法筆記 + SRE 技術文章（由 D1 資料庫即時提供） |
+| **Mascot Chat** | 浮動吉祥物（Lottie 動畫）+ LLM 聊天視窗，以第一人稱回答關於我的問題 |
+| **Admin CMS** | `/admin` 後台，登入後可即時新增／編輯／刪除文章（免重新部署） |
 | **Footer** | Build Time、LCP、系統健康度、聯絡表單 |
 
 ---
@@ -36,46 +39,59 @@
 | TypeScript | 5 | 型別安全 |
 | Vite | 5 | 建構工具 |
 | Tailwind CSS | v4 | 原子化樣式 |
+| React Router | 7 | SPA 路由（公開頁 + Admin CMS） |
 | Framer Motion | Latest | 動畫效果 |
 | Lenis | Latest | 絲滑物理滾動 |
+| Lottie | Latest | 吉祥物動畫 |
+| react-markdown | Latest | 文章與聊天內容渲染 |
 | lucide-react | Latest | 圖標 |
+
+### 後端（Cloudflare Pages Functions）
+| 模組 | 用途 |
+|------|------|
+| `functions/api/posts*` | 文章 CRUD API（讀 D1，寫入需登入） |
+| `functions/api/auth/*` | HMAC 簽章 Session（HttpOnly Cookie）登入／登出／驗證 |
+| `functions/api/chat*` | LLM 聊天 SSE 代理（限流、輸入淨化、Wiki 系統提示、Token 預算） |
 
 ### 基礎設施
 | 服務 | 用途 |
 |------|------|
-| Cloudflare Pages | 靜態部署 + 全球 CDN |
+| Cloudflare Pages | 靜態部署 + Functions + 全球 CDN |
+| Cloudflare D1 | 文章資料庫（`core_pulse_blog`，SQLite） |
 | Cloudflare R2 | 圖片儲存（零出站費） |
 | Cloudflare Tunnel | VPS 安全連線（不開 Port） |
 | Cloudflare Zero Trust | AI 管理後台存取控制 |
 | RackNerd VPS | OpenClaw AI Docker 容器 |
 | GitHub Actions | CI/CD 自動化部署 |
+| OpenAI-compatible LLM | 聊天吉祥物後端模型 |
 
 ---
 
 ## 快速開始
 
 ### 環境需求
-- Node.js `>= 20.19` 或 `>= 22.12`（Vite 8 需求；Vite 5 需 `>= 18`）
+- Node.js `>= 20.19` 或 `>= 22.12`
 - npm `>= 10`
 
-### 本地開發
+### 常用指令
 
 ```bash
-# 安裝依賴
-npm install
+npm install          # 安裝依賴
 
-# 啟動開發伺服器
-npm run dev
-
-# TypeScript 型別檢查
-npx tsc --noEmit
-
-# 建構生產版本
-npm run build
-
-# 預覽生產建構
-npm run preview
+npm run dev          # gen-wiki + Vite 開發伺服器（:5173，文章走 localStorage）
+npm run build        # gen-wiki + tsc -b + vite build → dist/
+npm run lint         # ESLint 檢查
+npm test             # gen-wiki + Vitest 單元測試（tests/）
+npm run test:watch   # Vitest watch
+npm run test:e2e     # Playwright E2E（需先 build；以 wrangler pages dev 服務 dist :8788）
+npm run preview      # 預覽生產建構
+npx tsc --noEmit     # 獨立型別檢查（CI build 前執行）
 ```
+
+> **⚠️ gen-wiki 建置步驟**：`scripts/gen-wiki.cjs` 會把 `src/content/wiki/*.md` 打包成
+> `functions/api/_wiki-gen.ts`（git 忽略、自動產生），供聊天系統提示使用。此步驟已內嵌於
+> `dev` / `build` / `test` 與 CI，但若你手動跑 `wrangler pages dev` 或 Playwright server，
+> 請先執行 `node scripts/gen-wiki.cjs`。**修改聊天內容請改 `src/content/wiki/*.md`，勿改產生檔。**
 
 ---
 
@@ -83,32 +99,57 @@ npm run preview
 
 ```
 core-pulse/
-├── .agent/
-│   └── skills/
-│       ├── PERSONAL_WEBSITE_SKILL.md   # 建站 Agent Skill
-│       └── DEPLOY_CLOUDFLARE_SKILL.md  # 部署 Agent Skill
-├── .github/
-│   └── workflows/
-│       └── deploy.yml                  # CI/CD 流程
-├── public/
-│   └── favicon.svg
+├── functions/
+│   └── api/                     # Cloudflare Pages Functions（檔案路徑即路由）
+│       ├── posts.ts             # GET(公開) / POST(需登入) 文章
+│       ├── posts/[id].ts        # 單篇讀取 / 刪除
+│       ├── auth/                # login / logout / check
+│       ├── auth-shared.ts       # HMAC Session Cookie 簽發與驗證
+│       ├── chat.ts              # POST /api/chat（SSE 串流）
+│       ├── chat-*.ts            # 限流 / 淨化 / 提示組裝 / LLM 串接 / Wiki
+│       └── _wiki-gen.ts         # 自動產生，勿手改（git 忽略）
 ├── src/
 │   ├── components/
-│   │   ├── Navbar/       # 導覽列（毛玻璃 + 手機漢堡選單）
-│   │   ├── Hero/         # 首屏（打字機 + 視差 + 環境光球）
-│   │   ├── Bento/        # 技術特性 Bento Grid
-│   │   ├── Projects/     # 專案深度解析
-│   │   ├── Blog/         # 技術筆記
-│   │   └── Footer/       # 頁尾 + 聯絡表單
-│   ├── lib/
-│   │   └── utils.ts      # cn() 工具函式
-│   ├── index.css         # 全域樣式 + Design Tokens
-│   ├── App.tsx           # 根組件（Lenis 初始化）
-│   └── main.tsx          # 入口點
-├── index.html            # HTML 模板（SEO + OG 標籤）
-├── vite.config.ts        # Vite 設定（Tailwind v4 + @ 路徑別名）
-└── tsconfig.app.json     # TypeScript 設定
+│   │   ├── Navbar/  Hero/  Bento/  Projects/  Blog/  Footer/
+│   │   └── Mascot/              # 浮動吉祥物 + 聊天視窗
+│   ├── pages/
+│   │   ├── Home.tsx  BlogPost.tsx
+│   │   └── Admin/               # AdminLogin / AdminDashboard / AdminEditor
+│   ├── services/
+│   │   ├── api.ts               # 文章資料層（dev: localStorage / prod: D1 fetch）
+│   │   └── chatClient.ts        # 聊天 SSE 用戶端
+│   ├── hooks/useMascotChat.ts   # 聊天狀態機
+│   ├── content/wiki/*.md        # 吉祥物知識庫（gen-wiki 來源）
+│   ├── lib/utils.ts             # cn() 工具函式
+│   ├── index.css                # 全域樣式 + Design Tokens
+│   ├── App.tsx                  # 根組件（路由 + Lenis）
+│   └── main.tsx                 # 入口點
+├── tests/                       # Vitest 單元測試
+├── e2e/                         # Playwright E2E
+├── scripts/                     # gen-wiki.cjs + 維運腳本（*.mjs）
+├── wrangler.toml                # Pages / D1 綁定與環境變數
+├── vite.config.ts               # Vite（Tailwind v4 + @ 路徑別名）
+└── tsconfig.app.json            # TypeScript 設定
 ```
+
+---
+
+## 架構重點
+
+### 資料層 dev/prod 雙模式
+`src/services/api.ts` 依 `import.meta.env.PROD` 分流：開發時文章讀寫 `localStorage`（免後端），
+生產時打 `/api/posts*` 由 D1 提供。要測真正的後端寫入／刪除，需用 wrangler dev server（即 E2E 的
+webServer），而非 Vite dev server。
+
+### Admin 登入
+無狀態 HMAC 簽章 token 存於 **HttpOnly / Secure / SameSite=Strict** Cookie（`cp_session`，8 小時），
+以 `SESSION_SECRET` 簽發、常數時間比對驗證，登入密碼為 `ADMIN_PASSWORD`。前端 `ProtectedRoute`
+每次掛載時打 `/api/auth/check` 重新驗證。
+
+### 聊天吉祥物
+`/api/chat` 為 SSE 端點：修剪對話歷史、以雜湊 IP + `RATE_LIMIT_SALT` 做每日限流、淨化輸入、
+用 Wiki 內容組出第一人稱人格系統提示，最後串接 OpenAI 相容端點串流 token。Wiki 文件 frontmatter
+標記非 `public` 者會被排除於提示之外。
 
 ---
 
@@ -117,28 +158,27 @@ core-pulse/
 ```
 Push to main
     ↓
-TypeScript 型別檢查
+TypeScript 型別檢查 (tsc --noEmit)
     ↓
-npm run build
+npm run build (gen-wiki + tsc -b + vite build)
     ↓
-Deploy → Cloudflare Pages
-    ↓
-Purge CDN Cache
+Deploy → Cloudflare Pages (wrangler@3)
 ```
 
-### 必要 GitHub Secrets
+> PR 只跑 lint / test / build，不部署。
 
-> ⚠️ **切勿將以下資訊 commit 至程式碼庫**
+### 環境變數與 Secrets
 
-| Secret | 說明 |
-|--------|------|
-| `CLOUDFLARE_API_TOKEN` | CF Pages 部署授權 Token |
-| `CLOUDFLARE_ACCOUNT_ID` | CF 帳戶 ID |
-| `CLOUDFLARE_ZONE_ID` | CF 域名 Zone ID（用於清除快取） |
-| `R2_ACCESS_KEY_ID` | R2 圖床存取金鑰（Phase 4） |
-| `R2_SECRET_ACCESS_KEY` | R2 圖床密鑰（Phase 4） |
-| `VPS_ROOT_PASSWORD` | RackNerd VPS 密碼（Phase 5） |
-| `TUNNEL_TOKEN` | Cloudflare Tunnel Token（Phase 5） |
+> ⚠️ **切勿將 Secret commit 至程式碼庫**，透過 `wrangler pages secret put` 設定。
+
+| 名稱 | 類型 | 說明 |
+|------|------|------|
+| `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` | GitHub Secret | Pages 部署授權 |
+| `SESSION_SECRET` | CF Secret | Admin Session 簽章金鑰 |
+| `ADMIN_PASSWORD` | CF Secret | Admin 登入密碼 |
+| `LLM_API_KEY` | CF Secret | 聊天模型 API Key |
+| `RATE_LIMIT_SALT` | CF Secret | 聊天限流 IP 雜湊鹽 |
+| `LLM_MODEL` / `LLM_BASE_URL` / `RATE_LIMIT_DAILY` / `WIKI_TOKEN_BUDGET` | CF Var | 聊天行為設定 |
 
 ---
 
@@ -148,7 +188,9 @@ Purge CDN Cache
 - [x] **Phase 1** — Vite + React + TS + Tailwind v4 環境建置
 - [x] **Phase 2** — 完整靜態佈局（Hero / Bento / Projects / Blog / Footer）
 - [x] **Phase 3** — GitHub Actions CI/CD 工作流程建立
-- [ ] **Phase 4** — Cloudflare R2 圖床設定（`img.yourdomain.com`）
+- [x] **Phase 4.5** — Cloudflare D1 Serverless CMS + Admin 後台 + Session 認證
+- [x] **Phase 4.6** — LLM 聊天吉祥物（SSE 串流 + 限流 + Wiki 知識庫）
+- [ ] **Phase 4** — Cloudflare R2 圖床設定（`img.19980803.xyz`）
 - [ ] **Phase 5** — RackNerd VPS 啟動 OpenClaw Docker + CF Tunnel
 - [ ] **Phase 6** — Zero Trust 安全設定 + 最終上線
 
@@ -156,7 +198,7 @@ Purge CDN Cache
 
 ## 設計系統
 
-網站使用純 CSS 自訂屬性（Design Tokens）實現 Apple 極簡風格：
+網站使用純 CSS 自訂屬性（Design Tokens）實現 Apple Liquid Glass Dark 風格：
 
 ```css
 /* 核心色彩 */
@@ -169,15 +211,6 @@ Purge CDN Cache
 /* 排版 */
 font-family: 'Inter', -apple-system, 'SF Pro Display'
 ```
-
----
-
-## Agent Skills 文件
-
-本專案使用 `.agent/skills/` 目錄存放可重用的 AI Agent 操作手冊：
-
-- [`PERSONAL_WEBSITE_SKILL.md`](.agent/skills/PERSONAL_WEBSITE_SKILL.md) — 建站流程完整指南
-- [`DEPLOY_CLOUDFLARE_SKILL.md`](.agent/skills/DEPLOY_CLOUDFLARE_SKILL.md) — Cloudflare 部署操作規範
 
 ---
 
