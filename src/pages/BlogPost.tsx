@@ -152,6 +152,7 @@ export default function BlogPost() {
     )
 
     headings.forEach((h) => observer.observe(h))
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- 初始化 active heading，僅在 post 變更時執行一次
     if (headings[0]) setActiveHeading(headings[0].id)
 
     return () => observer.disconnect()

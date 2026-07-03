@@ -1,4 +1,4 @@
-import { corsHeaders, jsonResponse, buildToken, setCookieHeader, SESSION_DURATION_SECONDS, Env, EventContext } from '../auth-shared';
+import { corsHeaders, jsonResponse, buildToken, setCookieHeader, SESSION_DURATION_SECONDS, EventContext } from '../auth-shared';
 
 export const onRequestPost = async (context: EventContext): Promise<Response> => {
   const { request, env } = context;

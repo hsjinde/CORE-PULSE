@@ -8,7 +8,7 @@ interface Props {
   ariaLabel: string;
 }
 
-export default function MascotAvatar({ state: _state, onClick, ariaLabel }: Props) {
+export default function MascotAvatar({ onClick, ariaLabel }: Props) {
   // ── Playful Motion Personality: bounce, overshoot, elastic ──
   // ── Motion Design: Three Pillars — Emotional=Joy, Narrative=Penguin alive, Craft=Squash&Stretch ──
 

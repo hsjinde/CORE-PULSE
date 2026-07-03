@@ -45,6 +45,7 @@ export default function AdminEditor() {
       if (!finalId) {
         // Auto-generate slug from title
         finalId = formData.title.toLowerCase().replace(/[\s_]+/g, '-').replace(/[^\w-]/g, '')
+        // eslint-disable-next-line react-hooks/purity -- 事件處理器內取時間戳，非 render 期間
         if (!finalId) finalId = `post-${Date.now()}`
       }
 
