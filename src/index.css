@@ -1525,6 +1525,73 @@
   border-color: rgba(255, 255, 255, 0.25);
 }
 
+/* ─── Terminal Card ───────────────────────────────────────────── */
+.terminal-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.terminal-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.terminal-dots i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.terminal-dots i:nth-child(1) { background: rgba(255, 95, 86, 0.65); }
+.terminal-dots i:nth-child(2) { background: rgba(255, 189, 46, 0.65); }
+.terminal-dots i:nth-child(3) { background: rgba(39, 201, 63, 0.65); }
+
+.terminal-title {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  color: var(--text-tertiary);
+}
+
+.terminal-body {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.8125rem;
+  line-height: 1.8;
+  min-height: 168px;
+}
+
+.terminal-line-cmd {
+  color: var(--accent-green);
+}
+
+.terminal-line-cmd::before {
+  content: '$ ';
+  color: var(--text-tertiary);
+}
+
+.terminal-line-out {
+  color: var(--text-secondary);
+  padding-left: 1.1em;
+}
+
+.terminal-cursor {
+  display: inline-block;
+  width: 7px;
+  height: 1em;
+  margin-left: 3px;
+  vertical-align: text-bottom;
+  background: var(--accent-green);
+  animation: cursor-blink 1s steps(2) infinite;
+}
+
+@keyframes cursor-blink {
+  50% { opacity: 0; }
+}
+
 .prose pre code {
   background: transparent;
   padding: 0;

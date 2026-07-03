@@ -4,6 +4,7 @@ import {
   Server, Shield, Cpu, Activity, Globe, Code2,
   GitBranch, Bot,
 } from 'lucide-react'
+import TerminalCard from './TerminalCard'
 
 /* ─── Types ──────────────────────────────────────────────────── */
 interface BentoCardProps {
@@ -33,43 +34,6 @@ function AnimatedCounter({ target, suffix = '' }: { target: number; suffix?: str
   }, [inView, target])
 
   return <span ref={ref}>{count}{suffix}</span>
-}
-
-/* ─── Mini Uptime Chart ──────────────────────────────────────── */
-const UPTIME_BARS = Array.from({ length: 30 }, (_, i) => {
-  // Deterministic values to avoid Math.random() during render
-  const height = 55 + ((i * 7 + 13) % 45);
-  const ok = (i * 3 + 1) % 17 !== 0;
-  return { height, ok };
-});
-
-function UptimeChart() {
-  const bars = UPTIME_BARS;
-
-  return (
-    <div style={{ display: 'flex', alignItems: 'flex-end', gap: 3, height: 48 }}>
-      {bars.map((bar, i) => (
-        <motion.div
-          key={i}
-          initial={{ scaleY: 0 }}
-          animate={{ scaleY: 1 }}
-          transition={{ delay: i * 0.025, duration: 0.4, ease: 'easeOut' }}
-          style={{
-            flex: 1,
-            height: `${bar.height}%`,
-            borderRadius: 3,
-            background: bar.ok
-              ? 'rgba(48, 209, 88, 0.75)'
-              : 'rgba(255, 69, 58, 0.75)',
-            transformOrigin: 'bottom',
-            boxShadow: bar.ok
-              ? '0 0 4px rgba(48,209,88,0.35)'
-              : '0 0 4px rgba(255,69,58,0.35)',
-          }}
-        />
-      ))}
-    </div>
-  )
 }
 
 /* ─── Bento Card Wrapper ─────────────────────────────────────── */
@@ -158,28 +122,14 @@ export default function BentoGrid() {
 
         {/* Bento Grid */}
         <div className="bento-grid">
-          {/* ── Card 1: SRE Status (4 cols) ── */}
+          {/* ── Card 1: Interactive Terminal (4 cols) ── */}
           <div className="bento-col-4">
             <BentoCard
               delay={0.05}
               className="h-full"
               glowColor="radial-gradient(ellipse at top right, rgba(48,209,88,0.07) 0%, transparent 70%)"
             >
-              <div className="flex items-center gap-2" style={{ marginBottom: 16 }}>
-                <span className="status-dot" />
-                <span className="text-label">System Status</span>
-              </div>
-              <p className="text-title" style={{ marginBottom: 4, fontFamily: 'var(--font-heading)' }}>
-                <AnimatedCounter target={99} suffix=".97%" />
-              </p>
-              <p className="text-body" style={{ fontSize: '0.8125rem', marginBottom: 20 }}>
-                Uptime — Last 90 days
-              </p>
-              <UptimeChart />
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 10 }}>
-                <span style={{ fontSize: '0.6875rem', color: 'var(--text-tertiary)', fontFamily: 'var(--font-body)' }}>30 days ago</span>
-                <span style={{ fontSize: '0.6875rem', color: 'var(--text-tertiary)', fontFamily: 'var(--font-body)' }}>Today</span>
-              </div>
+              <TerminalCard />
             </BentoCard>
           </div>
 
