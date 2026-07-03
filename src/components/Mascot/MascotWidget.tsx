@@ -67,7 +67,7 @@ export default function MascotWidget() {
 
   return (
     <>
-      {/* 手機：面板放在拖曳容器之外，避免 transform 容器內 fixed 定位跑掉 */}
+      {/* 手機全螢幕聊天：position fixed 不能放在有 transform 的祖先內，必須是兄弟節點 */}
       {isMobile && (
         <MascotChatPanel chat={chat} anchor="up" maxPanelHeight={0} isMobile />
       )}

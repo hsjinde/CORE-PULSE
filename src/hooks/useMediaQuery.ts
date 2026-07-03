@@ -11,6 +11,7 @@ export function useMediaQuery(query: string): boolean {
     if (typeof window.matchMedia !== 'function') return;
     const mql = window.matchMedia(query);
     const onChange = (e: MediaQueryListEvent) => setMatches(e.matches);
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- query 變更時同步當前狀態
     setMatches(mql.matches);
     mql.addEventListener('change', onChange);
     return () => mql.removeEventListener('change', onChange);

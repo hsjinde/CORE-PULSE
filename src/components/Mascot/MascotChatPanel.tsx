@@ -24,7 +24,11 @@ export default function MascotChatPanel({ chat, anchor, maxPanelHeight, isMobile
   // 手機鍵盤：面板高度跟著 visualViewport 走，輸入框永遠可見
   const [vvHeight, setVvHeight] = useState<number | null>(null);
   useEffect(() => {
-    if (!(chat.isOpen && isMobile)) { setVvHeight(null); return; }
+    if (!(chat.isOpen && isMobile)) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- 關窗/切桌機時重置高度
+      setVvHeight(null);
+      return;
+    }
     const vv = window.visualViewport;
     if (!vv) return; // 不支援 → 退回 100dvh
     const update = () => setVvHeight(vv.height);
@@ -49,7 +53,7 @@ export default function MascotChatPanel({ chat, anchor, maxPanelHeight, isMobile
     };
   }, [chat.isOpen, isMobile]);
 
-  // 自動捲到底
+  // 自動捲到底（鍵盤彈出改變高度時也重新貼底）
   useEffect(() => {
     if (listRef.current) {
       requestAnimationFrame(() => {
@@ -215,8 +219,9 @@ export default function MascotChatPanel({ chat, anchor, maxPanelHeight, isMobile
                 padding: '10px 12px',
                 color: 'var(--text-primary)',
                 fontFamily: 'var(--font-body)',
-                fontSize: isMobile ? '16px' : '0.9rem',
+                fontSize: isMobile ? '16px' : '0.9rem', // 16px 防止 iOS 聚焦自動縮放
                 lineHeight: 1.5,
+                maxHeight: 100,
                 outline: 'none',
               }}
             />
