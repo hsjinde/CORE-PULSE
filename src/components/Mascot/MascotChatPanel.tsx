@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Send, Square } from 'lucide-react';
 import type { UseMascotChat } from '@/hooks/useMascotChat';
+import { stopLenis, startLenis } from '@/lib/lenisController';
 import MessageBubble from './MessageBubble';
 
 interface Props {
@@ -10,13 +11,43 @@ interface Props {
   anchor: 'up' | 'down';
   /** 展開方向上可用的最大高度（px），避免超出視窗 */
   maxPanelHeight: number;
+  /** ≤640px：全螢幕聊天模式 */
+  isMobile: boolean;
 }
 
-export default function MascotChatPanel({ chat, anchor, maxPanelHeight }: Props) {
+export default function MascotChatPanel({ chat, anchor, maxPanelHeight, isMobile }: Props) {
   const [text, setText] = useState('');
   const listRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const isBusy = chat.status === 'thinking' || chat.status === 'talking';
+
+  // 手機鍵盤：面板高度跟著 visualViewport 走，輸入框永遠可見
+  const [vvHeight, setVvHeight] = useState<number | null>(null);
+  useEffect(() => {
+    if (!(chat.isOpen && isMobile)) { setVvHeight(null); return; }
+    const vv = window.visualViewport;
+    if (!vv) return; // 不支援 → 退回 100dvh
+    const update = () => setVvHeight(vv.height);
+    update();
+    vv.addEventListener('resize', update);
+    vv.addEventListener('scroll', update);
+    return () => {
+      vv.removeEventListener('resize', update);
+      vv.removeEventListener('scroll', update);
+    };
+  }, [chat.isOpen, isMobile]);
+
+  // 手機開窗：鎖定背景捲動（Lenis + body overflow），關窗還原
+  useEffect(() => {
+    if (!(chat.isOpen && isMobile)) return;
+    stopLenis();
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      startLenis();
+    };
+  }, [chat.isOpen, isMobile]);
 
   // 自動捲到底
   useEffect(() => {
@@ -27,7 +58,7 @@ export default function MascotChatPanel({ chat, anchor, maxPanelHeight }: Props)
         }
       });
     }
-  }, [chat.messages, chat.status, chat.isOpen]);
+  }, [chat.messages, chat.status, chat.isOpen, vvHeight]);
 
   // 開啟時自動 focus input
   useEffect(() => {
@@ -54,30 +85,52 @@ export default function MascotChatPanel({ chat, anchor, maxPanelHeight }: Props)
     <AnimatePresence>
       {chat.isOpen && (
         <motion.div
-          initial={{ opacity: 0, y: anchor === 'up' ? 12 : -12, scale: 0.96 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: anchor === 'up' ? 12 : -12, scale: 0.96 }}
+          initial={isMobile ? { opacity: 0 } : { opacity: 0, y: anchor === 'up' ? 12 : -12, scale: 0.96 }}
+          animate={isMobile ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
+          exit={isMobile ? { opacity: 0 } : { opacity: 0, y: anchor === 'up' ? 12 : -12, scale: 0.96 }}
           transition={{ duration: 0.25, ease: [0.34, 1.1, 0.64, 1] }}
           role="dialog"
           aria-label="與 hsjinde 吉祥物對話"
-          style={{
-            position: 'absolute',
-            ...(anchor === 'up' ? { bottom: 0 } : { top: 0 }),
-            right: 0,
-            transformOrigin: anchor === 'up' ? 'bottom right' : 'top right',
-            width: 'min(380px, calc(100vw - 48px))',
-            height: `min(60vh, ${Math.max(280, Math.min(600, maxPanelHeight))}px)`,
-            display: 'flex',
-            flexDirection: 'column',
-            background: 'var(--glass-3)',
-            backdropFilter: 'var(--blur-xl)',
-            WebkitBackdropFilter: 'var(--blur-xl)',
-            border: '1px solid var(--border)',
-            borderRadius: 'var(--radius-xl)',
-            boxShadow: 'var(--shadow-lg), var(--shadow-purple)',
-            overflow: 'hidden',
-            zIndex: 10000,
-          }}
+          style={
+            isMobile
+              ? {
+                  position: 'fixed',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  width: '100%',
+                  height: vvHeight ? `${vvHeight}px` : '100dvh',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  background: 'var(--glass-3)',
+                  backdropFilter: 'var(--blur-xl)',
+                  WebkitBackdropFilter: 'var(--blur-xl)',
+                  border: 'none',
+                  borderRadius: 0,
+                  overflow: 'hidden',
+                  zIndex: 10000,
+                  paddingTop: 'env(safe-area-inset-top)',
+                  paddingBottom: 'env(safe-area-inset-bottom)',
+                }
+              : {
+                  position: 'absolute',
+                  ...(anchor === 'up' ? { bottom: 0 } : { top: 0 }),
+                  right: 0,
+                  transformOrigin: anchor === 'up' ? 'bottom right' : 'top right',
+                  width: 'min(380px, calc(100vw - 48px))',
+                  height: `min(60vh, ${Math.max(280, Math.min(600, maxPanelHeight))}px)`,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  background: 'var(--glass-3)',
+                  backdropFilter: 'var(--blur-xl)',
+                  WebkitBackdropFilter: 'var(--blur-xl)',
+                  border: '1px solid var(--border)',
+                  borderRadius: 'var(--radius-xl)',
+                  boxShadow: 'var(--shadow-lg), var(--shadow-purple)',
+                  overflow: 'hidden',
+                  zIndex: 10000,
+                }
+          }
         >
           {/* Header */}
           <div style={{
@@ -162,9 +215,8 @@ export default function MascotChatPanel({ chat, anchor, maxPanelHeight }: Props)
                 padding: '10px 12px',
                 color: 'var(--text-primary)',
                 fontFamily: 'var(--font-body)',
-                fontSize: '0.9rem',
+                fontSize: isMobile ? '16px' : '0.9rem',
                 lineHeight: 1.5,
-                maxHeight: 100,
                 outline: 'none',
               }}
             />

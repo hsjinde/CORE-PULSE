@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useMotionValue } from 'framer-motion';
 import { useMascotChat } from '@/hooks/useMascotChat';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 import MascotAvatar from './MascotAvatar';
 import MascotChatPanel from './MascotChatPanel';
 import {
@@ -21,6 +22,7 @@ function defaultY(viewportHeight: number): number {
 
 export default function MascotWidget() {
   const chat = useMascotChat();
+  const isMobile = useMediaQuery('(max-width: 640px)');
   const [viewportH, setViewportH] = useState(() => window.innerHeight);
   const y = useMotionValue(loadMascotY(window.innerHeight) ?? defaultY(window.innerHeight));
   // 拖曳中不觸發 click 開窗
@@ -64,48 +66,59 @@ export default function MascotWidget() {
   };
 
   return (
-    <motion.div
-      drag="y"
-      dragConstraints={{
-        top: EDGE_MARGIN,
-        bottom: Math.max(EDGE_MARGIN, viewportH - MASCOT_SIZE - EDGE_MARGIN),
-      }}
-      dragElastic={0.05}
-      dragMomentum={false}
-      onDragStart={() => { draggingRef.current = true; }}
-      onDragEnd={() => {
-        const clamped = clampMascotY(y.get(), window.innerHeight);
-        y.set(clamped);
-        setYState(clamped);
-        saveMascotY(clamped);
-        // 延遲重置，避免 dragEnd 後緊接的 click 立刻開窗
-        setTimeout(() => { draggingRef.current = false; }, 0);
-      }}
-      style={{
-        position: 'fixed',
-        top: 0,
-        right: EDGE_MARGIN,
-        y,
-        zIndex: 9999,
-        width: MASCOT_SIZE,
-        height: MASCOT_SIZE,
-        cursor: 'grab',
-        touchAction: 'none',
-      }}
-      whileDrag={{ cursor: 'grabbing' }}
-    >
-      <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-        <MascotChatPanel
-          chat={chat}
-          anchor={upward ? 'up' : 'down'}
-          maxPanelHeight={maxPanelHeight}
-        />
-        <MascotAvatar
-          state={mascotState}
-          onClick={toggleChat}
-          ariaLabel={chat.isOpen ? '收合吉祥物對話窗' : '開啟 hsjinde 吉祥物對話'}
-        />
-      </div>
-    </motion.div>
+    <>
+      {/* 手機：面板放在拖曳容器之外，避免 transform 容器內 fixed 定位跑掉 */}
+      {isMobile && (
+        <MascotChatPanel chat={chat} anchor="up" maxPanelHeight={0} isMobile />
+      )}
+      <motion.div
+        drag="y"
+        dragConstraints={{
+          top: EDGE_MARGIN,
+          bottom: Math.max(EDGE_MARGIN, viewportH - MASCOT_SIZE - EDGE_MARGIN),
+        }}
+        dragElastic={0.05}
+        dragMomentum={false}
+        onDragStart={() => { draggingRef.current = true; }}
+        onDragEnd={() => {
+          const clamped = clampMascotY(y.get(), window.innerHeight);
+          y.set(clamped);
+          setYState(clamped);
+          saveMascotY(clamped);
+          // 延遲重置，避免 dragEnd 後緊接的 click 立刻開窗
+          setTimeout(() => { draggingRef.current = false; }, 0);
+        }}
+        style={{
+          position: 'fixed',
+          top: 0,
+          right: EDGE_MARGIN,
+          y,
+          zIndex: 9999,
+          width: MASCOT_SIZE,
+          height: MASCOT_SIZE,
+          cursor: 'grab',
+          touchAction: 'none',
+        }}
+        whileDrag={{ cursor: 'grabbing' }}
+      >
+        <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+          {!isMobile && (
+            <MascotChatPanel
+              chat={chat}
+              anchor={upward ? 'up' : 'down'}
+              maxPanelHeight={maxPanelHeight}
+              isMobile={false}
+            />
+          )}
+          {!(isMobile && chat.isOpen) && (
+            <MascotAvatar
+              state={mascotState}
+              onClick={toggleChat}
+              ariaLabel={chat.isOpen ? '收合吉祥物對話窗' : '開啟 hsjinde 吉祥物對話'}
+            />
+          )}
+        </div>
+      </motion.div>
+    </>
   );
 }
