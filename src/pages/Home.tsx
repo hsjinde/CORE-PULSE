@@ -7,7 +7,6 @@ import BentoGrid from '@/components/Bento/BentoGrid'
 import Projects from '@/components/Projects/Projects'
 import Blog from '@/components/Blog/Blog'
 import Footer from '@/components/Footer/Footer'
-import { registerLenis } from '@/lib/lenisController'
 
 export default function Home() {
   useEffect(() => {
@@ -29,7 +28,6 @@ export default function Home() {
     }
 
     requestAnimationFrame(raf)
-    registerLenis(lenis)
 
     return () => {
       registerLenis(null)
