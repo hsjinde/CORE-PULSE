@@ -9,6 +9,7 @@ import Navbar from '@/components/Navbar/Navbar'
 import Footer from '@/components/Footer/Footer'
 import { getPostById } from '@/services/api'
 import type { Post, PostType } from '@/services/api'
+import { extractText, slugify, extractLanguage } from '@/lib/markdown'
 
 const postTypeConfig: Record<PostType, { color: string; label: string; Icon: React.ElementType }> = {
   Learning: { color: '#ff9f0a', label: '個人學習', Icon: GraduationCap },
@@ -17,28 +18,10 @@ const postTypeConfig: Record<PostType, { color: string; label: string; Icon: Rea
   Daily:    { color: '#bf5af2', label: '日常',     Icon: Coffee         },
 }
 
-// ─── Text extraction ─────────────────────────────────────────
-function extractText(node: React.ReactNode): string {
-  if (typeof node === 'string') return node
-  if (Array.isArray(node)) return node.map(extractText).join('')
-  if (node && typeof node === 'object' && 'props' in (node as unknown as Record<string, unknown>)) {
-    return extractText((node as unknown as { props?: { children?: React.ReactNode } }).props?.children)
-  }
-  return ''
-}
-
-function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/[^\w\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-|-$/g, '')
-}
-
 // ─── Copy Code Block ─────────────────────────────────────────
 function PreBlock({ children }: { children?: React.ReactNode }) {
   const [copied, setCopied] = useState(false)
+  const lang = extractLanguage(children)
 
   const handleCopy = () => {
     const text = extractText(children)
@@ -50,12 +33,14 @@ function PreBlock({ children }: { children?: React.ReactNode }) {
 
   return (
     <pre>
-      <div className="prose-code-wrapper">
+      <div className="prose-code-header">
+        <span className="prose-code-dots" aria-hidden="true"><i /><i /><i /></span>
+        <span className="prose-code-lang">{lang ?? 'code'}</span>
         <button onClick={handleCopy} className="prose-copy-btn" aria-label="Copy code">
           {copied ? 'Copied' : 'Copy'}
         </button>
-        {children}
       </div>
+      <div className="prose-code-wrapper">{children}</div>
     </pre>
   )
 }
