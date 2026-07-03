@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Send, Square } from 'lucide-react';
 import type { UseMascotChat } from '@/hooks/useMascotChat';
 import { stopLenis, startLenis } from '@/lib/lenisController';
+import { MASCOT_SIZE, PANEL_GAP } from './mascotPosition';
 import MessageBubble from './MessageBubble';
 
 interface Props {
@@ -118,7 +119,8 @@ export default function MascotChatPanel({ chat, anchor, maxPanelHeight, isMobile
                 }
               : {
                   position: 'absolute',
-                  ...(anchor === 'up' ? { bottom: 0 } : { top: 0 }),
+                  // 與吉祥物本體保持間距，避免面板蓋住吉祥物
+                  ...(anchor === 'up' ? { bottom: MASCOT_SIZE + PANEL_GAP } : { top: MASCOT_SIZE + PANEL_GAP }),
                   right: 0,
                   transformOrigin: anchor === 'up' ? 'bottom right' : 'top right',
                   width: 'min(380px, calc(100vw - 48px))',

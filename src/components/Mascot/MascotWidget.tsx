@@ -6,7 +6,7 @@ import MascotAvatar from './MascotAvatar';
 import MascotChatPanel from './MascotChatPanel';
 import {
   clampMascotY, loadMascotY, saveMascotY, panelOpensUpward,
-  EDGE_MARGIN, MASCOT_SIZE,
+  EDGE_MARGIN, MASCOT_SIZE, PANEL_GAP,
 } from './mascotPosition';
 import type { MascotState } from './mascot.types';
 
@@ -56,8 +56,8 @@ export default function MascotWidget() {
   const mascotState = stateFromStatus(chat.status);
   const upward = panelOpensUpward(yState, viewportH);
   const maxPanelHeight = upward
-    ? yState + MASCOT_SIZE - EDGE_MARGIN
-    : viewportH - yState - EDGE_MARGIN;
+    ? yState - PANEL_GAP - EDGE_MARGIN
+    : viewportH - yState - MASCOT_SIZE - PANEL_GAP - EDGE_MARGIN;
 
   const toggleChat = () => {
     if (draggingRef.current) return;

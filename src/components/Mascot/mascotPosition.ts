@@ -3,6 +3,8 @@ const STORAGE_KEY = 'mascot-y';
 
 export const EDGE_MARGIN = 24;
 export const MASCOT_SIZE = 80;
+/** 聊天窗與吉祥物之間的間距，避免面板蓋住吉祥物本體。 */
+export const PANEL_GAP = 12;
 
 export function clampMascotY(y: number, viewportHeight: number): number {
   const min = EDGE_MARGIN;
