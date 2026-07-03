@@ -24,7 +24,7 @@
   # - frame-ancestors 'none'      : double-blocks clickjacking (with X-Frame-Options)
   # - base-uri 'self'             : prevents base tag hijacking
   # - form-action 'self'          : form submissions only to self
-  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';
 
 /api/*
   # API routes: allow CORS for credentialed requests but tighten framing
