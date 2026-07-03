@@ -6,9 +6,13 @@ import MessageBubble from './MessageBubble';
 
 interface Props {
   chat: UseMascotChat;
+  /** 聊天窗展開方向：up = 面板在吉祥物上方（往上長） */
+  anchor: 'up' | 'down';
+  /** 展開方向上可用的最大高度（px），避免超出視窗 */
+  maxPanelHeight: number;
 }
 
-export default function MascotChatPanel({ chat }: Props) {
+export default function MascotChatPanel({ chat, anchor, maxPanelHeight }: Props) {
   const [text, setText] = useState('');
   const listRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -50,18 +54,19 @@ export default function MascotChatPanel({ chat }: Props) {
     <AnimatePresence>
       {chat.isOpen && (
         <motion.div
-          initial={{ opacity: 0, y: 12, scale: 0.96 }}
+          initial={{ opacity: 0, y: anchor === 'up' ? 12 : -12, scale: 0.96 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: 12, scale: 0.96 }}
+          exit={{ opacity: 0, y: anchor === 'up' ? 12 : -12, scale: 0.96 }}
           transition={{ duration: 0.25, ease: [0.34, 1.1, 0.64, 1] }}
           role="dialog"
           aria-label="與 hsjinde 吉祥物對話"
           style={{
             position: 'absolute',
-            bottom: 0, right: 0,
-            transformOrigin: 'bottom right',
+            ...(anchor === 'up' ? { bottom: 0 } : { top: 0 }),
+            right: 0,
+            transformOrigin: anchor === 'up' ? 'bottom right' : 'top right',
             width: 'min(380px, calc(100vw - 48px))',
-            height: 'min(60vh, 600px)',
+            height: `min(60vh, ${Math.max(280, Math.min(600, maxPanelHeight))}px)`,
             display: 'flex',
             flexDirection: 'column',
             background: 'var(--glass-3)',
