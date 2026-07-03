@@ -6,6 +6,7 @@ import AdminLogin from '@/pages/Admin/AdminLogin'
 import AdminDashboard from '@/pages/Admin/AdminDashboard'
 import AdminEditor from '@/pages/Admin/AdminEditor'
 import MascotWidget from '@/components/Mascot/MascotWidget'
+import { initSpotlight } from '@/lib/spotlight'
 
 type AuthState = 'loading' | 'authenticated' | 'unauthenticated'
 
@@ -57,6 +58,9 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  // 卡片聚光燈：全站一次性掛載
+  useEffect(() => initSpotlight(), [])
+
   return (
     <BrowserRouter>
       <Routes>

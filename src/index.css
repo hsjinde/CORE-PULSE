@@ -212,6 +212,28 @@
   box-shadow: var(--shadow-lg);
 }
 
+/* ─── Card Spotlight（滑鼠跟隨光暈）───────────────────────────── */
+.glass-card::after,
+.blog-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    320px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 255, 255, 0.07),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.glass-card:hover::after,
+.blog-card:hover::after {
+  opacity: 1;
+}
+
 /* ─── Navbar Glass ────────────────────────────────────────────── */
 .glass-nav {
   background: rgba(0, 0, 0, 0.55);
