@@ -37,8 +37,8 @@
 
   /* Text */
   --text-primary:     #f5f5f7;
-  --text-secondary:   rgba(245, 245, 247, 0.56);
-  --text-tertiary:    rgba(245, 245, 247, 0.30);
+  --text-secondary:   rgba(245, 245, 247, 0.70);
+  --text-tertiary:    rgba(245, 245, 247, 0.50);
 
   /* Accent palette — Apple system colors */
   --accent-blue:      #2997ff;

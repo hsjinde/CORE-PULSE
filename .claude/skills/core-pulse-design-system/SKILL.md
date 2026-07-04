@@ -49,8 +49,8 @@ description: >
 
 ```css
 --text-primary:   #f5f5f7;                /* 主要文字 */
---text-secondary: rgba(245, 245, 247, 0.56); /* 內文 */
---text-tertiary:  rgba(245, 245, 247, 0.30); /* 標籤／後設資料 */
+--text-secondary: rgba(245, 245, 247, 0.70); /* 內文 */
+--text-tertiary:  rgba(245, 245, 247, 0.50); /* 標籤／後設資料 */
 ```
 
 ### 強調色（Apple 系統色映射）
