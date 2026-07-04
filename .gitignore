@@ -58,7 +58,10 @@ logs/
 
 # Ignore local .agent skill folder not meant for repo
 .agent/skills/ui-ux-pro-max/
-.claude/
+# Ignore local .claude config, but track shared skills so Claude Code
+# can read them across machines (negation needs .claude/* not .claude/)
+.claude/*
+!.claude/skills/
 
 # wrangler
 .wrangler/
