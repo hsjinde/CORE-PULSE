@@ -88,7 +88,7 @@ export default function AdminEditor() {
     <div style={{ background: 'var(--bg-primary)', minHeight: '100vh', padding: '24px' }}>
       <div className="max-w-[1400px] mx-auto flex flex-col h-full">
         <header className="flex items-center justify-between mb-6">
-          <button onClick={() => navigate('/admin/dashboard')} className="text-gray-400 hover:text-white flex items-center gap-2">
+          <button onClick={() => navigate('/admin/dashboard')} className="text-gray-300 hover:text-white flex items-center gap-2">
             <ArrowLeft size={16} /> Dashboard
           </button>
           <button onClick={handleSave} disabled={isSaving} className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed">
@@ -184,7 +184,7 @@ export default function AdminEditor() {
 
           {/* Preview Pane */}
           <div className="glass-card p-8 overflow-y-auto h-[calc(100vh-100px)] sticky top-[24px]">
-            <p className="text-gray-500 text-xs uppercase tracking-widest mb-6">Live Preview</p>
+            <p className="text-gray-400 text-xs uppercase tracking-widest mb-6">Live Preview</p>
             {formData.coverImage && <img src={formData.coverImage} className="w-full rounded-xl mb-8" alt="Cover" />}
             <h1 className="text-4xl font-bold text-white mb-8">{formData.title}</h1>
             <article className="prose">

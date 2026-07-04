@@ -59,7 +59,7 @@ export default function AdminDashboard() {
           <div className="admin-table-scroll">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-white/10 text-gray-400 text-sm">
+              <tr className="border-b border-white/10 text-gray-300 text-sm">
                 <th className="p-4 font-medium">Title</th>
                 <th className="p-4 font-medium">Date</th>
                 <th className="p-4 font-medium">Status</th>
@@ -71,9 +71,9 @@ export default function AdminDashboard() {
                 <tr key={post.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
                   <td className="p-4">
                     <p className="text-white font-medium">{post.title}</p>
-                    <p className="text-gray-500 text-xs mt-1">{post.id}</p>
+                    <p className="text-gray-400 text-xs mt-1">{post.id}</p>
                   </td>
-                  <td className="p-4 text-gray-400 text-sm">{post.date}</td>
+                  <td className="p-4 text-gray-300 text-sm">{post.date}</td>
                   <td className="p-4">
                     <span className="px-2 py-1 bg-green-500/10 text-green-400 text-xs rounded-full border border-green-500/20">
                       Published
@@ -93,7 +93,7 @@ export default function AdminDashboard() {
               ))}
               {posts.length === 0 && (
                 <tr>
-                  <td colSpan={4} className="p-8 text-center text-gray-500">
+                  <td colSpan={4} className="p-8 text-center text-gray-400">
                     No posts found. Create one!
                   </td>
                 </tr>
