@@ -27,14 +27,6 @@ export const onRequestGet = async (context: EventContext): Promise<Response> => 
     }, 200, corsHeaders(origin));
   }
 
-  if (url.searchParams.get('action') === 'debug') {
-    const allKeys = Object.keys(env);
-    const stringKeys = allKeys.filter(k => typeof (env as Record<string, unknown>)[k] === 'string');
-    const hasLLM = stringKeys.includes('LLM_BASE_URL');
-    const hasKey = stringKeys.includes('LLM_API_KEY');
-    return jsonResponse({ stringKeys, totalKeys: allKeys.length, hasLLM_BASE_URL: hasLLM, hasLLM_API_KEY: hasKey }, 200, corsHeaders(origin));
-  }
-
   return new Response('Not found', { status: 404 });
 };
 

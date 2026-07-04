@@ -28,9 +28,25 @@ if (!llmApiKey) {
   process.exit(1);
 }
 
+// RATE_LIMIT_SALT 不設可預測的預設值：若用已知 salt，hash 過的 IP 可被反推。
+let rateLimitSalt = process.env.RATE_LIMIT_SALT;
+if (!rateLimitSalt) {
+  for (const f of ['.env.production', '.dev.vars']) {
+    try {
+      const c = fs.readFileSync(resolve(process.cwd(), f), 'utf8');
+      rateLimitSalt = c.match(/^RATE_LIMIT_SALT=(.+)$/m)?.[1]?.trim();
+      if (rateLimitSalt) break;
+    } catch {}
+  }
+}
+if (!rateLimitSalt) {
+  console.error('ERROR: RATE_LIMIT_SALT not found in process.env, .env.production, or .dev.vars');
+  process.exit(1);
+}
+
 const secrets = {
   LLM_API_KEY: llmApiKey,
-  RATE_LIMIT_SALT: process.env.RATE_LIMIT_SALT || 'cp-mascot-salt-2026-dev',
+  RATE_LIMIT_SALT: rateLimitSalt,
 };
 
 for (const [name, value] of Object.entries(secrets)) {
