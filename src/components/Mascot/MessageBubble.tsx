@@ -25,9 +25,9 @@ export default function MessageBubble({ message }: Props) {
         style={{
           maxWidth: '85%',
           padding: '10px 14px',
-          borderRadius: isUser ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
+          borderRadius: isUser ? '10px 10px 3px 10px' : '10px 10px 10px 3px',
           background: isUser
-            ? 'var(--accent-signature)'
+            ? 'var(--accent-blue)'
             : isError ? 'rgba(255,69,58,0.10)' : 'var(--glass-3)',
           color: isUser ? '#fff' : 'var(--text-primary)',
           border: isUser ? 'none' : `1px solid ${isError ? 'rgba(255,69,58,0.4)' : 'var(--border)'}`,

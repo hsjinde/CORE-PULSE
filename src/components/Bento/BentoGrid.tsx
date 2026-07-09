@@ -99,7 +99,7 @@ export default function BentoGrid() {
           transform: 'translateX(-50%)',
           width: 800,
           height: 2,
-          background: 'linear-gradient(90deg, transparent, rgba(255,229,0,0.4), transparent)',
+          background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.30), transparent)',
           pointerEvents: 'none',
         }}
       />
@@ -113,8 +113,8 @@ export default function BentoGrid() {
           transition={{ duration: 0.7 }}
           style={{ textAlign: 'center', marginBottom: 64 }}
         >
-          <p className="text-label" style={{ marginBottom: 14 }}>Technical Arsenal</p>
-          <h2 className="text-headline gradient-text-signature">Skills &amp; Infrastructure</h2>
+          <p className="path-label" style={{ marginBottom: 14, justifyContent: 'center' }}>skills</p>
+          <h2 className="text-headline">Skills &amp; Infrastructure</h2>
           <motion.span
             className="headline-accent"
             initial={{ scaleX: 0 }}
@@ -140,32 +140,33 @@ export default function BentoGrid() {
           <div className="bento-col-8">
             <BentoCard delay={0.1} className="h-full">
               <div className="flex items-center gap-2" style={{ marginBottom: 20 }}>
-                <Code2 size={15} style={{ color: 'var(--accent-signature)' }} />
-                <span className="text-label">Core Stack</span>
+                <Code2 size={15} style={{ color: 'var(--accent-blue)' }} />
+                <span className="path-label">stack</span>
               </div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
                 {[
-                  { label: 'Python',             color: 'var(--accent-green)' },
-                  { label: 'C / Java',           color: '#5ac8fa' },
-                  { label: 'Docker',             color: '#2496ED' },
-                  { label: 'GitHub Actions',     color: 'var(--accent-purple)' },
-                  { label: 'GitLab CI',          color: 'var(--accent-orange)' },
-                  { label: 'Cloudflare',         color: '#F46800' },
-                  { label: 'SQLite / Django',    color: '#4ea7d8' },
-                  { label: 'React / Tailwind',   color: 'var(--accent-blue)' },
-                  { label: 'PyTorch',            color: 'var(--accent-red)' },
-                  { label: 'TensorFlow',         color: 'var(--accent-orange)' },
-                  { label: 'LLM / RAG',          color: 'var(--accent-green)' },
+                  { label: 'Python',             color: 'var(--accent-green)'  },
+                  { label: 'C / Java',            color: 'var(--accent-teal)'   },
+                  { label: 'Docker',              color: 'var(--accent-blue)'   },
+                  { label: 'GitHub Actions',      color: 'var(--accent-purple)' },
+                  { label: 'GitLab CI',           color: 'var(--accent-orange)' },
+                  { label: 'Cloudflare',          color: 'var(--accent-orange)' },
+                  { label: 'SQLite / Django',     color: 'var(--accent-teal)'   },
+                  { label: 'React / Tailwind',    color: 'var(--accent-blue)'   },
+                  { label: 'PyTorch',             color: 'var(--accent-red)'    },
+                  { label: 'TensorFlow',          color: 'var(--accent-orange)' },
+                  { label: 'LLM / RAG',           color: 'var(--accent-purple)' },
                 ].map((s) => (
                   <span
                     key={s.label}
                     className="skill-badge"
                     style={{
-                      background: `${s.color}14`,
-                      border: `1px solid ${s.color}28`,
+                      background: `color-mix(in srgb, ${s.color} 12%, transparent)`,
+                      border: `1px solid color-mix(in srgb, ${s.color} 30%, transparent)`,
                       color: s.color,
                       padding: '7px 18px',
                       fontSize: '0.875rem',
+                      fontFamily: 'var(--font-mono)',
                     }}
                   >
                     {s.label}
@@ -181,11 +182,11 @@ export default function BentoGrid() {
               delay={0.15}
               className="h-full"
               style={{ minHeight: 210 }}
-              glowColor="radial-gradient(ellipse at top right, rgba(255,229,0,0.10) 0%, transparent 65%)"
+              glowColor="radial-gradient(ellipse at top right, rgba(191,90,242,0.10) 0%, transparent 65%)"
             >
               <div className="flex items-center gap-2 relative z-10" style={{ marginBottom: 14 }}>
-                <Bot size={15} style={{ color: 'var(--accent-signature)' }} />
-                <span className="text-label">AI Agent Infrastructure</span>
+                <Bot size={15} style={{ color: 'var(--accent-purple)' }} />
+                <span className="path-label">agent</span>
               </div>
               <p className="text-title relative z-10" style={{ color: 'var(--text-primary)', marginBottom: 8, fontFamily: 'var(--font-heading)' }}>
                 LLM & Knowledge Base
@@ -201,8 +202,8 @@ export default function BentoGrid() {
                   style={{
                     padding: '8px 18px',
                     fontSize: '0.8125rem',
-                    borderColor: 'rgba(255,229,0,0.28)',
-                    color: 'var(--accent-signature)',
+                    borderColor: 'rgba(191,90,242,0.35)',
+                    color: 'var(--accent-purple)',
                     cursor: 'pointer',
                     textDecoration: 'none',
                   }}
@@ -238,7 +239,7 @@ export default function BentoGrid() {
                 <div>
                   <div className="flex items-center gap-2" style={{ marginBottom: 20 }}>
                     <Shield size={15} style={{ color: 'var(--accent-green)' }} />
-                    <span className="text-label">Security & DevSecOps</span>
+                    <span className="path-label">security</span>
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
                     {[
@@ -253,9 +254,9 @@ export default function BentoGrid() {
                             style={{
                               width: 28,
                               height: 28,
-                              borderRadius: 8,
-                              background: `${color}12`,
-                              border: `1px solid ${color}22`,
+                              borderRadius: 'var(--radius-xs)',
+                              background: `color-mix(in srgb, ${color} 12%, transparent)`,
+                              border: `1px solid color-mix(in srgb, ${color} 25%, transparent)`,
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'center',
@@ -271,11 +272,11 @@ export default function BentoGrid() {
                             fontSize: '0.75rem',
                             color,
                             fontWeight: 600,
-                            fontFamily: 'var(--font-body)',
-                            background: `${color}12`,
+                            fontFamily: 'var(--font-mono)',
+                            background: `color-mix(in srgb, ${color} 12%, transparent)`,
                             padding: '2px 8px',
-                            borderRadius: 6,
-                            border: `1px solid ${color}20`,
+                            borderRadius: 'var(--radius-xs)',
+                            border: `1px solid color-mix(in srgb, ${color} 22%, transparent)`,
                           }}
                         >
                           {status}
@@ -287,10 +288,10 @@ export default function BentoGrid() {
                 <div style={{ marginTop: 20, display: 'flex', justifyContent: 'flex-end' }}>
                   <Link
                     to="/telemetry"
-                    className="pointer-events-auto flex items-center gap-1.5 rounded-md border border-hairline/80 bg-carbon-900/80 px-3 py-2 text-[10px] uppercase tracking-wider text-chalk/80 backdrop-blur-md transition-all hover:bg-carbon-800/80 hover:border-beacon-400/40 hover:text-beacon-300"
+                    className="pointer-events-auto flex items-center gap-1.5 rounded-md border border-hairline/80 bg-carbon-900/80 px-3 py-2 text-[10px] font-mono lowercase tracking-tight text-chalk/80 transition-all hover:bg-carbon-800/80 hover:border-white/30 hover:text-chalk"
                     style={{ textDecoration: 'none' }}
                   >
-                    Telemetry Scope →
+                    telemetry scope →
                   </Link>
                 </div>
               </div>
@@ -302,7 +303,7 @@ export default function BentoGrid() {
             <BentoCard delay={0.25} className="h-full">
               <div className="flex items-center gap-2" style={{ marginBottom: 20 }}>
                 <GitBranch size={15} style={{ color: 'var(--accent-orange)' }} />
-                <span className="text-label">CI / CD</span>
+                <span className="path-label">ci-cd</span>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 {[
@@ -342,17 +343,17 @@ export default function BentoGrid() {
           <div className="bento-col-6">
             <BentoCard
               delay={0.3}
-              glowColor="radial-gradient(ellipse at bottom left, rgba(255,229,0,0.07) 0%, transparent 65%)"
+              glowColor="radial-gradient(ellipse at bottom left, rgba(41,151,255,0.08) 0%, transparent 65%)"
             >
               <div className="flex items-center gap-2 relative z-10" style={{ marginBottom: 20 }}>
-                <Code2 size={15} style={{ color: 'var(--accent-signature)' }} />
-                <span className="text-label">Academic Research</span>
+                <Code2 size={15} style={{ color: 'var(--accent-blue)' }} />
+                <span className="path-label">research</span>
               </div>
               <div className="bento-metrics-row">
                 {[
-                  { metric: 'NLP / RNN', value: 'IEEE',   label: 'Published Paper',        color: 'var(--accent-green)'  },
-                  { metric: 'SPARQL',    value: 'Query',  label: 'Performance Enhance',    color: 'var(--accent-blue)'   },
-                  { metric: 'YOLO',      value: 'Vision', label: 'Object Detection',       color: 'var(--accent-purple)' },
+                  { metric: 'NLP / RNN', value: 'IEEE',   label: 'Published Paper',     color: 'var(--accent-green)'  },
+                  { metric: 'SPARQL',    value: 'Query',  label: 'Performance Enhance', color: 'var(--accent-blue)'   },
+                  { metric: 'YOLO',      value: 'Vision', label: 'Object Detection',    color: 'var(--accent-purple)' },
                 ].map(({ metric, value, label, color }) => (
                   <div key={metric}>
                     <p className="text-label" style={{ marginBottom: 6 }}>{metric}</p>
@@ -361,7 +362,7 @@ export default function BentoGrid() {
                       style={{
                         color,
                         marginBottom: 6,
-                        fontFamily: 'var(--font-heading)',
+                        fontFamily: 'var(--font-mono)',
                         fontSize: '1.5rem',
                       }}
                     >
@@ -378,8 +379,8 @@ export default function BentoGrid() {
           <div className="bento-col-6">
             <BentoCard delay={0.35}>
               <div className="flex items-center gap-2" style={{ marginBottom: 20 }}>
-                <Cpu size={15} style={{ color: 'var(--accent-signature)' }} />
-                <span className="text-label">By the Numbers</span>
+                <Cpu size={15} style={{ color: 'var(--text-tertiary)' }} />
+                <span className="path-label">stats</span>
               </div>
               <div className="bento-metrics-row">
                 {[
@@ -389,13 +390,13 @@ export default function BentoGrid() {
                 ].map(({ label, value, suffix }) => (
                   <div key={label}>
                     <p
-                      className="gradient-text-signature"
                       style={{
-                        fontFamily: 'var(--font-heading)',
+                        color: 'var(--text-primary)',
+                        fontFamily: 'var(--font-mono)',
                         fontSize: '2.25rem',
-                        fontWeight: 800,
+                        fontWeight: 700,
                         marginBottom: 4,
-                        letterSpacing: '-0.03em',
+                        letterSpacing: '-0.01em',
                       }}
                     >
                       <AnimatedCounter target={value} suffix={suffix} />

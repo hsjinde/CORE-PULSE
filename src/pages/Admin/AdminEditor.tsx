@@ -185,7 +185,7 @@ export default function AdminEditor() {
           {/* Preview Pane */}
           <div className="glass-card p-8 overflow-y-auto h-[calc(100vh-100px)] sticky top-[24px]">
             <p className="text-gray-400 text-xs uppercase tracking-widest mb-6">Live Preview</p>
-            {formData.coverImage && <img src={formData.coverImage} className="w-full rounded-xl mb-8" alt="Cover" />}
+            {formData.coverImage && <img src={formData.coverImage} className="w-full rounded mb-8" alt="Cover" />}
             <h1 className="text-4xl font-bold text-white mb-8">{formData.title}</h1>
             <article className="prose">
               <ReactMarkdown>{formData.content || '*Start typing to preview...*'}</ReactMarkdown>

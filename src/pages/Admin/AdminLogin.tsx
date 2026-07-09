@@ -42,7 +42,7 @@ export default function AdminLogin() {
       <Navbar />
       <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
         <div className="glass-card" style={{ padding: '40px', width: '100%', maxWidth: '400px' }}>
-          <h1 className="text-2xl font-semibold mb-6 text-white text-center">CMS Login</h1>
+          <h1 className="text-2xl font-mono font-medium mb-6 text-white text-center tracking-tight">cms_login</h1>
           <form onSubmit={handleLogin} className="flex flex-col gap-4">
             <div>
               <input
@@ -53,7 +53,7 @@ export default function AdminLogin() {
                 autoComplete="current-password"
                 required
                 disabled={loading}
-                className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors disabled:opacity-50"
+                className="w-full bg-black/50 border border-white/10 rounded px-4 py-3 text-white font-mono focus:outline-none focus:border-blue-500 transition-colors disabled:opacity-50"
               />
               {error && <p className="text-red-400 text-sm mt-2">{error}</p>}
             </div>

@@ -91,31 +91,17 @@ export default function Hero() {
         className="absolute inset-0 pointer-events-none"
         style={{
           background: `
-            radial-gradient(ellipse 80% 60% at 20% 30%, rgba(255,229,0,0.09) 0%, transparent 65%),
-            radial-gradient(ellipse 60% 50% at 80% 70%, rgba(255,229,0,0.08) 0%, transparent 65%),
+            radial-gradient(ellipse 80% 60% at 20% 30%, rgba(41,151,255,0.07) 0%, transparent 65%),
+            radial-gradient(ellipse 60% 50% at 80% 70%, rgba(191,90,242,0.06) 0%, transparent 65%),
             radial-gradient(ellipse 50% 40% at 50% 50%, rgba(0,0,0,0.6) 0%, transparent 100%)
           `,
         }}
       />
 
-      {/* ── Subtle grid ─────────── */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)
-          `,
-          backgroundSize: '64px 64px',
-          maskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 100%)',
-          WebkitMaskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 100%)',
-        }}
-      />
-
       {/* ── Parallax glow orbs ─── */}
-      <GlowOrb x="5%"  y="12%" size={700} color="rgba(255,229,0,0.10)"  mouseX={mouseOffset.x} mouseY={mouseOffset.y} factor={-1.8} floatDuration={9}  />
-      <GlowOrb x="55%" y="55%" size={500} color="rgba(255,229,0,0.08)"  mouseX={mouseOffset.x} mouseY={mouseOffset.y} factor={ 1.4} floatDuration={12} />
-      <GlowOrb x="30%" y="70%" size={350} color="rgba(48,209,88,0.06)"   mouseX={mouseOffset.x} mouseY={mouseOffset.y} factor={-1.0} floatDuration={7}  />
+      <GlowOrb x="5%"  y="12%" size={700} color="rgba(41,151,255,0.10)"  mouseX={mouseOffset.x} mouseY={mouseOffset.y} factor={-1.8} floatDuration={9}  />
+      <GlowOrb x="55%" y="55%" size={500} color="rgba(191,90,242,0.08)" mouseX={mouseOffset.x} mouseY={mouseOffset.y} factor={ 1.4} floatDuration={12} />
+      <GlowOrb x="30%" y="70%" size={350} color="rgba(48,209,88,0.06)" mouseX={mouseOffset.x} mouseY={mouseOffset.y} factor={-1.0} floatDuration={7}  />
 
       {/* ── Main Content ────────── */}
       <motion.div
@@ -132,17 +118,15 @@ export default function Hero() {
             alignItems: 'center',
             gap: 8,
             marginBottom: 40,
-            padding: '7px 18px',
-            borderRadius: 980,
+            padding: '7px 16px',
+            borderRadius: 'var(--radius-xs)',
             background: 'rgba(48,209,88,0.08)',
             border: '1px solid rgba(48,209,88,0.22)',
-            backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)',
           }}
         >
           <span className="status-dot" />
-          <span style={{ fontSize: '0.8125rem', fontFamily: 'var(--font-body)', color: 'var(--accent-green)', fontWeight: 500 }}>
-            Available for opportunities
+          <span style={{ fontSize: '0.8125rem', fontFamily: 'var(--font-mono)', color: 'var(--accent-green)', fontWeight: 500 }}>
+            available for opportunities
           </span>
         </motion.div>
 
@@ -152,13 +136,11 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0  }}
           transition={{ delay: 0.25, duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
           className="text-display mb-6"
+          style={{ textWrap: 'balance' }}
         >
-          I'm{' '}
-          <span className="hero-gradient-warm">Ethan</span>
-          {'.'} I build
+          I'm Ethan. I build
           <br className="hidden md:inline" />
-          <span className="hero-gradient-cool">resilient</span>{' '}
-          cloud &amp; AI systems.
+          resilient cloud &amp; AI systems.
         </motion.h1>
 
         {/* Typewriter */}
@@ -176,7 +158,7 @@ export default function Hero() {
             letterSpacing: '-0.01em',
           }}
         >
-          <span className="hidden md:inline" style={{ color: 'rgba(255,229,0,0.45)', fontFamily: 'var(--font-mono)', fontSize: '0.9em' }}>{'// '}</span>
+          <span className="hidden md:inline" style={{ color: 'var(--text-tertiary)', fontFamily: 'var(--font-mono)', fontSize: '0.9em' }}>{'// '}</span>
           <span style={{ color: 'var(--text-secondary)' }}>{displayText}</span>
           <span
             style={{
@@ -213,21 +195,16 @@ export default function Hero() {
         >
           <a href="#projects" className="btn-primary">
             <Terminal size={15} />
-            View Projects
+            view projects
           </a>
           <a
             href="/resume.pdf"
             target="_blank"
             rel="noopener noreferrer"
             className="btn-ghost"
-            style={{
-              borderColor: 'rgba(48,209,88,0.4)',
-              color: 'var(--accent-green)',
-              background: 'rgba(48,209,88,0.05)'
-            }}
           >
             <ArrowDown size={15} />
-            Download Resume
+            download resume
           </a>
           <a
             href="https://github.com/hsjinde"
@@ -236,7 +213,7 @@ export default function Hero() {
             className="btn-ghost"
           >
             <Code2 size={15} />
-            GitHub
+            github
           </a>
         </motion.div>
 
@@ -294,7 +271,7 @@ export default function Hero() {
           color: 'var(--text-tertiary)',
         }}
       >
-        <span style={{ fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', fontFamily: 'var(--font-body)' }}>Scroll</span>
+        <span style={{ fontSize: '0.75rem', letterSpacing: '-0.01em', fontFamily: 'var(--font-mono)' }}>scroll</span>
         <motion.div
           animate={{ y: [0, 9, 0] }}
           transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}

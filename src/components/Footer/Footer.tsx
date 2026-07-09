@@ -50,7 +50,7 @@ export default function Footer() {
           transform: 'translateX(-50%)',
           width: '100%',
           height: 200,
-          background: 'radial-gradient(ellipse 60% 100% at 50% 0%, rgba(255,229,0,0.05) 0%, transparent 100%)',
+          background: 'radial-gradient(ellipse 60% 100% at 50% 0%, rgba(255,255,255,0.04) 0%, transparent 100%)',
           pointerEvents: 'none',
         }}
       />
@@ -66,34 +66,18 @@ export default function Footer() {
           <div className="footer-grid">
             {/* Col 1: Brand */}
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 18 }}>
-                {/* Logo pill */}
-                <div
-                  style={{
-                    width: 34,
-                    height: 34,
-                    borderRadius: 10,
-                    background: 'rgba(255,229,0,0.12)',
-                    border: '1px solid rgba(255,229,0,0.26)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    backdropFilter: 'blur(12px)',
-                    WebkitBackdropFilter: 'blur(12px)',
-                  }}
-                >
-                  <Terminal size={16} color="var(--accent-signature)" strokeWidth={2} />
-                </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 18 }}>
+                <Terminal size={15} color="var(--text-tertiary)" strokeWidth={2} />
                 <span
                   style={{
-                    fontFamily: 'var(--font-heading)',
-                    fontSize: '1rem',
-                    fontWeight: 700,
-                    letterSpacing: '-0.03em',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.9375rem',
+                    fontWeight: 500,
+                    letterSpacing: '-0.01em',
                     color: 'var(--text-primary)',
                   }}
                 >
-                  Core Pulse
+                  core_pulse
                 </span>
               </div>
 
@@ -121,8 +105,6 @@ export default function Footer() {
                       justifyContent: 'center',
                       color: 'var(--text-tertiary)',
                       background: 'var(--glass-1)',
-                      backdropFilter: 'blur(12px)',
-                      WebkitBackdropFilter: 'blur(12px)',
                       transition: 'all 0.2s ease',
                       cursor: 'pointer',
                     }}
@@ -145,21 +127,21 @@ export default function Footer() {
 
             {/* Col 2: Navigation */}
             <div>
-              <p className="text-label" style={{ marginBottom: 20 }}>Navigation</p>
+              <p className="path-label" style={{ marginBottom: 20 }}>nav</p>
               <nav style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                 {[
-                  { href: '#hero',     label: 'Home'     },
-                  { href: '#skills',   label: 'Skills'   },
-                  { href: '#projects', label: 'Projects' },
-                  { href: '#blog',     label: 'Blog'     },
-                  { href: '#contact',  label: 'Contact'  },
+                  { href: '#hero',     label: 'home'     },
+                  { href: '#skills',   label: 'skills'   },
+                  { href: '#projects', label: 'projects' },
+                  { href: '#blog',     label: 'blog'     },
+                  { href: '#contact',  label: 'contact'  },
                 ].map(({ href, label }) => (
                   <a
                     key={label}
                     href={href}
                     style={{
-                      fontSize: '0.9rem',
-                      fontFamily: 'var(--font-body)',
+                      fontSize: '0.875rem',
+                      fontFamily: 'var(--font-mono)',
                       color: 'var(--text-secondary)',
                       textDecoration: 'none',
                       transition: 'color 0.18s ease',
@@ -176,7 +158,7 @@ export default function Footer() {
 
             {/* Col 3: Contact */}
             <div>
-              <p className="text-label" style={{ marginBottom: 20 }}>Get in Touch</p>
+              <p className="path-label" style={{ marginBottom: 20 }}>contact</p>
               <p className="text-body" style={{ fontSize: '0.875rem', marginBottom: 18 }}>
                 有合作機會或技術討論？歡迎直接來信聯絡！
               </p>

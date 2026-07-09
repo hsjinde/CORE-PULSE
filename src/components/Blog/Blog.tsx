@@ -149,7 +149,7 @@ export default function Blog() {
             style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16, color: 'var(--accent-blue)' }}
           >
             <BookOpen size={18} />
-            <span className="text-label">Personal Notes</span>
+            <span className="path-label">notes</span>
           </motion.div>
 
           <motion.h2

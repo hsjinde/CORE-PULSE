@@ -13,6 +13,7 @@ interface Project {
   tags: string[]
   accentColor: string
   glowColor: string
+  glyph: string
   sourceUrl?: string
   demoUrl?: string
   demoLabel?: string
@@ -30,6 +31,7 @@ const projects: Project[] = [
     tags: ['RNN', 'SPARQL', 'Deep Learning', 'Semantic Web', 'Performance Optimization'],
     accentColor: '#bf5af2',
     glowColor: 'radial-gradient(ellipse at top left, rgba(191,90,242,0.10) 0%, transparent 60%)',
+    glyph: 'RNN()',
     sourceUrl: 'https://github.com/hsjinde/Traing-phase-Enhancing-SPARQL-Query-Performance-With-Recurrent-Neural-Networks',
     demoUrl: 'https://ieeexplore.ieee.org/document/10230082',
     demoLabel: 'Read Paper',
@@ -45,6 +47,7 @@ const projects: Project[] = [
     tags: ['Python', 'Django', 'SQLite', 'Backend', 'Email Server'],
     accentColor: '#2997ff',
     glowColor: 'radial-gradient(ellipse at top left, rgba(41,151,255,0.10) 0%, transparent 60%)',
+    glyph: 'SMTP:/',
     sourceUrl: 'https://github.com/hsjinde/mail-server',
   },
   {
@@ -58,6 +61,7 @@ const projects: Project[] = [
     tags: ['React', 'TypeScript', 'Dashboard', 'Web App', 'Frontend'],
     accentColor: '#30d158',
     glowColor: 'radial-gradient(ellipse at top right, rgba(48,209,88,0.09) 0%, transparent 60%)',
+    glyph: '~/core',
     sourceUrl: 'https://github.com/hsjinde/CORE-PULSE',
   },
 ]
@@ -129,6 +133,16 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             zIndex: 1,
           }}
         />
+
+        {/* Thumbnail strip — placeholder glyph on tinted gradient (no real screenshot yet) */}
+        <div
+          className="project-thumb"
+          style={{ background: `radial-gradient(ellipse 60% 100% at 15% 50%, ${project.accentColor}14 0%, transparent 70%), var(--bg-tertiary)` }}
+        >
+          <span className="project-thumb-glyph" style={{ color: project.accentColor }}>
+            {project.glyph}
+          </span>
+        </div>
 
         <div className="project-card-inner" style={{ position: 'relative', zIndex: 1 }}>
           <div className="project-card-grid">
@@ -216,17 +230,17 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                       padding: '9px 20px',
                       background: project.accentColor,
                       color: '#fff',
-                      borderRadius: 980,
+                      borderRadius: 'var(--radius-xs)',
                       fontSize: '0.875rem',
-                      fontFamily: 'var(--font-body)',
-                      fontWeight: 500,
+                      fontFamily: 'var(--font-mono)',
+                      fontWeight: 600,
                       textDecoration: 'none',
                       cursor: 'pointer',
                       transition: 'all 0.25s ease',
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.filter = 'brightness(1.12)'
-                      e.currentTarget.style.boxShadow = `0 8px 28px ${project.accentColor}50`
+                      e.currentTarget.style.boxShadow = `0 8px 24px ${project.accentColor}50`
                       e.currentTarget.style.transform = 'translateY(-1px)'
                     }}
                     onMouseLeave={(e) => {
@@ -291,11 +305,8 @@ export default function Projects() {
           transition={{ duration: 0.7 }}
           style={{ textAlign: 'center', marginBottom: 64 }}
         >
-          <p className="text-label" style={{ marginBottom: 14 }}>Selected Work</p>
-          <h2 className="text-headline">
-            Projects that{' '}
-            <span className="gradient-text-warm">matter</span>
-          </h2>
+          <p className="path-label" style={{ marginBottom: 14, justifyContent: 'center' }}>projects</p>
+          <h2 className="text-headline">Projects that matter</h2>
           <motion.span
             className="headline-accent"
             initial={{ scaleX: 0 }}
@@ -324,29 +335,29 @@ export default function Projects() {
               display: 'inline-flex',
               alignItems: 'center',
               gap: 8,
-              color: 'var(--accent-signature)',
+              color: 'var(--text-secondary)',
               textDecoration: 'none',
-              fontFamily: 'var(--font-body)',
-              fontSize: '0.9375rem',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.875rem',
               fontWeight: 500,
               letterSpacing: '-0.01em',
               padding: '10px 20px',
-              borderRadius: 980,
-              background: 'rgba(255,229,0,0.06)',
-              border: '1px solid rgba(255,229,0,0.16)',
+              borderRadius: 'var(--radius-xs)',
+              background: 'transparent',
+              border: '1px solid var(--border)',
               transition: 'all 0.2s ease',
               cursor: 'pointer',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(255,229,0,0.10)'
-              e.currentTarget.style.borderColor = 'rgba(255,229,0,0.28)'
+              e.currentTarget.style.borderColor = 'var(--text-primary)'
+              e.currentTarget.style.color = 'var(--text-primary)'
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'rgba(255,229,0,0.06)'
-              e.currentTarget.style.borderColor = 'rgba(255,229,0,0.16)'
+              e.currentTarget.style.borderColor = 'var(--border)'
+              e.currentTarget.style.color = 'var(--text-secondary)'
             }}
           >
-            View all on GitHub
+            view all on github
             <ArrowUpRight size={16} />
           </a>
         </motion.div>

@@ -46,10 +46,10 @@ export default function Navbar() {
         zIndex: 200,
         transition: 'background 0.4s ease, border-color 0.4s ease, backdrop-filter 0.4s ease',
         ...(scrolled ? {
-          background:     'rgba(0, 0, 0, 0.60)',
-          backdropFilter: 'blur(60px) saturate(180%)',
-          WebkitBackdropFilter: 'blur(60px) saturate(180%)',
-          borderBottom:   '1px solid rgba(255,255,255,0.07)',
+          background:     'rgba(5, 5, 5, 0.72)',
+          backdropFilter: 'var(--blur-xl)',
+          WebkitBackdropFilter: 'var(--blur-xl)',
+          borderBottom:   '1px solid var(--border)',
         } : {
           background:     'transparent',
           backdropFilter: 'none',
@@ -72,37 +72,31 @@ export default function Navbar() {
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: 9,
+            gap: 8,
             textDecoration: 'none',
             color: 'var(--text-primary)',
           }}
         >
-          {/* Icon glass pill */}
-          <div
-            style={{
-              width: 38,
-              height: 38,
-              borderRadius: 12,
-              background: 'rgba(255,229,0,0.14)',
-              border: '1px solid rgba(255,229,0,0.30)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              backdropFilter: 'blur(12px)',
-              WebkitBackdropFilter: 'blur(12px)',
-            }}
-          >
-            <Terminal size={18} color="var(--accent-signature)" strokeWidth={2} />
-          </div>
+          <Terminal size={16} color="var(--text-tertiary)" strokeWidth={2} />
           <span
             style={{
-              fontFamily: 'var(--font-heading)',
-              fontWeight: 700,
-              fontSize: '1.15rem',
-              letterSpacing: '-0.03em',
+              fontFamily: 'var(--font-mono)',
+              fontWeight: 500,
+              fontSize: '1rem',
+              letterSpacing: '-0.01em',
             }}
           >
-            Core Pulse
+            core_pulse
+            <span
+              style={{
+                display: 'inline-block',
+                width: '0.5em',
+                marginLeft: 2,
+                animation: 'cursor-blink 1.1s steps(2) infinite',
+              }}
+            >
+              _
+            </span>
           </span>
         </Link>
 
@@ -111,13 +105,7 @@ export default function Navbar() {
           className="hidden md:flex"
           style={{
             alignItems: 'center',
-            gap: 2,
-            background: 'rgba(255,255,255,0.04)',
-            border: '1px solid rgba(255,255,255,0.07)',
-            borderRadius: 980,
-            padding: '4px 6px',
-            backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)',
+            gap: 28,
           }}
         >
           {navLinks.map(({ href, label, external }) => {
@@ -129,16 +117,15 @@ export default function Navbar() {
                 {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                 style={{
                   position: 'relative',
-                  padding: '6px 16px',
-                  borderRadius: 980,
-                  fontSize: '0.875rem',
-                  fontFamily: 'var(--font-body)',
+                  padding: '4px 0',
+                  fontSize: '0.8125rem',
+                  fontFamily: 'var(--font-mono)',
                   fontWeight: 500,
                   letterSpacing: '-0.01em',
-                  color: isActive ? '#fff' : 'var(--text-secondary)',
+                  color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
                   textDecoration: 'none',
-                  background: isActive ? 'rgba(255,255,255,0.10)' : 'transparent',
-                  transition: 'all 0.2s ease',
+                  borderBottom: isActive ? '1px solid var(--text-primary)' : '1px solid transparent',
+                  transition: 'color 0.2s ease, border-color 0.2s ease',
                 }}
                 onMouseEnter={(e) => {
                   if (!isActive) e.currentTarget.style.color = 'var(--text-primary)'
@@ -147,7 +134,7 @@ export default function Navbar() {
                   if (!isActive) e.currentTarget.style.color = 'var(--text-secondary)'
                 }}
               >
-                {label}
+                {label.toLowerCase()}
               </a>
             )
           })}
@@ -155,41 +142,9 @@ export default function Navbar() {
 
         {/* ── GitHub CTA ────────────────────────────── */}
         <div className="hidden md:flex" style={{ alignItems: 'center', gap: 12 }}>
-          <a
-            href="https://github.com/hsjinde"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 7,
-              padding: '8px 18px',
-              borderRadius: 980,
-              background: 'rgba(255,255,255,0.07)',
-              border: '1px solid rgba(255,255,255,0.12)',
-              fontSize: '0.875rem',
-              fontFamily: 'var(--font-body)',
-              fontWeight: 500,
-              color: 'var(--text-secondary)',
-              textDecoration: 'none',
-              backdropFilter: 'blur(20px)',
-              WebkitBackdropFilter: 'blur(20px)',
-              transition: 'all 0.2s ease',
-              cursor: 'pointer',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(255,255,255,0.12)'
-              e.currentTarget.style.color = 'var(--text-primary)'
-              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.22)'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'rgba(255,255,255,0.07)'
-              e.currentTarget.style.color = 'var(--text-secondary)'
-              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)'
-            }}
-          >
+          <a href="https://github.com/hsjinde" target="_blank" rel="noopener noreferrer" className="btn-outline">
             <Code2 size={14} />
-            GitHub
+            github
           </a>
         </div>
 
@@ -199,17 +154,15 @@ export default function Navbar() {
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Toggle menu"
           style={{
-            background: 'rgba(255,255,255,0.06)',
-            border: '1px solid rgba(255,255,255,0.10)',
-            borderRadius: 10,
+            background: 'transparent',
+            border: '1px solid var(--border)',
+            borderRadius: 'var(--radius-xs)',
             color: 'var(--text-primary)',
             cursor: 'pointer',
             padding: '7px 8px',
             alignItems: 'center',
             justifyContent: 'center',
-            backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)',
-            transition: 'all 0.2s ease',
+            transition: 'border-color 0.2s ease',
           }}
         >
           {mobileOpen ? <X size={18} /> : <AlignRight size={18} />}
@@ -220,19 +173,17 @@ export default function Navbar() {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -12, scale: 0.97 }}
-            animate={{ opacity: 1, y: 0,   scale: 1     }}
-            exit={{    opacity: 0, y: -8,   scale: 0.98  }}
-            transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
+            initial={{ opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{    opacity: 0, y: -8 }}
+            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
             style={{
               margin: '8px 16px',
-              borderRadius: 20,
-              background: 'rgba(10, 10, 10, 0.85)',
-              backdropFilter: 'blur(60px) saturate(180%)',
-              WebkitBackdropFilter: 'blur(60px) saturate(180%)',
-              border: '1px solid rgba(255,255,255,0.10)',
+              borderRadius: 'var(--radius-md)',
+              background: 'var(--bg-secondary)',
+              border: '1px solid var(--border)',
               overflow: 'hidden',
-              boxShadow: '0 24px 64px rgba(0,0,0,0.7)',
+              boxShadow: 'var(--shadow-lg)',
             }}
           >
             <div style={{ padding: '8px 8px' }}>
@@ -245,16 +196,16 @@ export default function Navbar() {
                   style={{
                     display: 'block',
                     padding: '13px 20px',
-                    fontSize: '1rem',
-                    fontFamily: 'var(--font-body)',
+                    fontSize: '0.9375rem',
+                    fontFamily: 'var(--font-mono)',
                     fontWeight: 500,
                     color: 'var(--text-secondary)',
                     textDecoration: 'none',
-                    borderRadius: 12,
+                    borderRadius: 'var(--radius-xs)',
                     transition: 'all 0.15s ease',
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.background = 'rgba(255,255,255,0.06)'
+                    e.currentTarget.style.background = 'var(--glass-2)'
                     e.currentTarget.style.color = 'var(--text-primary)'
                   }}
                   onMouseLeave={(e) => {
@@ -262,7 +213,7 @@ export default function Navbar() {
                     e.currentTarget.style.color = 'var(--text-secondary)'
                   }}
                 >
-                  {label}
+                  {label.toLowerCase()}
                 </a>
               ))}
             </div>

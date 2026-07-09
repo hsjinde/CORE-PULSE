@@ -44,12 +44,12 @@ export default function AdminDashboard() {
       <Navbar />
       <main className="admin-main">
         <div className="flex items-center justify-between mb-12">
-          <h1 className="text-3xl font-bold text-white">Content Management</h1>
+          <h1 className="text-3xl font-mono font-medium text-white tracking-tight">content_management</h1>
           <div className="flex gap-4">
             <button onClick={() => navigate('/admin/editor')} className="btn-primary">
-              <Plus size={18} /> New Post
+              <Plus size={18} /> new post
             </button>
-            <button onClick={handleLogout} className="btn-ghost" style={{ padding: '12px', borderRadius: '12px' }}>
+            <button onClick={handleLogout} className="btn-ghost" style={{ padding: '12px', borderRadius: 'var(--radius-xs)' }}>
               <LogOut size={18} />
             </button>
           </div>

@@ -248,7 +248,7 @@ export default function MascotChatPanel({ chat, anchor, maxPanelHeight, isMobile
                 disabled={!text.trim()}
                 aria-label="送出訊息"
                 style={{
-                  background: text.trim() ? 'var(--accent-signature)' : 'var(--glass-2)',
+                  background: text.trim() ? 'var(--accent-blue)' : 'var(--glass-2)',
                   border: 'none',
                   color: text.trim() ? '#fff' : 'var(--text-tertiary)',
                   borderRadius: 'var(--radius-sm)',
