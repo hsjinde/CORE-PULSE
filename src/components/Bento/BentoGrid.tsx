@@ -7,6 +7,7 @@ import {
 } from 'lucide-react'
 import TerminalCard from './TerminalCard'
 import { ShaderComponent } from '../ui/waves-shader'
+import { NOTES_URL } from '@/lib/notes'
 
 /* ─── Types ──────────────────────────────────────────────────── */
 interface BentoCardProps {
@@ -192,21 +193,34 @@ export default function BentoGrid() {
               <p className="text-body relative z-10" style={{ fontSize: '0.8125rem', marginBottom: 20 }}>
                 利用 CLIProxyAPI 統一管理 API，並整合 Obsidian 作為個人的 AI 知識庫與 RAG 後端。
               </p>
-              <a
-                href="https://github.com/hsjinde/my-note"
-                target="_blank" rel="noreferrer"
-                className="btn-ghost relative z-10"
-                style={{
-                  padding: '8px 18px',
-                  fontSize: '0.8125rem',
-                  borderColor: 'rgba(191,90,242,0.28)',
-                  color: 'var(--accent-purple)',
-                  cursor: 'pointer',
-                  textDecoration: 'none'
-                }}
-              >
-                View Architecture →
-              </a>
+              <div className="flex items-center gap-4 relative z-10">
+                <a
+                  href={NOTES_URL}
+                  target="_blank" rel="noopener noreferrer"
+                  className="btn-ghost"
+                  style={{
+                    padding: '8px 18px',
+                    fontSize: '0.8125rem',
+                    borderColor: 'rgba(191,90,242,0.28)',
+                    color: 'var(--accent-purple)',
+                    cursor: 'pointer',
+                    textDecoration: 'none',
+                  }}
+                >
+                  開啟筆記 Notes →
+                </a>
+                <a
+                  href="https://github.com/hsjinde/my-note"
+                  target="_blank" rel="noopener noreferrer"
+                  style={{
+                    fontSize: '0.75rem',
+                    color: 'var(--text-tertiary)',
+                    textDecoration: 'none',
+                  }}
+                >
+                  Repo ↗
+                </a>
+              </div>
             </BentoCard>
           </div>
 
