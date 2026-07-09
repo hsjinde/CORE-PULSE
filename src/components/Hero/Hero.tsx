@@ -176,14 +176,14 @@ export default function Hero() {
             letterSpacing: '-0.01em',
           }}
         >
-          <span className="hidden md:inline" style={{ color: 'rgba(41,151,255,0.45)', fontFamily: 'ui-monospace, monospace', fontSize: '0.9em' }}>{'// '}</span>
+          <span className="hidden md:inline" style={{ color: 'rgba(255,229,0,0.45)', fontFamily: 'var(--font-mono)', fontSize: '0.9em' }}>{'// '}</span>
           <span style={{ color: 'var(--text-secondary)' }}>{displayText}</span>
           <span
             style={{
               display: 'inline-block',
               width: 2,
               height: '1.1em',
-              background: 'var(--accent-blue)',
+              background: 'var(--accent-signature)',
               marginLeft: 2,
               verticalAlign: 'middle',
               borderRadius: 1,

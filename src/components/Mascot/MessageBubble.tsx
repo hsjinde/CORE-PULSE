@@ -27,7 +27,7 @@ export default function MessageBubble({ message }: Props) {
           padding: '10px 14px',
           borderRadius: isUser ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
           background: isUser
-            ? 'var(--accent-blue)'
+            ? 'var(--accent-signature)'
             : isError ? 'rgba(255,69,58,0.10)' : 'var(--glass-3)',
           color: isUser ? '#fff' : 'var(--text-primary)',
           border: isUser ? 'none' : `1px solid ${isError ? 'rgba(255,69,58,0.4)' : 'var(--border)'}`,
@@ -57,7 +57,7 @@ export default function MessageBubble({ message }: Props) {
               <span className="mascot-cursor" style={{
                 display: 'inline-block',
                 width: 6, height: 14,
-                background: 'var(--accent-purple)',
+                background: 'var(--accent-signature)',
                 marginLeft: 2,
                 verticalAlign: 'text-bottom',
                 animation: 'mascot-blink 1s steps(2) infinite',

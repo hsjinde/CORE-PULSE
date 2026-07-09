@@ -324,7 +324,7 @@ export default function Projects() {
               display: 'inline-flex',
               alignItems: 'center',
               gap: 8,
-              color: 'var(--accent-blue)',
+              color: 'var(--accent-signature)',
               textDecoration: 'none',
               fontFamily: 'var(--font-body)',
               fontSize: '0.9375rem',

@@ -82,7 +82,7 @@ export default function Footer() {
                     WebkitBackdropFilter: 'blur(12px)',
                   }}
                 >
-                  <Terminal size={16} color="var(--accent-blue)" strokeWidth={2} />
+                  <Terminal size={16} color="var(--accent-signature)" strokeWidth={2} />
                 </div>
                 <span
                   style={{

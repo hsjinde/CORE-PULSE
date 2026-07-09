@@ -12,7 +12,7 @@
   transition: transform 0.1s ease-in;
 }
 .mascot-avatar-btn:focus-visible {
-  outline: 2px solid var(--accent-blue);
+  outline: 2px solid var(--accent-signature);
   outline-offset: 3px;
 }
 

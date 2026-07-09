@@ -92,7 +92,7 @@ export default function Navbar() {
               WebkitBackdropFilter: 'blur(12px)',
             }}
           >
-            <Terminal size={18} color="var(--accent-blue)" strokeWidth={2} />
+            <Terminal size={18} color="var(--accent-signature)" strokeWidth={2} />
           </div>
           <span
             style={{
