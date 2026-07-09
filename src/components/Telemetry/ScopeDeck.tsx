@@ -15,7 +15,7 @@ function Cell({
 }) {
 	return (
 		<div className="flex items-center gap-2.5">
-			<span className="text-phosphor-400/80">{icon}</span>
+			<span className="text-beacon-400/80">{icon}</span>
 			<div className="leading-none">
 				<div className="text-[9px] uppercase tracking-wider text-dim">
 					{label}
@@ -33,7 +33,7 @@ function Meter({ value }: { value: number }) {
 	return (
 		<div className="h-1.5 w-full overflow-hidden rounded-full bg-carbon-600">
 			<div
-				className="h-full rounded-full bg-gradient-to-r from-phosphor-600 to-phosphor-300"
+				className="h-full rounded-full bg-gradient-to-r from-beacon-600 to-beacon-300"
 				style={{ width: `${Math.max(2, Math.min(100, value * 100))}%` }}
 			/>
 		</div>
@@ -68,7 +68,7 @@ export function ScopeDeck({ sample }: { sample: SignalSample }) {
 						<span className="text-[9px] uppercase tracking-wider text-dim">
 							phase lock
 						</span>
-						<span className="font-mono text-[11px] tabular-nums text-phosphor-300">
+						<span className="font-mono text-[11px] tabular-nums text-beacon-300">
 							{(sample.phase * 100).toFixed(0)}%
 						</span>
 					</div>
@@ -76,11 +76,11 @@ export function ScopeDeck({ sample }: { sample: SignalSample }) {
 				</div>
 			</div>
 
-			{/* Sweep line: a phosphor head tracking left→right across the deck base. */}
+			{/* Sweep line: a beacon head tracking left→right across the deck base. */}
 			<div className="relative h-[3px] overflow-hidden rounded-b-md bg-carbon-700">
 				<div
 					className={cn(
-						"absolute inset-y-0 w-1/4 bg-gradient-to-r from-transparent via-phosphor-400 to-transparent",
+						"absolute inset-y-0 w-1/4 bg-gradient-to-r from-transparent via-beacon-400 to-transparent",
 						"animate-sweep",
 					)}
 				/>

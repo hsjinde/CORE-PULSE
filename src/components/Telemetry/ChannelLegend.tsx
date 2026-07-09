@@ -6,18 +6,18 @@ interface Channel {
 	label: string;
 	/** Phase offset so each indicator pulses on its own cadence. */
 	offset: number;
-	tone: "phosphor" | "amber" | "dim";
+	tone: "beacon" | "amber" | "dim";
 }
 
 const CHANNELS: Channel[] = [
-	{ id: "CH·1", label: "ring 10×", offset: 0.0, tone: "phosphor" },
-	{ id: "CH·2", label: "ring 20×", offset: 0.33, tone: "phosphor" },
+	{ id: "CH·1", label: "ring 10×", offset: 0.0, tone: "beacon" },
+	{ id: "CH·2", label: "ring 20×", offset: 0.33, tone: "beacon" },
 	{ id: "WRP", label: "coswarp", offset: 0.66, tone: "amber" },
 	{ id: "REF", label: "carrier", offset: 0.5, tone: "dim" },
 ];
 
 const dot: Record<Channel["tone"], string> = {
-	phosphor: "bg-phosphor-400",
+	beacon: "bg-beacon-400",
 	amber: "bg-amber-400",
 	dim: "bg-dim",
 };

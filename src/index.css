@@ -13,13 +13,13 @@
   
   --color-hairline: #22323d;
   
-  --color-phosphor-50: #e9fff6;
-  --color-phosphor-100: #c4ffe9;
-  --color-phosphor-200: #8dffd6;
-  --color-phosphor-300: #4dffc0;
-  --color-phosphor-400: #22f5b0;
-  --color-phosphor-500: #0fd99a;
-  --color-phosphor-600: #0bb182;
+  --color-beacon-50:  #fffce6;
+  --color-beacon-100: #fff9b8;
+  --color-beacon-200: #fff27a;
+  --color-beacon-300: #ffe94d;
+  --color-beacon-400: #ffe500;
+  --color-beacon-500: #e6ce00;
+  --color-beacon-600: #b8a500;
   
   --color-chalk: #e6f0ee;
   --color-dim: #7d8f93;
@@ -68,10 +68,10 @@
   );
 }
 
-@utility glow-phosphor {
+@utility glow-beacon {
   text-shadow:
-    0 0 14px rgba(34, 245, 176, 0.55),
-    0 0 2px rgba(34, 245, 176, 0.9);
+    0 0 14px rgba(255, 229, 0, 0.55),
+    0 0 2px rgba(255, 229, 0, 0.9);
 }
 
 @utility glow-amber {

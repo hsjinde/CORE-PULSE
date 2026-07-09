@@ -4,7 +4,7 @@ export function Reticle({ className }: { className?: string }) {
 	return (
 		<svg
 			viewBox="0 0 44 44"
-			className={cn("h-7 w-7 text-phosphor-400/70", className)}
+			className={cn("h-7 w-7 text-beacon-400/70", className)}
 			fill="none"
 			stroke="currentColor"
 			strokeWidth="1.1"

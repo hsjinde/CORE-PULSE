@@ -20,7 +20,7 @@ function Row({ label, value }: { label: string; value: string }) {
 			<span className="text-[10px] uppercase tracking-wider text-dim">
 				{label}
 			</span>
-			<span className="font-mono text-[12px] tabular-nums text-phosphor-200 glow-phosphor">
+			<span className="font-mono text-[12px] tabular-nums text-beacon-200 glow-beacon">
 				{value}
 			</span>
 		</div>
@@ -44,7 +44,7 @@ export function Readout({
 		>
 			<div className="mb-2 flex items-center justify-between">
 				<div className="flex items-center gap-1.5">
-					<Radio className="h-3.5 w-3.5 text-phosphor-400" strokeWidth={1.6} />
+					<Radio className="h-3.5 w-3.5 text-beacon-400" strokeWidth={1.6} />
 					<span className="text-[10px] uppercase tracking-wider text-chalk/80">
 						Live trace
 					</span>
@@ -52,13 +52,13 @@ export function Readout({
 				<span
 					className={cn(
 						"flex items-center gap-1 text-[9px] uppercase tracking-wider",
-						locked ? "text-phosphor-400" : "text-amber-400",
+						locked ? "text-beacon-400" : "text-amber-400",
 					)}
 				>
 					<span
 						className={cn(
 							"inline-block h-1.5 w-1.5 rounded-full animate-blink",
-							locked ? "bg-phosphor-400" : "bg-amber-400",
+							locked ? "bg-beacon-400" : "bg-amber-400",
 						)}
 					/>
 					{locked ? "lock" : "drift"}
@@ -74,7 +74,7 @@ export function Readout({
 			</div>
 
 			<div className="mt-2.5 flex items-center gap-1.5 border-t border-hairline/70 pt-2">
-				<Activity className="h-3 w-3 text-phosphor-400/80" strokeWidth={1.6} />
+				<Activity className="h-3 w-3 text-beacon-400/80" strokeWidth={1.6} />
 				<span className="text-[9px] uppercase tracking-wider text-dim">
 					coswarp interference · gpu
 				</span>
