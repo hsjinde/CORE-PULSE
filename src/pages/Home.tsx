@@ -5,7 +5,6 @@ import Navbar from '@/components/Navbar/Navbar'
 import Hero from '@/components/Hero/Hero'
 import BentoGrid from '@/components/Bento/BentoGrid'
 import Projects from '@/components/Projects/Projects'
-import NotesCTA from '@/components/NotesCTA/NotesCTA'
 import Footer from '@/components/Footer/Footer'
 
 export default function Home() {
@@ -42,7 +41,6 @@ export default function Home() {
         <Hero />
         <BentoGrid />
         <Projects />
-        <NotesCTA />
       </main>
       <Footer />
     </>
