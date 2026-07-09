@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import Home from '@/pages/Home'
 import BlogPost from '@/pages/BlogPost'
+import Telemetry from '@/pages/Telemetry'
 import AdminLogin from '@/pages/Admin/AdminLogin'
 import AdminDashboard from '@/pages/Admin/AdminDashboard'
 import AdminEditor from '@/pages/Admin/AdminEditor'
@@ -62,6 +63,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/blog/:id" element={<BlogPost />} />
+        <Route path="/telemetry" element={<Telemetry />} />
 
         {/* Admin CMS Routes */}
         <Route path="/admin" element={<AdminLogin />} />

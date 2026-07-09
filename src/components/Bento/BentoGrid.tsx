@@ -1,10 +1,12 @@
 import { useRef, useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { motion, useInView } from 'framer-motion'
 import {
   Server, Shield, Cpu, Activity, Globe, Code2,
   GitBranch, Bot,
 } from 'lucide-react'
 import TerminalCard from './TerminalCard'
+import { ShaderComponent } from '../ui/waves-shader'
 
 /* ─── Types ──────────────────────────────────────────────────── */
 interface BentoCardProps {
@@ -210,53 +212,73 @@ export default function BentoGrid() {
 
           {/* ── Card 4: Infrastructure (4 cols) ── */}
           <div className="bento-col-4">
-            <BentoCard delay={0.2} className="h-full">
-              <div className="flex items-center gap-2" style={{ marginBottom: 20 }}>
-                <Shield size={15} style={{ color: 'var(--accent-green)' }} />
-                <span className="text-label">Security & DevSecOps</span>
+            <BentoCard delay={0.2} className="h-full relative overflow-hidden group">
+              {/* WebGL background shader */}
+              <div className="absolute inset-0 z-0 opacity-20 pointer-events-none transition-opacity duration-500 group-hover:opacity-35">
+                <ShaderComponent />
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-                {[
-                  { icon: Shield,    label: 'CVE Analysis',     status: 'Active',  color: 'var(--accent-red)'    },
-                  { icon: Activity,  label: 'Defense Evasion',  status: 'Testing', color: 'var(--accent-purple)' },
-                  { icon: Server,    label: 'System Security',  status: 'Deep',    color: 'var(--accent-blue)'   },
-                  { icon: Globe,     label: 'Zero Trust CDN',   status: 'CF',      color: 'var(--accent-orange)' },
-                ].map(({ icon: Icon, label, status, color }) => (
-                  <div key={label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <div
-                        style={{
-                          width: 28,
-                          height: 28,
-                          borderRadius: 8,
-                          background: `${color}12`,
-                          border: `1px solid ${color}22`,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          flexShrink: 0,
-                        }}
-                      >
-                        <Icon size={13} style={{ color }} />
-                      </div>
-                      <span style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', fontFamily: 'var(--font-body)' }}>{label}</span>
-                    </div>
-                    <span
-                      style={{
-                        fontSize: '0.75rem',
-                        color,
-                        fontWeight: 600,
-                        fontFamily: 'var(--font-body)',
-                        background: `${color}12`,
-                        padding: '2px 8px',
-                        borderRadius: 6,
-                        border: `1px solid ${color}20`,
-                      }}
-                    >
-                      {status}
-                    </span>
+              {/* CRT Scanline overlay */}
+              <div className="scanlines absolute inset-0 z-0 opacity-15 pointer-events-none" />
+
+              <div className="relative z-10 flex flex-col justify-between h-full">
+                <div>
+                  <div className="flex items-center gap-2" style={{ marginBottom: 20 }}>
+                    <Shield size={15} style={{ color: 'var(--accent-green)' }} />
+                    <span className="text-label">Security & DevSecOps</span>
                   </div>
-                ))}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                    {[
+                      { icon: Shield,    label: 'CVE Analysis',     status: 'Active',  color: 'var(--accent-red)'    },
+                      { icon: Activity,  label: 'Defense Evasion',  status: 'Testing', color: 'var(--accent-purple)' },
+                      { icon: Server,    label: 'System Security',  status: 'Deep',    color: 'var(--accent-blue)'   },
+                      { icon: Globe,     label: 'Zero Trust CDN',   status: 'CF',      color: 'var(--accent-orange)' },
+                    ].map(({ icon: Icon, label, status, color }) => (
+                      <div key={label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                          <div
+                            style={{
+                              width: 28,
+                              height: 28,
+                              borderRadius: 8,
+                              background: `${color}12`,
+                              border: `1px solid ${color}22`,
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              flexShrink: 0,
+                            }}
+                          >
+                            <Icon size={13} style={{ color }} />
+                          </div>
+                          <span style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', fontFamily: 'var(--font-body)' }}>{label}</span>
+                        </div>
+                        <span
+                          style={{
+                            fontSize: '0.75rem',
+                            color,
+                            fontWeight: 600,
+                            fontFamily: 'var(--font-body)',
+                            background: `${color}12`,
+                            padding: '2px 8px',
+                            borderRadius: 6,
+                            border: `1px solid ${color}20`,
+                          }}
+                        >
+                          {status}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div style={{ marginTop: 20, display: 'flex', justifyContent: 'flex-end' }}>
+                  <Link
+                    to="/telemetry"
+                    className="pointer-events-auto flex items-center gap-1.5 rounded-md border border-hairline/80 bg-carbon-900/80 px-3 py-2 text-[10px] uppercase tracking-wider text-chalk/80 backdrop-blur-md transition-all hover:bg-carbon-800/80 hover:border-phosphor-400/40 hover:text-phosphor-300"
+                    style={{ textDecoration: 'none' }}
+                  >
+                    Telemetry Scope →
+                  </Link>
+                </div>
               </div>
             </BentoCard>
           </div>

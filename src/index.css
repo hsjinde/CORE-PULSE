@@ -2,6 +2,82 @@
 @import "tailwindcss";
 @import "./components/Mascot/MascotAvatar.css";
 
+/* ─── Tailwind v4 Custom Theme & Utilities for Telemetry ─── */
+@theme {
+  --color-carbon-950: #050608;
+  --color-carbon-900: #070a0d;
+  --color-carbon-800: #0b1014;
+  --color-carbon-700: #10171d;
+  --color-carbon-600: #161f27;
+  --color-carbon-500: #1d2a34;
+  
+  --color-hairline: #22323d;
+  
+  --color-phosphor-50: #e9fff6;
+  --color-phosphor-100: #c4ffe9;
+  --color-phosphor-200: #8dffd6;
+  --color-phosphor-300: #4dffc0;
+  --color-phosphor-400: #22f5b0;
+  --color-phosphor-500: #0fd99a;
+  --color-phosphor-600: #0bb182;
+  
+  --color-chalk: #e6f0ee;
+  --color-dim: #7d8f93;
+
+  --tracking-ultra: 0.42em;
+  --tracking-wider2: 0.22em;
+
+  --animate-rise: rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-fade-in: fade-in 1.4s ease-out both;
+  --animate-reticle-spin: reticle-spin 30s linear infinite;
+  --animate-blink: blink 1.6s steps(1, end) infinite;
+  --animate-sweep: sweep 5.5s linear infinite;
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes reticle-spin {
+    to { transform: rotate(360deg); }
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.2; }
+  }
+  @keyframes sweep {
+    0% { transform: translateX(-130%); }
+    100% { transform: translateX(130%); }
+  }
+}
+
+@utility grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+}
+
+@utility scanlines {
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0) 0px,
+    rgba(0, 0, 0, 0) 2px,
+    rgba(0, 0, 0, 0.18) 3px,
+    rgba(0, 0, 0, 0.18) 4px
+  );
+}
+
+@utility glow-phosphor {
+  text-shadow:
+    0 0 14px rgba(34, 245, 176, 0.55),
+    0 0 2px rgba(34, 245, 176, 0.9);
+}
+
+@utility glow-amber {
+  text-shadow: 0 0 12px rgba(255, 180, 67, 0.5);
+}
+
 /* ── Override Tailwind v4 Preflight white background ──────────── */
 @layer base {
   html, body {
