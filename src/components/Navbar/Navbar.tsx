@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Terminal, Code2, X, AlignRight } from 'lucide-react'
+import { NOTES_URL } from '@/lib/notes'
 
-const navLinks = [
-  { href: '#skills',   label: 'Skills'    },
-  { href: '#projects', label: 'Projects'  },
-  { href: '#blog',     label: 'Blog'      },
-  { href: '#contact',  label: 'Contact'   },
+const navLinks: { href: string; label: string; external?: boolean }[] = [
+  { href: '#skills',   label: 'Skills'                       },
+  { href: '#projects', label: 'Projects'                     },
+  { href: NOTES_URL,   label: '筆記 Notes', external: true    },
+  { href: '#blog',     label: 'Blog'                         },
+  { href: '#contact',  label: 'Contact'                      },
 ]
 
 export default function Navbar() {
@@ -120,12 +122,13 @@ export default function Navbar() {
             WebkitBackdropFilter: 'blur(20px)',
           }}
         >
-          {navLinks.map(({ href, label }) => {
-            const isActive = activeHash === href
+          {navLinks.map(({ href, label, external }) => {
+            const isActive = !external && activeHash === href
             return (
               <a
                 key={label}
                 href={href}
+                {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                 style={{
                   position: 'relative',
                   padding: '6px 16px',
@@ -235,10 +238,11 @@ export default function Navbar() {
             }}
           >
             <div style={{ padding: '8px 8px' }}>
-              {navLinks.map(({ href, label }) => (
+              {navLinks.map(({ href, label, external }) => (
                 <a
                   key={label}
                   href={href}
+                  {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                   onClick={() => setMobileOpen(false)}
                   style={{
                     display: 'block',
