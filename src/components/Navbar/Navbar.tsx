@@ -2,14 +2,12 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Terminal, Code2, X, AlignRight } from 'lucide-react'
-import { NOTES_URL } from '@/lib/notes'
 
 const navLinks: { href: string; label: string; external?: boolean }[] = [
-  { href: '#skills',   label: 'Skills'                       },
-  { href: '#projects', label: 'Projects'                     },
-  { href: NOTES_URL,   label: '筆記 Notes', external: true    },
-  { href: '#blog',     label: 'Blog'                         },
-  { href: '#contact',  label: 'Contact'                      },
+  { href: '#skills',   label: 'Skills'   },
+  { href: '#projects', label: 'Projects' },
+  { href: '#blog',     label: 'Blog'     },
+  { href: '#contact',  label: 'Contact'  },
 ]
 
 export default function Navbar() {
