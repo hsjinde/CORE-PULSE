@@ -114,7 +114,7 @@ export default function BentoGrid() {
           style={{ textAlign: 'center', marginBottom: 64 }}
         >
           <p className="text-label" style={{ marginBottom: 14 }}>Technical Arsenal</p>
-          <h2 className="text-headline gradient-text-blue">Skills &amp; Infrastructure</h2>
+          <h2 className="text-headline gradient-text-signature">Skills &amp; Infrastructure</h2>
           <motion.span
             className="headline-accent"
             initial={{ scaleX: 0 }}
@@ -389,7 +389,7 @@ export default function BentoGrid() {
                 ].map(({ label, value, suffix }) => (
                   <div key={label}>
                     <p
-                      className="gradient-text-blue"
+                      className="gradient-text-signature"
                       style={{
                         fontFamily: 'var(--font-heading)',
                         fontSize: '2.25rem',

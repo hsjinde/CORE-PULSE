@@ -104,12 +104,11 @@
   --border-hover:     rgba(255, 255, 255, 0.18);
   --border-active:    rgba(255, 255, 255, 0.30);
 
-  /* Apple-style iridescent border */
+  /* Voltmark-style signature border */
   --border-glass:     linear-gradient(135deg,
                         rgba(255,255,255,0.25) 0%,
                         rgba(255,255,255,0.06) 40%,
-                        rgba(100,180,255,0.15) 70%,
-                        rgba(180,100,255,0.20) 100%);
+                        rgba(255,229,0,0.18) 100%);
 
   /* Text */
   --text-primary:     #f5f5f7;
@@ -302,7 +301,7 @@
   height: 3px;
   border-radius: 2px;
   margin: 18px auto 0;
-  background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+  background: var(--accent-signature);
   transform-origin: center;
 }
 
@@ -391,15 +390,15 @@
 }
 
 /* ─── Gradient Text ───────────────────────────────────────────── */
-.gradient-text-blue {
-  background: linear-gradient(135deg, #5eb8ff 0%, #2997ff 50%, #bf5af2 100%);
+.gradient-text-signature {
+  background: linear-gradient(135deg, #fff77a 0%, var(--accent-signature) 60%, var(--accent-signature-hover) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .gradient-text-warm {
-  background: linear-gradient(135deg, #ffd700 0%, #ff9f0a 50%, #ff453a 100%);
+  background: linear-gradient(135deg, #fff77a 0%, var(--accent-signature) 55%, var(--accent-signature-hover) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -418,7 +417,7 @@
   align-items: center;
   gap: 8px;
   padding: 13px 28px;
-  background: var(--accent-blue);
+  background: var(--accent-signature);
   color: #fff;
   border-radius: 980px;
   font-family: var(--font-body);
@@ -452,8 +451,8 @@
 }
 
 .btn-primary:hover {
-  background: #4aabff;
-  box-shadow: 0 8px 32px rgba(41, 151, 255, 0.40);
+  background: var(--accent-signature-hover);
+  box-shadow: 0 8px 32px rgba(255, 229, 0, 0.40);
   transform: translateY(-1px);
 }
 
