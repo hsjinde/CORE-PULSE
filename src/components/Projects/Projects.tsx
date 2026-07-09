@@ -332,18 +332,18 @@ export default function Projects() {
               letterSpacing: '-0.01em',
               padding: '10px 20px',
               borderRadius: 980,
-              background: 'rgba(41,151,255,0.06)',
-              border: '1px solid rgba(41,151,255,0.16)',
+              background: 'rgba(255,229,0,0.06)',
+              border: '1px solid rgba(255,229,0,0.16)',
               transition: 'all 0.2s ease',
               cursor: 'pointer',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(41,151,255,0.10)'
-              e.currentTarget.style.borderColor = 'rgba(41,151,255,0.28)'
+              e.currentTarget.style.background = 'rgba(255,229,0,0.10)'
+              e.currentTarget.style.borderColor = 'rgba(255,229,0,0.28)'
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'rgba(41,151,255,0.06)'
-              e.currentTarget.style.borderColor = 'rgba(41,151,255,0.16)'
+              e.currentTarget.style.background = 'rgba(255,229,0,0.06)'
+              e.currentTarget.style.borderColor = 'rgba(255,229,0,0.16)'
             }}
           >
             View all on GitHub

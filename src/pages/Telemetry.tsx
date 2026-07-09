@@ -53,7 +53,7 @@ export default function Telemetry() {
 			/>
 
 			{/* ── Layer 2: instrument framing (Reticle brackets) ──────────────── */}
-			<div className="pointer-events-none absolute inset-4 z-20 rounded-lg ring-1 ring-inset ring-phosphor-400/10 sm:inset-6">
+			<div className="pointer-events-none absolute inset-4 z-20 rounded-lg ring-1 ring-inset ring-beacon-400/10 sm:inset-6">
 				<ReticleFrame />
 			</div>
 
@@ -62,13 +62,13 @@ export default function Telemetry() {
 				{/* Masthead */}
 				<header className="flex items-start justify-between gap-4">
 					<div className="animate-rise">
-						<div className="mb-2 flex items-center gap-2 text-phosphor-400">
+						<div className="mb-2 flex items-center gap-2 text-beacon-400">
 							<CircleDot className="h-4 w-4 animate-blink" strokeWidth={1.8} />
 							<span className="text-[10px] uppercase tracking-wider opacity-70">
 								SRE Telemetry Center
 							</span>
 						</div>
-						<h1 className="font-mono text-3xl font-medium tracking-tight glow-phosphor sm:text-5xl">
+						<h1 className="font-mono text-3xl font-medium tracking-tight glow-beacon sm:text-5xl">
 							CORE.OSCILLON
 						</h1>
 						<p className="mt-2 max-w-xs text-balance text-[10px] uppercase tracking-wider text-dim sm:text-xs">
@@ -81,7 +81,7 @@ export default function Telemetry() {
 						{/* Mode Plate */}
 						<div className="rounded-md border border-hairline/80 bg-carbon-900/80 px-3 py-2 backdrop-blur-md">
 							<div className="flex items-center gap-2">
-								<SignalHigh className="h-3.5 w-3.5 text-phosphor-400" strokeWidth={1.8} />
+								<SignalHigh className="h-3.5 w-3.5 text-beacon-400" strokeWidth={1.8} />
 								<span className="text-[10px] uppercase tracking-wider text-chalk/80">
 									XY · free-run
 								</span>
@@ -95,7 +95,7 @@ export default function Telemetry() {
 						{/* Return to Base Button */}
 						<Link
 							to="/"
-							className="pointer-events-auto flex items-center gap-1.5 rounded-md border border-hairline/80 bg-carbon-900/80 px-3 py-2 text-[10px] uppercase tracking-wider text-chalk/80 backdrop-blur-md transition-all hover:bg-carbon-800/80 hover:border-phosphor-400/40 hover:text-phosphor-300"
+							className="pointer-events-auto flex items-center gap-1.5 rounded-md border border-hairline/80 bg-carbon-900/80 px-3 py-2 text-[10px] uppercase tracking-wider text-chalk/80 backdrop-blur-md transition-all hover:bg-carbon-800/80 hover:border-beacon-400/40 hover:text-beacon-300"
 						>
 							<ArrowLeft className="h-3.5 w-3.5" />
 							Return Base

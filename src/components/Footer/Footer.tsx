@@ -50,7 +50,7 @@ export default function Footer() {
           transform: 'translateX(-50%)',
           width: '100%',
           height: 200,
-          background: 'radial-gradient(ellipse 60% 100% at 50% 0%, rgba(41,151,255,0.05) 0%, transparent 100%)',
+          background: 'radial-gradient(ellipse 60% 100% at 50% 0%, rgba(255,229,0,0.05) 0%, transparent 100%)',
           pointerEvents: 'none',
         }}
       />
@@ -73,8 +73,8 @@ export default function Footer() {
                     width: 34,
                     height: 34,
                     borderRadius: 10,
-                    background: 'rgba(41,151,255,0.12)',
-                    border: '1px solid rgba(41,151,255,0.26)',
+                    background: 'rgba(255,229,0,0.12)',
+                    border: '1px solid rgba(255,229,0,0.26)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',

@@ -91,8 +91,8 @@ export default function Hero() {
         className="absolute inset-0 pointer-events-none"
         style={{
           background: `
-            radial-gradient(ellipse 80% 60% at 20% 30%, rgba(41,151,255,0.09) 0%, transparent 65%),
-            radial-gradient(ellipse 60% 50% at 80% 70%, rgba(191,90,242,0.08) 0%, transparent 65%),
+            radial-gradient(ellipse 80% 60% at 20% 30%, rgba(255,229,0,0.09) 0%, transparent 65%),
+            radial-gradient(ellipse 60% 50% at 80% 70%, rgba(255,229,0,0.08) 0%, transparent 65%),
             radial-gradient(ellipse 50% 40% at 50% 50%, rgba(0,0,0,0.6) 0%, transparent 100%)
           `,
         }}
@@ -113,8 +113,8 @@ export default function Hero() {
       />
 
       {/* ── Parallax glow orbs ─── */}
-      <GlowOrb x="5%"  y="12%" size={700} color="rgba(41,151,255,0.10)"  mouseX={mouseOffset.x} mouseY={mouseOffset.y} factor={-1.8} floatDuration={9}  />
-      <GlowOrb x="55%" y="55%" size={500} color="rgba(191,90,242,0.08)"  mouseX={mouseOffset.x} mouseY={mouseOffset.y} factor={ 1.4} floatDuration={12} />
+      <GlowOrb x="5%"  y="12%" size={700} color="rgba(255,229,0,0.10)"  mouseX={mouseOffset.x} mouseY={mouseOffset.y} factor={-1.8} floatDuration={9}  />
+      <GlowOrb x="55%" y="55%" size={500} color="rgba(255,229,0,0.08)"  mouseX={mouseOffset.x} mouseY={mouseOffset.y} factor={ 1.4} floatDuration={12} />
       <GlowOrb x="30%" y="70%" size={350} color="rgba(48,209,88,0.06)"   mouseX={mouseOffset.x} mouseY={mouseOffset.y} factor={-1.0} floatDuration={7}  />
 
       {/* ── Main Content ────────── */}

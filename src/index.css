@@ -330,7 +330,7 @@
 }
 
 .hero-gradient-cool {
-  background-image: linear-gradient(135deg, #5eb8ff 0%, #2997ff 50%, #bf5af2 100%);
+  background-image: linear-gradient(135deg, #fff77a 0%, var(--accent-signature) 50%, var(--accent-signature-hover) 100%);
 }
 
 /* ─── Orb Float ───────────────────────────────────────────────── */
@@ -729,8 +729,8 @@
 }
 
 .blog-search-input-wrap:focus-within {
-  border-color: rgba(41, 151, 255, 0.45);
-  box-shadow: 0 0 0 3px rgba(41, 151, 255, 0.10), var(--shadow-md);
+  border-color: rgba(255, 229, 0, 0.45);
+  box-shadow: 0 0 0 3px rgba(255, 229, 0, 0.10), var(--shadow-md);
 }
 
 .blog-search-icon {
@@ -1448,7 +1448,7 @@
   padding: 1.25rem 1.5rem;
   color: rgba(245, 245, 247, 0.70);
   margin: 0 0 1.6em 0;
-  background: rgba(41, 151, 255, 0.06);
+  background: rgba(255, 229, 0, 0.06);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   font-style: normal;
 }

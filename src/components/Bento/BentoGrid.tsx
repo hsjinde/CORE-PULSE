@@ -99,7 +99,7 @@ export default function BentoGrid() {
           transform: 'translateX(-50%)',
           width: 800,
           height: 2,
-          background: 'linear-gradient(90deg, transparent, rgba(41,151,255,0.4), rgba(191,90,242,0.4), transparent)',
+          background: 'linear-gradient(90deg, transparent, rgba(255,229,0,0.4), transparent)',
           pointerEvents: 'none',
         }}
       />
@@ -287,7 +287,7 @@ export default function BentoGrid() {
                 <div style={{ marginTop: 20, display: 'flex', justifyContent: 'flex-end' }}>
                   <Link
                     to="/telemetry"
-                    className="pointer-events-auto flex items-center gap-1.5 rounded-md border border-hairline/80 bg-carbon-900/80 px-3 py-2 text-[10px] uppercase tracking-wider text-chalk/80 backdrop-blur-md transition-all hover:bg-carbon-800/80 hover:border-phosphor-400/40 hover:text-phosphor-300"
+                    className="pointer-events-auto flex items-center gap-1.5 rounded-md border border-hairline/80 bg-carbon-900/80 px-3 py-2 text-[10px] uppercase tracking-wider text-chalk/80 backdrop-blur-md transition-all hover:bg-carbon-800/80 hover:border-beacon-400/40 hover:text-beacon-300"
                     style={{ textDecoration: 'none' }}
                   >
                     Telemetry Scope →
