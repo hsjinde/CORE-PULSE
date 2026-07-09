@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
 @import "tailwindcss";
 @import "./components/Mascot/MascotAvatar.css";
 
@@ -127,6 +127,11 @@
   --accent-red:       #ff453a;
   --accent-teal:      #5ac8fa;
 
+  /* Signature accent — Voltmark electric yellow (brand identity only) */
+  --accent-signature:       #ffe500;
+  --accent-signature-hover: #e6ce00;
+  --accent-signature-glow:  rgba(255, 229, 0, 0.25);
+
   /* Blur values */
   --blur-sm:   blur(10px);
   --blur-md:   blur(24px);
@@ -148,10 +153,12 @@
   --shadow-blue: 0 8px 48px rgba(41, 151, 255, 0.20);
   --shadow-purple: 0 8px 48px rgba(191, 90, 242, 0.18);
   --shadow-green: 0 8px 48px rgba(48, 209, 88, 0.16);
+  --shadow-signature: 0 8px 48px rgba(255, 229, 0, 0.20);
 
   /* Typography */
-  --font-heading: 'Archivo', -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
-  --font-body:    'Space Grotesk', -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+  --font-heading: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
 /* ─── Base Reset ──────────────────────────────────────────────── */
@@ -1495,7 +1502,7 @@
 
 /* Inline code */
 .prose code {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: var(--font-mono);
   background: rgba(255, 255, 255, 0.10);
   padding: 0.22em 0.5em;
   border-radius: 5px;
@@ -1605,14 +1612,14 @@
 .terminal-dots i:nth-child(3) { background: rgba(39, 201, 63, 0.65); }
 
 .terminal-title {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-family: var(--font-mono);
   font-size: 0.7rem;
   letter-spacing: 0.04em;
   color: var(--text-tertiary);
 }
 
 .terminal-body {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-family: var(--font-mono);
   font-size: 0.8125rem;
   line-height: 1.8;
   min-height: 168px;
