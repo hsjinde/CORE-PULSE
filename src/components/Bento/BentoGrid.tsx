@@ -140,7 +140,7 @@ export default function BentoGrid() {
           <div className="bento-col-8">
             <BentoCard delay={0.1} className="h-full">
               <div className="flex items-center gap-2" style={{ marginBottom: 20 }}>
-                <Code2 size={15} style={{ color: 'var(--accent-blue)' }} />
+                <Code2 size={15} style={{ color: 'var(--accent-signature)' }} />
                 <span className="text-label">Core Stack</span>
               </div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
@@ -181,10 +181,10 @@ export default function BentoGrid() {
               delay={0.15}
               className="h-full"
               style={{ minHeight: 210 }}
-              glowColor="radial-gradient(ellipse at top right, rgba(191,90,242,0.10) 0%, transparent 65%)"
+              glowColor="radial-gradient(ellipse at top right, rgba(255,229,0,0.10) 0%, transparent 65%)"
             >
               <div className="flex items-center gap-2 relative z-10" style={{ marginBottom: 14 }}>
-                <Bot size={15} style={{ color: 'var(--accent-purple)' }} />
+                <Bot size={15} style={{ color: 'var(--accent-signature)' }} />
                 <span className="text-label">AI Agent Infrastructure</span>
               </div>
               <p className="text-title relative z-10" style={{ color: 'var(--text-primary)', marginBottom: 8, fontFamily: 'var(--font-heading)' }}>
@@ -201,8 +201,8 @@ export default function BentoGrid() {
                   style={{
                     padding: '8px 18px',
                     fontSize: '0.8125rem',
-                    borderColor: 'rgba(191,90,242,0.28)',
-                    color: 'var(--accent-purple)',
+                    borderColor: 'rgba(255,229,0,0.28)',
+                    color: 'var(--accent-signature)',
                     cursor: 'pointer',
                     textDecoration: 'none',
                   }}
@@ -342,10 +342,10 @@ export default function BentoGrid() {
           <div className="bento-col-6">
             <BentoCard
               delay={0.3}
-              glowColor="radial-gradient(ellipse at bottom left, rgba(41,151,255,0.07) 0%, transparent 65%)"
+              glowColor="radial-gradient(ellipse at bottom left, rgba(255,229,0,0.07) 0%, transparent 65%)"
             >
               <div className="flex items-center gap-2 relative z-10" style={{ marginBottom: 20 }}>
-                <Code2 size={15} style={{ color: 'var(--accent-blue)' }} />
+                <Code2 size={15} style={{ color: 'var(--accent-signature)' }} />
                 <span className="text-label">Academic Research</span>
               </div>
               <div className="bento-metrics-row">
@@ -378,7 +378,7 @@ export default function BentoGrid() {
           <div className="bento-col-6">
             <BentoCard delay={0.35}>
               <div className="flex items-center gap-2" style={{ marginBottom: 20 }}>
-                <Cpu size={15} style={{ color: 'var(--accent-purple)' }} />
+                <Cpu size={15} style={{ color: 'var(--accent-signature)' }} />
                 <span className="text-label">By the Numbers</span>
               </div>
               <div className="bento-metrics-row">
