@@ -93,8 +93,9 @@ Inter（300/400/600）、JetBrains Mono（400/700），移除 Archivo。所有�
 | `src/components/Hero/Hero.tsx:186` | 「Available for opportunities」狀態燈 `var(--accent-blue)` | `var(--accent-signature)` |
 | `src/components/Footer/Footer.tsx:85` | icon `var(--accent-blue)` | `var(--accent-signature)` |
 | `src/components/Bento/BentoGrid.tsx:117,392` | `className="gradient-text-blue"` | 改為 `className="gradient-text-signature"` |
-| `src/components/Bento/BentoGrid.tsx:143,247,348`（Core Stack／Security／Academic 卡片標題旁 icon，非清單內個別項目） | `var(--accent-blue)` | `var(--accent-signature)` |
-| `src/components/Bento/BentoGrid.tsx:187,205,381`（AI Agent／By Numbers 卡片標題旁 icon） | `var(--accent-purple)` | `var(--accent-signature)` |
+| `src/components/Bento/BentoGrid.tsx:143,348`（Core Stack／Academic Research 卡片標題旁 icon） | `var(--accent-blue)` | `var(--accent-signature)` |
+| `src/components/Bento/BentoGrid.tsx:187,381`（AI Agent／By Numbers 卡片標題旁 icon） | `var(--accent-purple)` | `var(--accent-signature)` |
+| `src/components/Bento/BentoGrid.tsx:204-205`（AI Agent 卡片內「開啟筆記 Notes」按鈕 borderColor／文字色） | `rgba(191,90,242,0.28)` / `var(--accent-purple)` | `rgba(255,229,0,0.28)` / `var(--accent-signature)` |
 | `src/components/Bento/BentoGrid.tsx:184`（AI Agent 卡片 `glowColor`） | `radial-gradient(...rgba(191,90,242,0.10)...)` | `radial-gradient(ellipse at top right, rgba(255,229,0,0.10) 0%, transparent 65%)` |
 | `src/components/Bento/BentoGrid.tsx:345`（Academic Research 卡片 `glowColor`） | `radial-gradient(...rgba(41,151,255,0.07)...)` | `radial-gradient(ellipse at bottom left, rgba(255,229,0,0.07) 0%, transparent 65%)` |
 | `src/components/Projects/Projects.tsx:327`（「View all on GitHub」CTA 連結） | `var(--accent-blue)` | `var(--accent-signature)` |
