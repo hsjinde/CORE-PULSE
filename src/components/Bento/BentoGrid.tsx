@@ -6,7 +6,6 @@ import {
   GitBranch, Bot,
 } from 'lucide-react'
 import TerminalCard from './TerminalCard'
-import { ShaderComponent } from '../ui/waves-shader'
 import { NOTES_URL } from '@/lib/notes'
 
 /* ─── Types ──────────────────────────────────────────────────── */
@@ -209,13 +208,10 @@ export default function BentoGrid() {
 
           {/* ── Card 4: Infrastructure (4 cols) ── */}
           <div className="bento-col-4">
-            <BentoCard delay={0.2} className="h-full relative overflow-hidden group">
-              {/* WebGL background shader */}
-              <div className="absolute inset-0 z-0 opacity-20 pointer-events-none transition-opacity duration-500 group-hover:opacity-35">
-                <ShaderComponent />
-              </div>
-              {/* CRT Scanline overlay */}
-              <div className="scanlines absolute inset-0 z-0 opacity-15 pointer-events-none" />
+            <BentoCard delay={0.2} className="h-full relative overflow-hidden">
+              {/* Static CRT scanline texture only — a flat terminal identity with no animated
+                  shader shimmering behind the readout, so the security list stays crisp. */}
+              <div className="scanlines absolute inset-0 z-0 opacity-[0.06] pointer-events-none" />
 
               <div className="relative z-10 flex flex-col justify-between h-full">
                 <div>
@@ -270,7 +266,7 @@ export default function BentoGrid() {
                 <div style={{ marginTop: 20, display: 'flex', justifyContent: 'flex-end' }}>
                   <Link
                     to="/telemetry"
-                    className="pointer-events-auto flex items-center gap-1.5 rounded-md border border-hairline/80 bg-carbon-900/80 px-3 py-2 text-[10px] font-mono lowercase tracking-tight text-chalk/80 transition-all hover:bg-carbon-800/80 hover:border-white/30 hover:text-chalk"
+                    className="pointer-events-auto flex items-center gap-1.5 rounded-md border border-hairline/80 bg-carbon-900/80 px-3 py-2 text-[11px] font-mono lowercase tracking-tight text-chalk transition-all hover:bg-carbon-800/80 hover:border-white/30 hover:text-white"
                     style={{ textDecoration: 'none' }}
                   >
                     telemetry scope →
