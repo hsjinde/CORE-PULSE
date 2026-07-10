@@ -15,7 +15,6 @@ interface BentoCardProps {
   className?: string
   style?: React.CSSProperties
   delay?: number
-  glowColor?: string
 }
 
 /* ─── Animated Counter ───────────────────────────────────────── */
@@ -40,7 +39,7 @@ function AnimatedCounter({ target, suffix = '' }: { target: number; suffix?: str
 }
 
 /* ─── Bento Card Wrapper ─────────────────────────────────────── */
-function BentoCard({ children, className = '', style, delay = 0, glowColor }: BentoCardProps) {
+function BentoCard({ children, className = '', style, delay = 0 }: BentoCardProps) {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '-50px' })
 
@@ -58,18 +57,6 @@ function BentoCard({ children, className = '', style, delay = 0, glowColor }: Be
         ...style,
       }}
     >
-      {/* Inner glow accent */}
-      {glowColor && (
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            background: glowColor,
-            pointerEvents: 'none',
-            borderRadius: 'inherit',
-          }}
-        />
-      )}
       {children}
     </motion.div>
   )
@@ -98,8 +85,8 @@ export default function BentoGrid() {
           left: '50%',
           transform: 'translateX(-50%)',
           width: 800,
-          height: 2,
-          background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.30), transparent)',
+          height: 1,
+          background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)',
           pointerEvents: 'none',
         }}
       />
@@ -127,11 +114,7 @@ export default function BentoGrid() {
         <div className="bento-grid">
           {/* ── Card 1: Interactive Terminal (4 cols) ── */}
           <div className="bento-col-4">
-            <BentoCard
-              delay={0.05}
-              className="h-full"
-              glowColor="radial-gradient(ellipse at top right, rgba(48,209,88,0.07) 0%, transparent 70%)"
-            >
+            <BentoCard delay={0.05} className="h-full">
               <TerminalCard />
             </BentoCard>
           </div>
@@ -182,7 +165,6 @@ export default function BentoGrid() {
               delay={0.15}
               className="h-full"
               style={{ minHeight: 210 }}
-              glowColor="radial-gradient(ellipse at top right, rgba(191,90,242,0.10) 0%, transparent 65%)"
             >
               <div className="flex items-center gap-2 relative z-10" style={{ marginBottom: 14 }}>
                 <Bot size={15} style={{ color: 'var(--accent-purple)' }} />
@@ -341,10 +323,7 @@ export default function BentoGrid() {
 
           {/* ── Card 6: Performance (6 cols) ── */}
           <div className="bento-col-6">
-            <BentoCard
-              delay={0.3}
-              glowColor="radial-gradient(ellipse at bottom left, rgba(41,151,255,0.08) 0%, transparent 65%)"
-            >
+            <BentoCard delay={0.3}>
               <div className="flex items-center gap-2 relative z-10" style={{ marginBottom: 20 }}>
                 <Code2 size={15} style={{ color: 'var(--accent-blue)' }} />
                 <span className="path-label">research</span>

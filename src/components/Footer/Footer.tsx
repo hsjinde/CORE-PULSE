@@ -27,7 +27,7 @@ export default function Footer() {
   const inView = useInView(ref, { once: true, margin: '-40px' })
   const socialLinks = [
     { icon: Code2,        href: 'https://github.com/hsjinde',        label: 'GitHub'   },
-    { icon: ExternalLink, href: 'https://linkedin.com/in/hsjinde',   label: 'LinkedIn' },
+    { icon: ExternalLink, href: 'https://www.linkedin.com/in/%E6%99%89%E5%BE%B7-%E6%9E%97-99421a237/', label: 'LinkedIn' },
     { icon: Mail,         href: 'mailto:ethan19980803@gmail.com',     label: 'Email'    },
   ]
 
@@ -133,7 +133,6 @@ export default function Footer() {
                   { href: '#hero',     label: 'home'     },
                   { href: '#skills',   label: 'skills'   },
                   { href: '#projects', label: 'projects' },
-                  { href: '#blog',     label: 'blog'     },
                   { href: '#contact',  label: 'contact'  },
                 ].map(({ href, label }) => (
                   <a
@@ -178,7 +177,7 @@ export default function Footer() {
                 </a>
                 <div style={{ display: 'flex', gap: 10, marginTop: 4 }}>
                   <a
-                    href="https://linkedin.com/in/hsjinde"
+                    href="https://www.linkedin.com/in/%E6%99%89%E5%BE%B7-%E6%9E%97-99421a237/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="btn-ghost"

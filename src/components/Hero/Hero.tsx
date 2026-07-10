@@ -9,31 +9,6 @@ const roles = [
   'AI Solutions Architect',
 ]
 
-/* ── Floating Orb ─────────────────────────────────────────────── */
-function GlowOrb({
-  x, y, size, color, mouseX, mouseY, factor, floatDuration = 9,
-}: {
-  x: string; y: string; size: number; color: string;
-  mouseX: number; mouseY: number; factor: number; floatDuration?: number
-}) {
-  return (
-    <motion.div
-      className="absolute pointer-events-none"
-      style={{ width: size, height: size, left: x, top: y, filter: 'blur(1px)' }}
-      animate={{ x: mouseX * factor, y: mouseY * factor }}
-      transition={{ type: 'spring', stiffness: 30, damping: 18, mass: 0.8 }}
-    >
-      <div
-        className="orb-float"
-        style={{
-          background: `radial-gradient(circle, ${color} 0%, transparent 70%)`,
-          ['--float-duration' as string]: `${floatDuration}s`,
-        }}
-      />
-    </motion.div>
-  )
-}
-
 export default function Hero() {
   const [roleIndex,   setRoleIndex]   = useState(0)
   const [displayText, setDisplayText] = useState('')
@@ -86,22 +61,34 @@ export default function Hero() {
       className="relative min-h-screen flex items-center justify-center overflow-hidden noise-overlay"
       style={{ background: 'var(--bg-primary)' }}
     >
-      {/* ── Deep ambient background ─── */}
+      {/* ── Instrument backdrop — grayscale only. Colour is reserved for signal
+             (the green availability badge), never decoration. ─── */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           background: `
-            radial-gradient(ellipse 80% 60% at 20% 30%, rgba(41,151,255,0.07) 0%, transparent 65%),
-            radial-gradient(ellipse 60% 50% at 80% 70%, rgba(191,90,242,0.06) 0%, transparent 65%),
-            radial-gradient(ellipse 50% 40% at 50% 50%, rgba(0,0,0,0.6) 0%, transparent 100%)
+            radial-gradient(ellipse 100% 68% at 50% -12%, rgba(255,255,255,0.055) 0%, transparent 60%),
+            radial-gradient(ellipse 140% 90% at 50% 116%, rgba(0,0,0,0.5) 0%, transparent 72%)
           `,
         }}
       />
 
-      {/* ── Parallax glow orbs ─── */}
-      <GlowOrb x="5%"  y="12%" size={700} color="rgba(41,151,255,0.10)"  mouseX={mouseOffset.x} mouseY={mouseOffset.y} factor={-1.8} floatDuration={9}  />
-      <GlowOrb x="55%" y="55%" size={500} color="rgba(191,90,242,0.08)" mouseX={mouseOffset.x} mouseY={mouseOffset.y} factor={ 1.4} floatDuration={12} />
-      <GlowOrb x="30%" y="70%" size={350} color="rgba(48,209,88,0.06)" mouseX={mouseOffset.x} mouseY={mouseOffset.y} factor={-1.0} floatDuration={7}  />
+      {/* Soft carbon halo tracking the cursor — subtle life, no colour, no fake depth */}
+      <motion.div
+        className="absolute pointer-events-none"
+        style={{
+          width: 640, height: 640,
+          left: '50%', top: '42%',
+          marginLeft: -320, marginTop: -320,
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 68%)',
+        }}
+        animate={{ x: mouseOffset.x, y: mouseOffset.y }}
+        transition={{ type: 'spring', stiffness: 30, damping: 20, mass: 0.9 }}
+      />
+
+      {/* Faint scanline texture — terminal signature (grayscale) */}
+      <div className="absolute inset-0 pointer-events-none scanlines" style={{ opacity: 0.35 }} />
 
       {/* ── Main Content ────────── */}
       <motion.div
@@ -226,8 +213,7 @@ export default function Hero() {
         >
           {[
             { icon: Code2,        label: 'GitHub',   href: 'https://github.com/hsjinde' },
-            { icon: ExternalLink, label: 'LinkedIn', href: '#' },
-            { icon: Terminal,     label: 'Blog',     href: '#blog' },
+            { icon: ExternalLink, label: 'LinkedIn', href: 'https://www.linkedin.com/in/%E6%99%89%E5%BE%B7-%E6%9E%97-99421a237/' },
           ].map(({ icon: Icon, label, href }) => (
             <a
               key={label}

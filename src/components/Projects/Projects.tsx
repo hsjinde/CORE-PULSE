@@ -12,8 +12,8 @@ interface Project {
   result: string
   tags: string[]
   accentColor: string
-  glowColor: string
-  glyph: string
+  slug: string
+  status: string
   sourceUrl?: string
   demoUrl?: string
   demoLabel?: string
@@ -30,8 +30,8 @@ const projects: Project[] = [
     result: '實驗證明在多個基準數據集上，查詢反應時間平均降低了 35%，並成功發表於 IEEE 學術期刊。',
     tags: ['RNN', 'SPARQL', 'Deep Learning', 'Semantic Web', 'Performance Optimization'],
     accentColor: '#bf5af2',
-    glowColor: 'radial-gradient(ellipse at top left, rgba(191,90,242,0.10) 0%, transparent 60%)',
-    glyph: 'RNN()',
+    slug: 'rnn-sparql-optimizer',
+    status: 'ieee · published',
     sourceUrl: 'https://github.com/hsjinde/Traing-phase-Enhancing-SPARQL-Query-Performance-With-Recurrent-Neural-Networks',
     demoUrl: 'https://ieeexplore.ieee.org/document/10230082',
     demoLabel: 'Read Paper',
@@ -46,8 +46,8 @@ const projects: Project[] = [
     result: '成功打造輕量級可擴充的郵件系統，提升後端架構的自主掌握度，並降低了專案的整合與建置成本。',
     tags: ['Python', 'Django', 'SQLite', 'Backend', 'Email Server'],
     accentColor: '#2997ff',
-    glowColor: 'radial-gradient(ellipse at top left, rgba(41,151,255,0.10) 0%, transparent 60%)',
-    glyph: 'SMTP:/',
+    slug: 'django-mail-server',
+    status: 'open source',
     sourceUrl: 'https://github.com/hsjinde/mail-server',
   },
   {
@@ -60,8 +60,8 @@ const projects: Project[] = [
     result: '成功開發出具備資料視覺化能力的 Web 應用系統，提供流暢的使用者體驗，並完美整合各項核心專案。',
     tags: ['React', 'TypeScript', 'Dashboard', 'Web App', 'Frontend'],
     accentColor: '#30d158',
-    glowColor: 'radial-gradient(ellipse at top right, rgba(48,209,88,0.09) 0%, transparent 60%)',
-    glyph: '~/core',
+    slug: 'core-pulse',
+    status: 'live · deployed',
     sourceUrl: 'https://github.com/hsjinde/CORE-PULSE',
   },
 ]
@@ -113,38 +113,19 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         className="glass-card"
         style={{ overflow: 'hidden', position: 'relative' }}
       >
-        {/* Ambient glow overlay */}
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            background: project.glowColor,
-            pointerEvents: 'none',
-            zIndex: 0,
-          }}
-        />
-
-        {/* Top accent line */}
-        <div
-          style={{
-            height: 2,
-            background: `linear-gradient(90deg, ${project.accentColor}80, ${project.accentColor}cc, transparent)`,
-            position: 'relative',
-            zIndex: 1,
-          }}
-        />
-
-        {/* Thumbnail strip — placeholder glyph on tinted gradient (no real screenshot yet) */}
-        <div
-          className="project-thumb"
-          style={{ background: `radial-gradient(ellipse 60% 100% at 15% 50%, ${project.accentColor}14 0%, transparent 70%), var(--bg-tertiary)` }}
-        >
-          <span className="project-thumb-glyph" style={{ color: project.accentColor }}>
-            {project.glyph}
+        {/* Terminal command header — grayscale chrome. The category colour appears
+            only as the single status dot (colour = signal, never decoration). */}
+        <div className="project-term-header">
+          <span className="project-term-path">
+            <span className="project-term-caret">❯</span>~/projects/<span className="project-term-slug">{project.slug}</span>
+          </span>
+          <span className="project-term-status">
+            <span className="project-term-dot" style={{ background: project.accentColor }} />
+            {project.status}
           </span>
         </div>
 
-        <div className="project-card-inner" style={{ position: 'relative', zIndex: 1 }}>
+        <div className="project-card-inner">
           <div className="project-card-grid">
             {/* ── Left: Main info ── */}
             <div>
