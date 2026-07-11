@@ -330,7 +330,7 @@ export default function Projects() {
               letterSpacing: '-0.01em',
               padding: '10px 20px',
               borderRadius: 'var(--radius-xs)',
-              background: 'transparent',
+              background: 'var(--bg-tertiary)',
               border: '1px solid var(--border)',
               transition: 'all 0.2s ease',
               cursor: 'pointer',
