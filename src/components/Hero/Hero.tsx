@@ -46,7 +46,7 @@ export default function Hero() {
     <section
       ref={containerRef}
       id="hero"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden noise-overlay"
+      className="relative min-h-screen flex items-center justify-center overflow-visible noise-overlay"
       style={{ background: 'var(--bg-primary)' }}
     >
       {/* ── Signal Field — drifting hairline signal lines + micro dot field,

@@ -262,7 +262,7 @@ export default function Projects() {
       style={{
         background: 'var(--bg-primary)',
         position: 'relative',
-        overflow: 'hidden',
+        overflow: 'visible',
       }}
     >
       <SignalField intensity={0.5} />

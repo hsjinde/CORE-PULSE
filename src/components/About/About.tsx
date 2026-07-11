@@ -20,7 +20,7 @@ export default function About() {
     <section
       id="about"
       className="section-padding"
-      style={{ background: 'var(--bg-primary)', position: 'relative', overflow: 'hidden' }}
+      style={{ background: 'var(--bg-primary)', position: 'relative', overflow: 'visible' }}
     >
       <SignalField intensity={0.4} />
       <div className="section-container" style={{ position: 'relative', zIndex: 10 }}>

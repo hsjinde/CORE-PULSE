@@ -149,7 +149,10 @@ export default function SignalField({ intensity = 1 }: SignalFieldProps) {
       style={{
         position: 'absolute',
         top: 0,
-        left: 0,
+        left: '50%',
+        width: '100vw',
+        height: '100%',
+        transform: 'translateX(-50%)',
         display: 'block',
         pointerEvents: 'none',
         zIndex: 0,

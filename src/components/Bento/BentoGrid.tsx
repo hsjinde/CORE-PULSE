@@ -74,7 +74,7 @@ export default function BentoGrid() {
       style={{
         background: 'var(--bg-secondary)',
         position: 'relative',
-        overflow: 'hidden',
+        overflow: 'visible',
       }}
     >
       <SignalField intensity={0.5} />
