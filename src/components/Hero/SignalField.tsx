@@ -49,9 +49,10 @@ export default function SignalField({ intensity = 1 }: SignalFieldProps) {
     }
 
     const fit = () => {
+      const rect = canvas.getBoundingClientRect()
       dpr = Math.min(window.devicePixelRatio || 1, 2)
-      w = window.innerWidth
-      h = canvas.parentElement?.clientHeight || window.innerHeight
+      w = rect.width
+      h = rect.height
       canvas.width = Math.max(1, Math.floor(w * dpr))
       canvas.height = Math.max(1, Math.floor(h * dpr))
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
@@ -148,10 +149,7 @@ export default function SignalField({ intensity = 1 }: SignalFieldProps) {
       style={{
         position: 'absolute',
         top: 0,
-        left: '50%',
-        transform: 'translateX(-50%)',
-        width: '100vw',
-        height: '100%',
+        left: 0,
         display: 'block',
         pointerEvents: 'none',
         zIndex: 0,
