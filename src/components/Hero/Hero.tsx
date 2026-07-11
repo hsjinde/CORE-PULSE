@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
 import { ArrowDown, Code2, ExternalLink, Terminal } from 'lucide-react'
+import SignalField from './SignalField'
 
 const roles = [
   'SRE / DevOps Engineer',
@@ -13,7 +14,6 @@ export default function Hero() {
   const [roleIndex,   setRoleIndex]   = useState(0)
   const [displayText, setDisplayText] = useState('')
   const [isDeleting,  setIsDeleting]  = useState(false)
-  const [mouseOffset, setMouseOffset] = useState({ x: 0, y: 0 })
   const containerRef = useRef<HTMLDivElement>(null)
 
   /* ── Scroll parallax ─── */
@@ -42,18 +42,6 @@ export default function Hero() {
     return () => clearTimeout(timeout)
   }, [displayText, isDeleting, roleIndex])
 
-  /* ── Mouse parallax ─── */
-  useEffect(() => {
-    const handleMouse = (e: MouseEvent) => {
-      setMouseOffset({
-        x: (e.clientX / window.innerWidth  - 0.5) * 24,
-        y: (e.clientY / window.innerHeight - 0.5) * 24,
-      })
-    }
-    window.addEventListener('mousemove', handleMouse)
-    return () => window.removeEventListener('mousemove', handleMouse)
-  }, [])
-
   return (
     <section
       ref={containerRef}
@@ -61,34 +49,26 @@ export default function Hero() {
       className="relative min-h-screen flex items-center justify-center overflow-hidden noise-overlay"
       style={{ background: 'var(--bg-primary)' }}
     >
-      {/* ── Instrument backdrop — grayscale only. Colour is reserved for signal
-             (the green availability badge), never decoration. ─── */}
+      {/* ── Signal Field — drifting hairline signal lines + micro dot field,
+             cursor-parallaxed. Grayscale; the only hue is a few green signal
+             pulses. Colour = signal, never decoration. ─── */}
+      <SignalField />
+
+      {/* Vignette above the field — lifts headline contrast, sinks the base */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
+          zIndex: 1,
           background: `
-            radial-gradient(ellipse 100% 68% at 50% -12%, rgba(255,255,255,0.055) 0%, transparent 60%),
-            radial-gradient(ellipse 140% 90% at 50% 116%, rgba(0,0,0,0.5) 0%, transparent 72%)
+            radial-gradient(ellipse 100% 68% at 50% -12%, rgba(255,255,255,0.05) 0%, transparent 60%),
+            radial-gradient(ellipse 120% 80% at 50% 50%, transparent 34%, rgba(5,5,5,0.55) 78%),
+            radial-gradient(ellipse 140% 90% at 50% 116%, rgba(0,0,0,0.55) 0%, transparent 72%)
           `,
         }}
       />
 
-      {/* Soft carbon halo tracking the cursor — subtle life, no colour, no fake depth */}
-      <motion.div
-        className="absolute pointer-events-none"
-        style={{
-          width: 640, height: 640,
-          left: '50%', top: '42%',
-          marginLeft: -320, marginTop: -320,
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 68%)',
-        }}
-        animate={{ x: mouseOffset.x, y: mouseOffset.y }}
-        transition={{ type: 'spring', stiffness: 30, damping: 20, mass: 0.9 }}
-      />
-
       {/* Faint scanline texture — terminal signature (grayscale) */}
-      <div className="absolute inset-0 pointer-events-none scanlines" style={{ opacity: 0.35 }} />
+      <div className="absolute inset-0 pointer-events-none scanlines" style={{ opacity: 0.3, zIndex: 1 }} />
 
       {/* ── Main Content ────────── */}
       <motion.div

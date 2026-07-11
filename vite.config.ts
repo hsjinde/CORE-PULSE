@@ -14,4 +14,9 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  server: {
+    // 綁定所有介面(IPv4 + IPv6),避免 Windows 上 localhost 解析為 127.0.0.1
+    // 卻只監聽 [::1] 而出現 ERR_CONNECTION_REFUSED
+    host: true,
+  },
 })

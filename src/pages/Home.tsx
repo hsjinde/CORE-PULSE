@@ -3,7 +3,6 @@ import Lenis from 'lenis'
 import { registerLenis } from '@/lib/lenisController'
 import Navbar from '@/components/Navbar/Navbar'
 import Hero from '@/components/Hero/Hero'
-import FeaturedSlider from '@/components/FeaturedSlider/FeaturedSlider'
 import About from '@/components/About/About'
 import BentoGrid from '@/components/Bento/BentoGrid'
 import WorkTimeline from '@/components/WorkTimeline/WorkTimeline'
@@ -43,7 +42,6 @@ export default function Home() {
       <div className="site-frame">
         <main>
           <Hero />
-          <FeaturedSlider />
           <About />
           <BentoGrid />
           <WorkTimeline />

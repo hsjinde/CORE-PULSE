@@ -76,16 +76,22 @@ export default function BentoGrid() {
         overflow: 'hidden',
       }}
     >
-      {/* Section top glow */}
-      <div
+      {/* Section top separator — draws open from centre on scroll-in */}
+      <motion.div
+        aria-hidden="true"
+        initial={{ scaleX: 0, opacity: 0 }}
+        whileInView={{ scaleX: 1, opacity: 1 }}
+        viewport={{ once: true, margin: '-40px' }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
         style={{
           position: 'absolute',
           top: 0,
           left: '50%',
-          transform: 'translateX(-50%)',
-          width: 800,
+          x: '-50%',
+          transformOrigin: 'center',
+          width: 'min(800px, 80%)',
           height: 1,
-          background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)',
+          background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.10), transparent)',
           pointerEvents: 'none',
         }}
       />
