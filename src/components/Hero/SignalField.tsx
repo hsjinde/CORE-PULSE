@@ -148,8 +148,10 @@ export default function SignalField({ intensity = 1 }: SignalFieldProps) {
       aria-hidden="true"
       style={{
         position: 'absolute',
-        inset: 0,
-        width: '100%',
+        top: 0,
+        left: '50%',
+        transform: 'translateX(-50%)',
+        width: '100vw',
         height: '100%',
         display: 'block',
         pointerEvents: 'none',
