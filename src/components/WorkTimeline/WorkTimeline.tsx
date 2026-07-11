@@ -1,5 +1,6 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
+import SignalField from '../Hero/SignalField'
 
 // 佔位資歷 —— 待替換為真實任職公司/期間/職稱
 const jobs = [
@@ -15,9 +16,10 @@ export default function WorkTimeline() {
   return (
     <section
       className="section-padding"
-      style={{ background: 'var(--bg-secondary)' }}
+      style={{ background: 'var(--bg-secondary)', position: 'relative', overflow: 'visible' }}
     >
-      <div className="section-container">
+      <SignalField intensity={0.4} />
+      <div className="section-container" style={{ position: 'relative', zIndex: 10 }}>
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 28 }}
