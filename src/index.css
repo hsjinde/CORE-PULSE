@@ -153,6 +153,10 @@
   --font-heading: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
   --font-body:    'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
   --font-mono:    'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* Motion easing — exponential ease-out, no bounce (see DESIGN.md 動態系統) */
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out-expo:  cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ─── Base Reset ──────────────────────────────────────────────── */
@@ -252,6 +256,37 @@
   border-color: var(--border-hover);
 }
 
+/* 互動微回饋 —— hover 時頂緣髮絲線由左往右掃光(灰階,像儀表掃描線)。
+   inset 兩側避免蓋到圓角;元件本身若 overflow:hidden 也會被裁得乾淨。 */
+.tx-card::after,
+.glass-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10px;
+  right: 10px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  opacity: 0;
+  transition: transform 0.55s var(--ease-out-quint), opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.tx-card:hover::after,
+.glass-card:hover::after {
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tx-card::after,
+  .glass-card::after {
+    display: none;
+  }
+}
+
 /* ─── Card Variants ───────────────────────────────────────────── */
 .glass-card-sm {
   border-radius: var(--radius-sm);
@@ -341,7 +376,8 @@
   cursor: pointer;
   transition: background 0.25s cubic-bezier(0.22, 1, 0.36, 1),
               color 0.25s cubic-bezier(0.22, 1, 0.36, 1),
-              border-color 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+              border-color 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.12s ease;
   letter-spacing: -0.01em;
   position: relative;
 }
@@ -358,6 +394,7 @@
   background: var(--accent-signature-hover);
   color: #050505;
   border-color: var(--accent-signature-hover);
+  transform: scale(0.97);
 }
 
 .btn-outline,
@@ -384,6 +421,49 @@
 .btn-ghost:hover {
   border-color: var(--text-primary);
   color: var(--text-primary);
+}
+
+.btn-outline,
+.btn-ghost {
+  transition: background 0.25s var(--ease-out-quint),
+              color 0.25s var(--ease-out-quint),
+              border-color 0.25s var(--ease-out-quint),
+              transform 0.12s ease;
+}
+
+.btn-outline:active,
+.btn-ghost:active {
+  transform: scale(0.97);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-solid:active,
+  .btn-primary:active,
+  .btn-outline:active,
+  .btn-ghost:active { transform: none; }
+}
+
+/* 互動微回饋 —— nav 連結 hover 底線由左往右 wipe */
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1px;
+  background: var(--text-primary);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform 0.28s var(--ease-out-quint);
+  pointer-events: none;
+}
+
+.nav-link:hover::after {
+  transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-link::after { transition: none; }
 }
 
 /* ─── 終端路徑標籤(取代 uppercase 寬字距 label)──────────────── */
@@ -481,8 +561,18 @@
   letter-spacing: -0.01em;
   backdrop-filter: var(--blur-sm);
   -webkit-backdrop-filter: var(--blur-sm);
-  transition: all 0.2s ease;
+  transition: transform 0.2s var(--ease-out-quint), filter 0.2s ease, border-color 0.2s ease;
   cursor: default;
+}
+
+/* 互動微回饋 —— badge hover 細膩上浮 + 提亮(維持既有語意色) */
+.skill-badge:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.18);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skill-badge:hover { transform: none; }
 }
 
 /* ─── Section Padding ────────────────────────────────────────── */

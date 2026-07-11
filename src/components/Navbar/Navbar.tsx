@@ -113,6 +113,7 @@ export default function Navbar() {
               <a
                 key={label}
                 href={href}
+                className="nav-link"
                 {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                 style={{
                   position: 'relative',

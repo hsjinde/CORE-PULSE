@@ -7,6 +7,7 @@ import AdminLogin from '@/pages/Admin/AdminLogin'
 import AdminDashboard from '@/pages/Admin/AdminDashboard'
 import AdminEditor from '@/pages/Admin/AdminEditor'
 import MascotWidget from '@/components/Mascot/MascotWidget'
+import ScrollProgress from '@/components/ScrollProgress/ScrollProgress'
 
 type AuthState = 'loading' | 'authenticated' | 'unauthenticated'
 
@@ -60,6 +61,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 export default function App() {
   return (
     <BrowserRouter>
+      <ScrollProgress />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/blog/:id" element={<BlogPost />} />
