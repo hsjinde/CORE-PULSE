@@ -18,7 +18,7 @@ export default function WorkTimeline() {
       className="section-padding"
       style={{ background: 'var(--bg-secondary)', position: 'relative', overflow: 'visible' }}
     >
-      <SignalField intensity={0.4} />
+      <SignalField />
       <div className="section-container" style={{ position: 'relative', zIndex: 10 }}>
         <motion.div
           ref={ref}

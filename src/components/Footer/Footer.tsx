@@ -43,7 +43,7 @@ export default function Footer() {
         overflow: 'visible',
       }}
     >
-      <SignalField intensity={0.3} />
+      <SignalField />
 
       {/* Ambient gradient at top */}
       <div

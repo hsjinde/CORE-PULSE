@@ -5,12 +5,12 @@ import { useReducedMotion } from 'framer-motion'
    緩慢漂移的髮絲訊號線 + 微光點陣，游標帶動整層輕微視差。
    嚴格灰階,只有極少數點以訊號綠脈動(色彩即訊號,不作裝飾)。
    Canvas 2D、單一 rAF loop、DPR 上限 2;reduced-motion 下只畫一張靜態幀。
-   intensity: 0–1 強度調整（預設 1） */
+   intensity: 0–1 強度調整（預設 0.85，全站一致） */
 interface SignalFieldProps {
   intensity?: number
 }
 
-export default function SignalField({ intensity = 1 }: SignalFieldProps) {
+export default function SignalField({ intensity = 0.85 }: SignalFieldProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const reduced = useReducedMotion()
 

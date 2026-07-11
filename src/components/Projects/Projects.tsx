@@ -265,7 +265,7 @@ export default function Projects() {
         overflow: 'visible',
       }}
     >
-      <SignalField intensity={0.5} />
+      <SignalField />
 
       {/* Ambient top separator — draws open from centre on scroll-in */}
       <motion.div

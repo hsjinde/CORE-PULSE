@@ -22,7 +22,7 @@ export default function About() {
       className="section-padding"
       style={{ background: 'var(--bg-primary)', position: 'relative', overflow: 'visible' }}
     >
-      <SignalField intensity={0.4} />
+      <SignalField />
       <div className="section-container" style={{ position: 'relative', zIndex: 10 }}>
         <motion.div
           ref={ref}

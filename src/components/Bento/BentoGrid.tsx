@@ -77,7 +77,7 @@ export default function BentoGrid() {
         overflow: 'visible',
       }}
     >
-      <SignalField intensity={0.5} />
+      <SignalField />
 
       {/* Section top separator — draws open from centre on scroll-in */}
       <motion.div
