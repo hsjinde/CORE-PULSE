@@ -16,7 +16,7 @@ export default function WorkTimeline() {
   return (
     <section
       className="section-padding"
-      style={{ background: 'var(--bg-secondary)', position: 'relative', overflow: 'visible' }}
+      style={{ background: 'var(--bg-primary)', position: 'relative', overflow: 'visible' }}
     >
       <SignalField />
       <div className="section-container" style={{ position: 'relative', zIndex: 10 }}>

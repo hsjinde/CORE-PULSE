@@ -72,7 +72,7 @@ export default function BentoGrid() {
       id="skills"
       className="section-padding"
       style={{
-        background: 'var(--bg-secondary)',
+        background: 'var(--bg-primary)',
         position: 'relative',
         overflow: 'visible',
       }}
