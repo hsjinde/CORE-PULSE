@@ -544,14 +544,12 @@
   padding: 0 24px;
 }
 
-/* ─── Site Frame ── narrow centered column, hairline vertical border ─── */
+/* ─── Site Frame ── narrow centered column ─── */
 .site-frame {
   position: relative;
   max-width: 1150px;
   margin: 0 auto;
   min-height: 100vh;
-  border-left: 1px solid var(--border);
-  border-right: 1px solid var(--border);
 }
 
 /* ─── Animations ──────────────────────────────────────────────── */

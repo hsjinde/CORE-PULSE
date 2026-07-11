@@ -13,10 +13,10 @@ consistent hue per category, never randomized for visual variety.
 
 ## Page Composition (Home)
 
-Home is wrapped in `.site-frame`: `max-width: 1150px`, centered, 1px hairline borders on both
-sides (`border-left`/`border-right: 1px solid var(--border)`) — a narrow bordered column framing
-all content below the (full-width, fixed) Navbar, adapted from the `monogram-terminal-h42`
-reference portfolio's `.frame` pattern. Section order:
+Home is wrapped in `.site-frame`: `max-width: 1150px`, centered — a narrow column framing all
+content below the (full-width, fixed) Navbar, adapted from the `monogram-terminal-h42` reference
+portfolio's `.frame` pattern. Its 1px side hairlines were removed so the full-bleed `SignalField`
+background can span the entire viewport width without a visible boundary. Section order:
 
 1. **Hero** — name/role intro, availability badge, CTAs.
 2. **Featured** (`FeaturedSlider`) — auto-advancing cross-fade highlights, 3 placeholder slides.
