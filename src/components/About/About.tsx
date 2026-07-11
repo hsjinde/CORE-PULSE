@@ -1,5 +1,6 @@
 import { useRef } from 'react'
 import { motion, useInView, type Variants } from 'framer-motion'
+import SignalField from '../Hero/SignalField'
 
 /* 捲動進場編排 —— 子元素依序淡入(cascade),而非整塊一次出現 */
 const group: Variants = {
@@ -19,9 +20,10 @@ export default function About() {
     <section
       id="about"
       className="section-padding"
-      style={{ background: 'var(--bg-primary)' }}
+      style={{ background: 'var(--bg-primary)', position: 'relative', overflow: 'hidden' }}
     >
-      <div className="section-container">
+      <SignalField intensity={0.4} />
+      <div className="section-container" style={{ position: 'relative', zIndex: 10 }}>
         <motion.div
           ref={ref}
           variants={group}

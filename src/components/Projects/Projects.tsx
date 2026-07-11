@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { ExternalLink, Code2, ArrowUpRight } from 'lucide-react'
+import SignalField from '../Hero/SignalField'
 
 interface Project {
   id: string
@@ -264,6 +265,8 @@ export default function Projects() {
         overflow: 'hidden',
       }}
     >
+      <SignalField intensity={0.5} />
+
       {/* Ambient top separator — draws open from centre on scroll-in */}
       <motion.div
         aria-hidden="true"
@@ -284,7 +287,7 @@ export default function Projects() {
         }}
       />
 
-      <div className="section-container">
+      <div className="section-container" style={{ position: 'relative', zIndex: 10 }}>
         <motion.div
           ref={titleRef}
           initial={{ opacity: 0, y: 28 }}

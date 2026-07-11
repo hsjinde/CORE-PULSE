@@ -5,6 +5,7 @@ import {
   Server, Shield, Cpu, Activity, Globe, Code2,
   GitBranch, Bot,
 } from 'lucide-react'
+import SignalField from '../Hero/SignalField'
 import TerminalCard from './TerminalCard'
 import { NOTES_URL } from '@/lib/notes'
 
@@ -76,6 +77,8 @@ export default function BentoGrid() {
         overflow: 'hidden',
       }}
     >
+      <SignalField intensity={0.5} />
+
       {/* Section top separator — draws open from centre on scroll-in */}
       <motion.div
         aria-hidden="true"
@@ -96,7 +99,7 @@ export default function BentoGrid() {
         }}
       />
 
-      <div className="section-container">
+      <div className="section-container" style={{ position: 'relative', zIndex: 10 }}>
         {/* Section Header */}
         <motion.div
           ref={titleRef}

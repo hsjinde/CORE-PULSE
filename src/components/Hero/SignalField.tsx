@@ -1,11 +1,16 @@
 import { useEffect, useRef } from 'react'
 import { useReducedMotion } from 'framer-motion'
 
-/* SignalField —— Hero 背景的「訊號流場」。
+/* SignalField —— 「訊號流場」背景。
    緩慢漂移的髮絲訊號線 + 微光點陣，游標帶動整層輕微視差。
    嚴格灰階,只有極少數點以訊號綠脈動(色彩即訊號,不作裝飾)。
-   Canvas 2D、單一 rAF loop、DPR 上限 2;reduced-motion 下只畫一張靜態幀。 */
-export default function SignalField() {
+   Canvas 2D、單一 rAF loop、DPR 上限 2;reduced-motion 下只畫一張靜態幀。
+   intensity: 0–1 強度調整（預設 1） */
+interface SignalFieldProps {
+  intensity?: number
+}
+
+export default function SignalField({ intensity = 1 }: SignalFieldProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const reduced = useReducedMotion()
 
@@ -73,7 +78,7 @@ export default function SignalField() {
           if (x === 0) ctx.moveTo(x, yy)
           else ctx.lineTo(x, yy)
         }
-        ctx.strokeStyle = `rgba(244,244,245,${L.op})`
+        ctx.strokeStyle = `rgba(244,244,245,${L.op * intensity})`
         ctx.lineWidth = 1
         ctx.stroke()
       }
@@ -86,9 +91,9 @@ export default function SignalField() {
         ctx.arc(dx, dy, D.r, 0, 6.28)
         if (D.green) {
           const pulse = 0.5 + 0.5 * Math.abs(Math.sin(t + D.ph))
-          ctx.fillStyle = `rgba(48,209,88,${0.5 * pulse})`
+          ctx.fillStyle = `rgba(48,209,88,${0.5 * pulse * intensity})`
         } else {
-          ctx.fillStyle = 'rgba(244,244,245,0.32)'
+          ctx.fillStyle = `rgba(244,244,245,${0.32 * intensity})`
         }
         ctx.fill()
       }
