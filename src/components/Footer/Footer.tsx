@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { Code2, ExternalLink, Mail, Terminal, Clock, Activity } from 'lucide-react'
+import SignalField from '../Hero/SignalField'
 
 function BuildInfo() {
   const buildTime = new Date().toISOString().slice(0, 10)
@@ -39,8 +40,11 @@ export default function Footer() {
         borderTop: '1px solid rgba(255,255,255,0.06)',
         padding: '80px 0 40px',
         position: 'relative',
+        overflow: 'visible',
       }}
     >
+      <SignalField intensity={0.3} />
+
       {/* Ambient gradient at top */}
       <div
         style={{
@@ -55,7 +59,7 @@ export default function Footer() {
         }}
       />
 
-      <div className="section-container">
+      <div className="section-container" style={{ position: 'relative', zIndex: 10 }}>
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 28 }}
