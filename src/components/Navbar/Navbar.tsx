@@ -3,10 +3,11 @@ import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Terminal, Code2, X, AlignRight } from 'lucide-react'
 
-const navLinks: { href: string; label: string; external?: boolean }[] = [
+const navLinks: { href: string; label: string; external?: boolean; route?: boolean }[] = [
   { href: '#skills',   label: 'Skills'   },
   { href: '#projects', label: 'Projects' },
   { href: '#contact',  label: 'Contact'  },
+  { href: '/ask',      label: 'Ask', route: true },
 ]
 
 export default function Navbar() {
@@ -107,32 +108,40 @@ export default function Navbar() {
             gap: 28,
           }}
         >
-          {navLinks.map(({ href, label, external }) => {
-            const isActive = !external && activeHash === href
-            return (
+          {navLinks.map(({ href, label, external, route }) => {
+            const isActive = !external && !route && activeHash === href
+            const linkStyle: React.CSSProperties = {
+              position: 'relative',
+              padding: '4px 0',
+              fontSize: '0.8125rem',
+              fontFamily: 'var(--font-mono)',
+              fontWeight: 500,
+              letterSpacing: '-0.01em',
+              color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
+              textDecoration: 'none',
+              borderBottom: isActive ? '1px solid var(--text-primary)' : '1px solid transparent',
+              transition: 'color 0.2s ease, border-color 0.2s ease',
+            }
+            const hoverHandlers = {
+              onMouseEnter: (e: React.MouseEvent<HTMLAnchorElement>) => {
+                if (!isActive) e.currentTarget.style.color = 'var(--text-primary)'
+              },
+              onMouseLeave: (e: React.MouseEvent<HTMLAnchorElement>) => {
+                if (!isActive) e.currentTarget.style.color = 'var(--text-secondary)'
+              },
+            }
+            return route ? (
+              <Link key={label} to={href} className="nav-link" style={linkStyle} {...hoverHandlers}>
+                {label.toLowerCase()}
+              </Link>
+            ) : (
               <a
                 key={label}
                 href={href}
                 className="nav-link"
                 {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                style={{
-                  position: 'relative',
-                  padding: '4px 0',
-                  fontSize: '0.8125rem',
-                  fontFamily: 'var(--font-mono)',
-                  fontWeight: 500,
-                  letterSpacing: '-0.01em',
-                  color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
-                  textDecoration: 'none',
-                  borderBottom: isActive ? '1px solid var(--text-primary)' : '1px solid transparent',
-                  transition: 'color 0.2s ease, border-color 0.2s ease',
-                }}
-                onMouseEnter={(e) => {
-                  if (!isActive) e.currentTarget.style.color = 'var(--text-primary)'
-                }}
-                onMouseLeave={(e) => {
-                  if (!isActive) e.currentTarget.style.color = 'var(--text-secondary)'
-                }}
+                style={linkStyle}
+                {...hoverHandlers}
               >
                 {label.toLowerCase()}
               </a>
@@ -187,35 +196,51 @@ export default function Navbar() {
             }}
           >
             <div style={{ padding: '8px 8px' }}>
-              {navLinks.map(({ href, label, external }) => (
-                <a
-                  key={label}
-                  href={href}
-                  {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                  onClick={() => setMobileOpen(false)}
-                  style={{
-                    display: 'block',
-                    padding: '13px 20px',
-                    fontSize: '0.9375rem',
-                    fontFamily: 'var(--font-mono)',
-                    fontWeight: 500,
-                    color: 'var(--text-secondary)',
-                    textDecoration: 'none',
-                    borderRadius: 'var(--radius-xs)',
-                    transition: 'all 0.15s ease',
-                  }}
-                  onMouseEnter={(e) => {
+              {navLinks.map(({ href, label, external, route }) => {
+                const itemStyle: React.CSSProperties = {
+                  display: 'block',
+                  padding: '13px 20px',
+                  fontSize: '0.9375rem',
+                  fontFamily: 'var(--font-mono)',
+                  fontWeight: 500,
+                  color: 'var(--text-secondary)',
+                  textDecoration: 'none',
+                  borderRadius: 'var(--radius-xs)',
+                  transition: 'all 0.15s ease',
+                }
+                const itemHover = {
+                  onMouseEnter: (e: React.MouseEvent<HTMLAnchorElement>) => {
                     e.currentTarget.style.background = 'var(--glass-2)'
                     e.currentTarget.style.color = 'var(--text-primary)'
-                  }}
-                  onMouseLeave={(e) => {
+                  },
+                  onMouseLeave: (e: React.MouseEvent<HTMLAnchorElement>) => {
                     e.currentTarget.style.background = 'transparent'
                     e.currentTarget.style.color = 'var(--text-secondary)'
-                  }}
-                >
-                  {label.toLowerCase()}
-                </a>
-              ))}
+                  },
+                }
+                return route ? (
+                  <Link
+                    key={label}
+                    to={href}
+                    onClick={() => setMobileOpen(false)}
+                    style={itemStyle}
+                    {...itemHover}
+                  >
+                    {label.toLowerCase()}
+                  </Link>
+                ) : (
+                  <a
+                    key={label}
+                    href={href}
+                    {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                    onClick={() => setMobileOpen(false)}
+                    style={itemStyle}
+                    {...itemHover}
+                  >
+                    {label.toLowerCase()}
+                  </a>
+                )
+              })}
             </div>
           </motion.div>
         )}

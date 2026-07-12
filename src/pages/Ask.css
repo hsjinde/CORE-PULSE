@@ -1,0 +1,172 @@
+/* ═══ /ask — 完整頁面 AI 對話 ═══════════════════════════════════ */
+
+.ask-page {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-primary);
+  overflow: hidden;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* ─── Header ───────────────────────────────────── */
+.ask-page-head {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px clamp(12px, 4vw, 24px);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-secondary);
+}
+.ask-panel-title {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+.ask-panel-sub {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-tertiary);
+}
+/* 極窄螢幕收起副標，保住返回鍵與清除鍵 */
+@media (max-width: 420px) {
+  .ask-page-sub { display: none; }
+}
+.ask-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  color: var(--text-tertiary);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.ask-icon-btn:hover { color: var(--text-primary); background: var(--glass-2); }
+
+/* ─── 訊息區 ───────────────────────────────────── */
+.ask-page-log {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.ask-page-log::-webkit-scrollbar { width: 8px; }
+.ask-page-log::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+/* 閱讀欄：窄欄置中，行長不失控 */
+.ask-page-col {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 20px clamp(14px, 4vw, 24px);
+}
+
+/* ─── 空狀態 ───────────────────────────────────── */
+.ask-empty { margin: auto 0; padding: 4px 2px; }
+.ask-empty-lead {
+  margin: 0 0 16px;
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+.ask-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.ask-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 12px;
+  color: var(--text-secondary);
+  background: var(--glass-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+.ask-chip::before {
+  content: '›';
+  margin-right: 6px;
+  color: var(--accent-signature);
+}
+.ask-chip:hover:not(:disabled) {
+  color: var(--text-primary);
+  background: var(--glass-3);
+  border-color: var(--border-hover);
+}
+.ask-chip:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ─── 輸入列 ───────────────────────────────────── */
+.ask-page-input-wrap {
+  flex-shrink: 0;
+  border-top: 1px solid var(--border);
+  background: var(--bg-secondary);
+}
+.ask-page-input-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 10px clamp(14px, 4vw, 24px);
+}
+.ask-textarea {
+  flex: 1;
+  resize: none;
+  max-height: 100px;
+  padding: 10px 12px;
+  background: var(--glass-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 16px; /* 防 iOS 聚焦自動縮放 */
+  line-height: 1.5;
+  outline: none;
+}
+.ask-textarea:focus { border-color: var(--border-hover); }
+/* 桌機上聊天字級略收（16px 是手機防縮放需求） */
+@media (min-width: 768px) {
+  .ask-textarea { font-size: 0.95rem; }
+}
+.ask-send {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 12px;
+  background: var(--accent-blue);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+.ask-send:disabled { background: var(--glass-2); color: var(--text-tertiary); cursor: not-allowed; }
+.ask-send.stop {
+  background: rgba(255, 69, 58, 0.15);
+  color: var(--accent-red);
+  border: 1px solid rgba(255, 69, 58, 0.3);
+}
+
+/* ─── focus-visible 白色焦點環（全站一致） ──────── */
+.ask-chip:focus-visible,
+.ask-icon-btn:focus-visible,
+.ask-send:focus-visible {
+  outline: 2px solid var(--accent-signature);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ask-chip, .ask-icon-btn { transition: none; }
+}
