@@ -13,6 +13,7 @@ export interface Env {
   };
   // Secrets（透過 wrangler secret put 設定，不進 commit）
   LLM_API_KEY: string;
+  LLM_API_KEY_TEST?: string; // 測試環境用備援 key（見 chat.ts / chat-llm-openai.ts）
   RATE_LIMIT_SALT: string;
   // 變數
   LLM_PROVIDER?: string;      // 'openai'（MVP 預設）
