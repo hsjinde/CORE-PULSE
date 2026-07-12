@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react'
 import Home from '@/pages/Home'
 import BlogPost from '@/pages/BlogPost'
 import Telemetry from '@/pages/Telemetry'
+import Ask from '@/pages/Ask'
 import AdminLogin from '@/pages/Admin/AdminLogin'
 import AdminDashboard from '@/pages/Admin/AdminDashboard'
 import AdminEditor from '@/pages/Admin/AdminEditor'
-import MascotWidget from '@/components/Mascot/MascotWidget'
 import ScrollProgress from '@/components/ScrollProgress/ScrollProgress'
 
 type AuthState = 'loading' | 'authenticated' | 'unauthenticated'
@@ -66,6 +66,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/blog/:id" element={<BlogPost />} />
         <Route path="/telemetry" element={<Telemetry />} />
+        <Route path="/ask" element={<Ask />} />
 
         {/* Admin CMS Routes */}
         <Route path="/admin" element={<AdminLogin />} />
@@ -86,7 +87,6 @@ export default function App() {
           }
         />
       </Routes>
-      <MascotWidget />
     </BrowserRouter>
   )
 }

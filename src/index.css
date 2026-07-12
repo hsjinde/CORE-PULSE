@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "./components/Mascot/MascotAvatar.css";
 
 /* ─── Tailwind v4 Custom Theme & Utilities for Telemetry ───────
    底盤純灰階(chroma 0),只有訊號通道與狀態允許發色。
