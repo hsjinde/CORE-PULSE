@@ -9,8 +9,8 @@ import './Ask.css';
 /** 空狀態的建議提問 —— 點擊即以該問題發問。 */
 const askSuggestions = [
   { label: '核心技術棧', query: '你的核心技術棧是什麼？' },
-  { label: '最近的專案', query: '介紹一個你最近做的專案' },
-  { label: 'SRE 經驗', query: '你在 SRE / 維運這塊有哪些經驗？' },
+  { label: '資安工作', query: '你在資安這塊做些什麼？' },
+  { label: '自架了哪些服務', query: '你的 VPS 上自架了哪些服務？' },
   { label: '怎麼聯絡你', query: '要怎麼跟你聯絡？' },
 ];
 
@@ -110,7 +110,7 @@ export default function Ask() {
             <div className="ask-empty">
               <p className="ask-empty-lead">
                 嗨，我是 Ethan（<span style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-primary)' }}>hsjinde</span>）。
-                問我任何關於我的事 —— 技術棧、專案、SRE 經驗、怎麼聯絡。
+                問我任何關於我的事 —— 技術棧、專案、資安工作、怎麼聯絡。
               </p>
               <div className="ask-chips">
                 {askSuggestions.map((s) => (

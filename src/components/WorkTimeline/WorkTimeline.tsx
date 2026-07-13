@@ -2,11 +2,9 @@ import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import SignalField from '../Hero/SignalField'
 
-// 佔位資歷 —— 待替換為真實任職公司/期間/職稱
 const jobs = [
-  { year: 'Now',   company: 'Company Name',   duration: 'X yrs · Present', role: 'SRE / DevOps Engineer' },
-  { year: 'Prior', company: 'Company Name',   duration: 'X yrs X months',  role: 'Backend Developer' },
-  { year: 'Prior', company: 'Company Name',   duration: 'X months',       role: 'Cloud / Infra Intern' },
+  { year: 'Now',  company: '國防部',                duration: '2023/11 – 現在',  role: '資安軟體工程師 — CVE 弱點研究、防毒相關軟體開發' },
+  { year: '2023', company: '國立中興大學 資訊管理學系', duration: '2020/9 – 2023/1', role: '碩士 — 論文發表於 IEEE Access（RNN × SPARQL）' },
 ]
 
 export default function WorkTimeline() {
@@ -50,7 +48,7 @@ export default function WorkTimeline() {
           ))}
           <div className="timeline-total">
             <span className="k">total experience</span>
-            <span className="v">X years X months</span>
+            <span className="v">2 yrs 8 mos</span>
           </div>
         </div>
       </div>

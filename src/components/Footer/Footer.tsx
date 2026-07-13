@@ -86,8 +86,8 @@ export default function Footer() {
               </div>
 
               <p className="text-body" style={{ fontSize: '0.875rem', marginBottom: 22 }}>
-                Cloud Architecture Builder &amp; AI Solutions Developer.<br />
-                Building resilient infrastructure for the future.
+                Security Software Engineer &amp; Self-Hosted Infra Builder.<br />
+                Everything on this site runs on systems I built myself.
               </p>
 
               {/* Social icons */}

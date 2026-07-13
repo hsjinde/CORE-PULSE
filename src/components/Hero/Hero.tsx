@@ -4,10 +4,10 @@ import { ArrowDown, Code2, ExternalLink, Terminal } from 'lucide-react'
 import SignalField from './SignalField'
 
 const roles = [
-  'SRE / DevOps Engineer',
-  'Cloud Architecture Builder',
+  'Security Software Engineer',
   'Backend Developer',
-  'AI Solutions Architect',
+  'Self-Hosted Infra Builder',
+  'AI Systems Tinkerer',
 ]
 
 export default function Hero() {
@@ -107,7 +107,7 @@ export default function Hero() {
         >
           I'm Ethan. I build
           <br className="hidden md:inline" />
-          resilient cloud &amp; AI systems.
+          security software &amp; self-hosted systems.
         </motion.h1>
 
         {/* Typewriter */}
@@ -149,8 +149,8 @@ export default function Hero() {
           className="text-body mx-auto"
           style={{ maxWidth: 540, marginBottom: 48, textAlign: 'center' }}
         >
-          專注於系統高可用性、自動化維運與後端架構設計。身為 AI 解決方案與雲端架構建構者，
-          我致力於將 AI 模型落地，並以 SRE 思維打造穩健且可擴展的基礎設施。
+          白天在國防部做資安軟體開發，與 CVE 和防毒技術打交道；下班後把 VPS 當實驗室——
+          自架郵件系統、LLM 代理，加上 Cloudflare 邊緣架構，這個網站就是整套系統的門面。
         </motion.p>
 
         {/* CTA Buttons */}

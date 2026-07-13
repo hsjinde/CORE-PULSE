@@ -44,12 +44,13 @@ export default function About() {
                 fontFamily: 'var(--font-body)',
               }}
             >
-              嗨,我是 Ethan。一名專注<em style={{ fontStyle: 'italic', color: 'var(--text-primary)' }}>系統韌性</em>的
-              SRE / AI 系統開發者。
+              嗨，我是 Ethan。一名把<em style={{ fontStyle: 'italic', color: 'var(--text-primary)' }}>資安</em>當本業、
+              把基礎設施當愛好的軟體工程師。
             </motion.p>
             <motion.p variants={item} className="text-body" style={{ maxWidth: 480 }}>
-              我在意的是系統與系統交界的縫隙 —— 大多數團隊停止關注的地方。從基礎設施自動化到
-              AI 模型落地,我的目標是打造禁得起故障演練、經得起半夜被叫醒的架構。
+              我在國防部做資安軟體開發，平常跟 CVE 和防毒引擎打交道。工作之外，我把一台 VPS
+              經營成自己的機房：自架郵件系統、LLM 代理、Discord AI 助理，再用 Cloudflare
+              把它們串成一套完整的邊緣架構。我相信自己架過一遍，才算真的懂。
             </motion.p>
           </div>
 

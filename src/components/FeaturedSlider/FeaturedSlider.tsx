@@ -10,28 +10,27 @@ interface Slide {
   glowPos: string
 }
 
-// 佔位精選內容 —— 之後可換成真實文章/專案精選
 const slides: Slide[] = [
   {
-    tag: '// sre · reliability',
-    title: '從告警疲勞到穩定睡眠的維運哲學',
-    description: '記錄我在建立 SLO、降低誤報率、把半夜叫醒次數降到接近零的過程中學到的事。',
+    tag: '// security · cve',
+    title: '資安是本業，習慣是職業病',
+    description: '在國防部做 CVE 弱點研究與防毒相關開發。能公開說的不多，但「預設不信任、凡事驗證」已經刻進我寫的每一行程式。',
     glyph: '$_',
     glowPos: '20% 30%',
   },
   {
-    tag: '// ai · rag',
-    title: '把 LLM 落地成真正能用的系統',
-    description: '從 prompt 實驗到生產環境:RAG 架構、知識庫維護與成本控制的取捨紀錄。',
-    glyph: '{ }',
-    glowPos: '75% 40%',
-  },
-  {
-    tag: '// infra · automation',
-    title: '自動化不是少寫程式,是少犯錯',
-    description: 'CI/CD、IaC 與自我修復系統如何把「人為疏失」這個風險項目從清單上劃掉。',
+    tag: '// self-hosted · infra',
+    title: '把一台 VPS 經營成自己的機房',
+    description: 'Postfix、Dovecot、OpenDKIM、Django、nginx、LLM proxy——八個容器全部自己架、自己維運、自己天天在用。',
     glyph: '#!',
     glowPos: '50% 65%',
+  },
+  {
+    tag: '// ai · llm',
+    title: '這個網站的 /ask 有一顆自架的大腦',
+    description: '從自架 CLIProxyAPI 到 SSE 串流、每日限流與 prompt guardrails，一條龍把 LLM 接進正式環境的實作紀錄。',
+    glyph: '{ }',
+    glowPos: '75% 40%',
   },
 ]
 

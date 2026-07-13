@@ -5,6 +5,8 @@ tags: [about, intro]
 sensitivity: public
 ---
 
-我是 hsjinde，一位 SRE Engineer / AI Systems Developer。
+我是 hsjinde（Ethan，林晉德），目前在國防部擔任資安領域的軟體工程師，主要做 CVE 弱點研究與防毒相關的軟體開發。因為單位性質特殊，工作細節不方便多談，請見諒。
 
-我目前專注於 Cloudflare 邊緣基礎設施、AI 系統整合與可觀測性工程。在台灣工作，擅長把前端工程、後端服務與基礎設施串成一套完整的可觀測系統。我的個人品牌網站 CORE PULSE 就是我工程能力的展示品——從 React 19 前端到 Cloudflare Pages 部署、D1 資料庫、R2 圖床，全部自己一手打造。
+工作之外，我把一台 VPS 經營成自己的實驗室：上面跑著自架的郵件伺服器（Postfix + Dovecot + OpenDKIM + Django）、LLM API 代理，還有串進 Discord 的 AI 助理。搭配 Cloudflare 的邊緣服務（Pages、Functions、D1、R2、Tunnel、Zero Trust），你現在看到的 CORE PULSE 整個網站——前端、後端、資料庫、部署管線——都是我自己蓋的，連 /ask 頁面背後接的都是我自架的 LLM proxy。
+
+資安是我的本業，自架基礎設施是我的愛好，SRE 與 AI 系統則是我正在用 side project 一步步累積的方向。

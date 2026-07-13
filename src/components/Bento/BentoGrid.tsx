@@ -230,10 +230,10 @@ export default function BentoGrid() {
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
                     {[
-                      { icon: Shield,    label: 'CVE Analysis',     status: 'Active',  color: 'var(--accent-red)'    },
-                      { icon: Activity,  label: 'Defense Evasion',  status: 'Testing', color: 'var(--accent-purple)' },
-                      { icon: Server,    label: 'System Security',  status: 'Deep',    color: 'var(--accent-blue)'   },
-                      { icon: Globe,     label: 'Zero Trust CDN',   status: 'CF',      color: 'var(--accent-orange)' },
+                      { icon: Shield,    label: 'CVE Research',     status: 'Active', color: 'var(--accent-red)'    },
+                      { icon: Activity,  label: 'Antivirus Dev',    status: 'Core',   color: 'var(--accent-purple)' },
+                      { icon: Server,    label: 'System Security',  status: 'Deep',   color: 'var(--accent-blue)'   },
+                      { icon: Globe,     label: 'Zero Trust CDN',   status: 'CF',     color: 'var(--accent-orange)' },
                     ].map(({ icon: Icon, label, status, color }) => (
                       <div key={label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -368,9 +368,9 @@ export default function BentoGrid() {
               </div>
               <div className="bento-metrics-row">
                 {[
-                  { label: 'Repositories', value: 23,  suffix: ''  },
-                  { label: 'Automations',  value: 15,  suffix: '+' },
-                  { label: 'Models',       value: 5,   suffix: '+' },
+                  { label: 'Repositories', value: 40,  suffix: '+' },
+                  { label: 'Containers',   value: 8,   suffix: ''  },
+                  { label: 'IEEE Papers',  value: 1,   suffix: ''  },
                 ].map(({ label, value, suffix }) => (
                   <div key={label}>
                     <p
