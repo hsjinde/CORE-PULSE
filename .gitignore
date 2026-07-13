@@ -68,3 +68,7 @@ logs/
 
 # Playwright MCP (local browser session artifacts)
 .playwright-mcp/
+
+# Playwright 產出物（每次跑 e2e 都會變動，不進版控）
+playwright-report/
+test-results/

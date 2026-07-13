@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 CORE PULSE is a personal brand website for an SRE / AI Systems developer. It is a
 React 19 + Vite 5 + TypeScript SPA served as static assets, with a serverless
 backend implemented as **Cloudflare Pages Functions** (`functions/api/`). D1 (SQLite)
-stores blog posts; the LLM-backed chat mascot proxies to an OpenAI-compatible endpoint.
+stores blog posts; the LLM-backed `/ask` chat page proxies to an OpenAI-compatible endpoint.
 
 ## Commands
 
@@ -23,7 +23,7 @@ npx tsc --noEmit     # standalone type check (what CI runs before build)
 
 - **Run a single unit test:** `npx vitest run tests/functions/chat-sanitizer.test.ts`
   (or `-t "<name>"` to filter by test name). Unit tests use jsdom + `tests/setup.ts`.
-- **Run a single e2e test:** `npx playwright test e2e/mascot.spec.ts`. E2e requires a
+- **Run a single e2e test:** `npx playwright test e2e/ask.spec.ts`. E2e requires a
   built `dist/` — run `npm run build` first, since the webServer serves `dist` via wrangler.
 - There is no separate lint-fix script; use `npx eslint . --fix`.
 
@@ -43,7 +43,8 @@ first. **To change chat/wiki content, edit `src/content/wiki/*.md`, not `_wiki-g
 
 ### Two runtimes, one repo
 - **Client** (`src/`): React SPA, path alias `@/` → `src/`. Routing via react-router-dom
-  in [src/App.tsx](src/App.tsx): public `/` and `/blog/:id`, plus an admin CMS at
+  in [src/App.tsx](src/App.tsx): public `/`, `/blog/:id`, `/telemetry` (SRE waveform
+  observation deck), `/ask` (full-page LLM chat), plus an admin CMS at
   `/admin`, `/admin/dashboard`, `/admin/editor/:id?`.
 - **Server** (`functions/api/`): Cloudflare Pages Functions. File path = route
   (`functions/api/posts.ts` → `/api/posts`, `functions/api/posts/[id].ts` → `/api/posts/:id`).
@@ -66,9 +67,17 @@ a constant-time compare. Login checks `ADMIN_PASSWORD`. The client's `ProtectedR
 re-verifies with `/api/auth/check` on every mount (cookie is not JS-readable). Protected
 write endpoints call `verifySession()` and return 401 on failure.
 
-### Chat mascot (LLM proxy)
-Floating widget ([src/components/Mascot/](src/components/Mascot/), driven by
-`useMascotChat` + `chatClient.streamChat`). `/api/chat` ([functions/api/chat.ts](functions/api/chat.ts))
+Login is additionally brute-force protected by
+[functions/api/auth-rate-limit.ts](functions/api/auth-rate-limit.ts): failed attempts per
+hashed IP are recorded in D1 (15-minute sliding window, `LOGIN_MAX_ATTEMPTS`, default 10);
+only failures count. This is separate from the chat rate limiter by design.
+
+### Chat page `/ask` (LLM proxy)
+Full-page chat at [src/pages/Ask.tsx](src/pages/Ask.tsx), driven by
+`useMascotChat` + `chatClient.streamChat` (the floating mascot widget was removed, but
+the "mascot" naming survives in `src/hooks/useMascotChat.ts` and
+`src/components/Mascot/` — MessageBubble + types are still used by `/ask`).
+`/api/chat` ([functions/api/chat.ts](functions/api/chat.ts))
 is an SSE endpoint that: validates/trims history (last 6 turns), enforces a per-IP daily
 rate limit (`chat-rate-limit.ts`, hashed IP + `RATE_LIMIT_SALT`), sanitizes input
 (`chat-sanitizer.ts`), assembles a system prompt from the wiki (`chat-prompts.ts` — first-person
@@ -102,5 +111,11 @@ lint/test/build only. Domains: `core-pulse.pages.dev` and `www.19980803.xyz`.
 - Comments and user-facing strings are frequently in Traditional Chinese; match the local style.
 - TypeScript is strict; CI runs `tsc --noEmit` and fails on unused vars (TS6133) — prefix
   intentionally-unused params with `_`.
-- UI work should follow the `core-pulse-design-system` skill (Apple Liquid Glass Dark style);
-  design tokens are CSS custom properties in `src/index.css`.
+- Commit messages: conventional-commit prefix with a Traditional Chinese description,
+  e.g. `feat(ui): 首頁六段 section 底色統一`, `fix(functions): 修正 Env 型別缺漏`.
+- **UI work: [DESIGN.md](DESIGN.md) is the authority** — the Terminal Editorial visual
+  system (near-black canvas, hairline borders, JetBrains Mono display type, color = signal
+  not decoration). [PRODUCT.md](PRODUCT.md) holds brand/strategy context; design plans and
+  rationale live in `docs/plans/`. Design tokens are CSS custom properties in `src/index.css`.
+  The previous Apple Liquid Glass / glassmorphism style is explicitly retired — do not
+  reintroduce blur, glow, or large radii (see PRODUCT.md anti-references).
