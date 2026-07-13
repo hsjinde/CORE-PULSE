@@ -24,9 +24,9 @@ sensitivity: public
 
 下班後的時間大多花在自架服務上：
 
-- **自架郵件系統**：Postfix / Dovecot / OpenDKIM / Django / nginx / certbot，全部 Docker 化跑在 VPS 上，日常實際在用
+- **自架郵件系統**：Postfix / Dovecot / OpenDKIM / Django / nginx / certbot，全部 Docker 化跑在 VPS 上，日常實際在用；管理介面 postfix-manager.19980803.xyz
 - **my-note-web**（note.19980803.xyz）：把 Obsidian 筆記庫發佈成網站——GitHub webhook 增量同步、KV 索引、線上編輯自動 commit 回 repo、Workers AI 筆記問答
-- **LLM 基礎設施**：在 VPS 上部署維運開源專案 CLIProxyAPI（cli.19980803.xyz）統一管理各家模型 API，這個網站 /ask 的大腦就接在上面
+- **LLM 基礎設施**：在 VPS 上部署維運開源專案 CLIProxyAPI（cli.19980803.xyz，管理介面 cli.19980803.xyz/management.html）統一管理各家模型 API，這個網站 /ask 的大腦就接在上面
 - **OpenClaw / Hermes**：串進 Discord 的 AI 助理，偶爾幫我處理雜事
 - **Osaka-web**（osaka.19980803.xyz）：旅遊儀表板——Obsidian vault 經 Zod 驗證的 markdown 資料管線、D1 跨裝置狀態同步、雙平台自動部署
 - **CORE PULSE**：這個網站本身，React 19 + Cloudflare 全端

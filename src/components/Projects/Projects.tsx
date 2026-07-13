@@ -49,6 +49,8 @@ const projects: Project[] = [
     accentColor: '#2997ff',
     slug: 'self-hosted-mail',
     status: 'self-hosted · running',
+    demoUrl: 'https://postfix-manager.19980803.xyz/login/',
+    demoLabel: 'Manager',
   },
   {
     id: 'my-note-web',

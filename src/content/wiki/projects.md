@@ -32,10 +32,12 @@ sensitivity: public
 
 - 在 VPS 上用 Docker 自架完整郵件服務：Postfix（SMTP）+ Dovecot（IMAP/POP3）+ OpenDKIM（簽章）+ Django（管理層）+ nginx + certbot（自動 TLS）
 - 通過 SPF / DKIM 驗證，是我日常實際在用的信箱，不是玩具
+- 管理介面：postfix-manager.19980803.xyz
 
 ## 自架 LLM 基礎設施
 
 - 在 VPS 上部署維運開源專案 **CLIProxyAPI**（github.com/router-for-me/CLIProxyAPI，不是我開發的，我負責部署、設定與維運），跑在 cli.19980803.xyz，統一管理各家 LLM API
+- 管理介面：cli.19980803.xyz/management.html
 - 這個網站 /ask 的「大腦」就接在上面——你現在如果在跟我對話，流量就是走這條
 
 ## OpenClaw / Hermes — Discord AI 助理
