@@ -108,6 +108,7 @@ lint/test/build only. Domains: `core-pulse.pages.dev` and `www.19980803.xyz`.
 
 ## Conventions
 
+- **務必優先使用繁體中文（台灣用語）回覆使用者**；程式碼、識別字、檔名維持原文。
 - Comments and user-facing strings are frequently in Traditional Chinese; match the local style.
 - TypeScript is strict; CI runs `tsc --noEmit` and fails on unused vars (TS6133) — prefix
   intentionally-unused params with `_`.
