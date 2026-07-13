@@ -25,7 +25,8 @@ sensitivity: public
 
 ## AI / 資料
 
-- 自架 **CLIProxyAPI** 統一管理 LLM API，/ask 頁面的串流回應、限流、prompt guardrails 都是自己實作的
+- 部署維運開源專案 **CLIProxyAPI** 統一管理 LLM API（代理本身是開源專案；/ask 頁面的 SSE 串流、限流、prompt guardrails 則是我自己實作的）
+- **Cloudflare Workers AI**：my-note-web 的筆記問答功能
 - OpenClaw / Hermes AI 助理，串 Discord 使用
 - 研究所時期：PyTorch、RNN、多標籤學習（BR / CC / Ensemble BR），成果發表於 IEEE Access
 

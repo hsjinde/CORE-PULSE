@@ -3,7 +3,7 @@ import { motion, useInView } from 'framer-motion'
 import SignalField from '../Hero/SignalField'
 
 const jobs = [
-  { year: 'Now',  company: '國防部',                duration: '2023/11 – 現在',  role: '資安軟體工程師 — CVE 弱點研究、防毒相關軟體開發' },
+  { year: 'Now',  company: '國防部',                duration: '2023/11 – 現在',  role: '資安軟體工程師 — 軍用軟體開發、CVE 弱點研究、防毒相關開發' },
   { year: '2023', company: '國立中興大學 資訊管理學系', duration: '2020/9 – 2023/1', role: '碩士 — 論文發表於 IEEE Access（RNN × SPARQL）' },
 ]
 
