@@ -49,6 +49,7 @@ const projects: Project[] = [
     accentColor: '#2997ff',
     slug: 'self-hosted-mail',
     status: 'self-hosted · running',
+    sourceUrl: 'https://github.com/hsjinde/mail-server',
     demoUrl: 'https://postfix-manager.19980803.xyz/login/',
     demoLabel: 'Manager',
   },

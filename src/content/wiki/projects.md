@@ -33,12 +33,20 @@ sensitivity: public
 - 在 VPS 上用 Docker 自架完整郵件服務：Postfix（SMTP）+ Dovecot（IMAP/POP3）+ OpenDKIM（簽章）+ Django（管理層）+ nginx + certbot（自動 TLS）
 - 通過 SPF / DKIM 驗證，是我日常實際在用的信箱，不是玩具
 - 管理介面：postfix-manager.19980803.xyz
+- 程式碼開源：https://github.com/hsjinde/mail-server
 
 ## 自架 LLM 基礎設施
 
 - 在 VPS 上部署維運開源專案 **CLIProxyAPI**（github.com/router-for-me/CLIProxyAPI，不是我開發的，我負責部署、設定與維運），跑在 cli.19980803.xyz，統一管理各家 LLM API
 - 管理介面：cli.19980803.xyz/management.html
 - 這個網站 /ask 的「大腦」就接在上面——你現在如果在跟我對話，流量就是走這條
+
+## 開源 Claude Code Skills
+
+自己寫、自己每天在用的兩個 AI agent 工具，都開源在 GitHub 上：
+
+- **server-security-audit**（github.com/hsjinde/server-security-audit-skills）：對 Docker Linux 伺服器做可重複的唯讀安全掃描——容器盤點、防火牆 / SSH / fail2ban 體檢、Postfix + Dovecot 登入與寄信活動分析。源自一次真實的事件應變：當時抓到 fail2ban filter 對長達數小時的暴力破解完全沒反應、mail server 連登入日誌都沒開，這些教訓都內建成檢查項目。附「哪些可自動修、哪些必須先問過」的安全政策。
+- **cloudflare-use**（github.com/hsjinde/cloudflare-use-skill）：讓 AI agent 安全快速操作 Cloudflare D1 / R2 的 skill——繞開 shell 與 wrangler、直接打 REST API，零設定自動探測資料庫與 bucket，解掉 Windows PowerShell BOM 亂碼與 wrangler 冷啟動慢的實戰痛點。
 
 ## OpenClaw / Hermes — Discord AI 助理
 
