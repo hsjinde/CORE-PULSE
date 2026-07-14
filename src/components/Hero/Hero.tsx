@@ -149,8 +149,8 @@ export default function Hero() {
           className="text-body mx-auto"
           style={{ maxWidth: 540, marginBottom: 48, textAlign: 'center' }}
         >
-          白天在國防部做資安軟體開發，與 CVE 和防毒技術打交道；下班後把 VPS 當實驗室——
-          自架郵件系統、LLM 代理，加上 Cloudflare 邊緣架構，這個網站就是整套系統的門面。
+          白天在國防部寫資安軟體；下班後把一台 VPS 當實驗室——
+          郵件系統、LLM 代理、筆記站全部自己架、自己維運，每一個都是日常真的在用的服務。
         </motion.p>
 
         {/* CTA Buttons */}
