@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { motion, useInView, type Variants } from 'framer-motion'
 import SignalField from '../Hero/SignalField'
+import portraitImg from '../../assets/portrait.jpg'
 
 /* 捲動進場編排 —— 子元素依序淡入(cascade),而非整塊一次出現 */
 const group: Variants = {
@@ -55,8 +56,7 @@ export default function About() {
           </div>
 
           <motion.div variants={item} className="about-portrait">
-            <span className="about-portrait-mark">E</span>
-            <span className="about-portrait-caption">// portrait placeholder</span>
+            <img src={portraitImg} alt="Ethan" className="about-portrait-img" />
           </motion.div>
         </motion.div>
       </div>
