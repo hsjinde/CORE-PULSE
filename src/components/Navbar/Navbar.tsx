@@ -23,11 +23,13 @@ export default function Navbar() {
 
   /* Track active section */
   useEffect(() => {
+    /* 中線判定:區塊跨越視口 40%–45% 帶即視為 active。
+       固定比例 threshold 對超過一屏高的長區塊(如 #projects)永遠不會觸發。 */
     const obs = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => { if (e.isIntersecting) setActiveHash('#' + e.target.id) })
       },
-      { threshold: 0.4 }
+      { threshold: 0, rootMargin: '-40% 0px -55% 0px' }
     )
     document.querySelectorAll('section[id], footer[id]').forEach((el) => obs.observe(el))
     return () => obs.disconnect()
@@ -168,7 +170,9 @@ export default function Navbar() {
             borderRadius: 'var(--radius-xs)',
             color: 'var(--text-primary)',
             cursor: 'pointer',
-            padding: '7px 8px',
+            width: 44,
+            height: 44,
+            padding: 0,
             alignItems: 'center',
             justifyContent: 'center',
             transition: 'border-color 0.2s ease',

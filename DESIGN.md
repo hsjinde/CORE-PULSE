@@ -20,21 +20,17 @@ background can span the entire viewport width without a visible boundary. Sectio
 
 1. **Hero** — name/role intro, availability badge, CTAs.
 2. **Featured** (`FeaturedSlider`) — auto-advancing cross-fade highlights, 3 placeholder slides.
-3. **About** (`About`) — bio statement + portrait placeholder (monogram "E" card; swap for a real
-   photo in `src/components/About/About.tsx` when available).
-4. **Skills & Infrastructure** (`BentoGrid`) — the detailed Bento grid (unchanged from the
-   retheme; carries the site's real technical content).
-5. **Career Timeline** (`WorkTimeline`) — vertical job history. **Placeholder data** in
-   `src/components/WorkTimeline/WorkTimeline.tsx` (`jobs` array) — replace with real employer/
-   duration/role before shipping.
+3. **About** (`About`) — bio statement + real portrait photo (`about-portrait-img`).
+4. **Skills & Infrastructure** (`BentoGrid`) — the detailed Bento grid; 2026-07 revamp leads
+   with the self-hosted services card (SERVICES list) and open-source agent tools.
+5. **Career Timeline** (`WorkTimeline`) — vertical job history (real data).
 6. **Projects** — existing project cards, now with a `.project-thumb` placeholder banner
    (mono glyph on a tinted gradient) above the title, echoing the reference's thumbnail-led card
    shape without needing real screenshots yet.
 7. **Footer**.
 
-`FeaturedSlider` and `About`'s portrait use CSS-only placeholder art (radial gradients + a large
-faint mono glyph) rather than stock photography or broken `<img>` tags — swap in real images by
-replacing the glyph `<span>` with an `<img>` once assets exist.
+`FeaturedSlider` uses CSS-only placeholder art (radial gradients + a large faint mono glyph)
+rather than stock photography or broken `<img>` tags. (`About`'s portrait is now a real photo.)
 
 ## Color
 
@@ -126,11 +122,11 @@ durations globally.
 
 - `Blog.tsx` (list view) is restyled but not routed anywhere — `App.tsx` only has `/blog/:id`,
   and `Home.tsx` doesn't render `<Blog />`. Pre-existing, unrelated to this retheme.
-- Fonts still load via Google Fonts CDN (render-blocking `@import`); local vendoring was noted as
-  optional in the retheme plan, not done.
+- Fonts still load from the Google Fonts CDN (now via `<link>` + preconnect in `index.html`, no
+  longer a render-blocking `@import`); local vendoring remains optional and not done.
 - `--tracking-ultra` / `--tracking-wider2` tokens are unused leftovers from the old eyebrow
   pattern; harmless, not cleaned up.
-- **Placeholder content to replace before shipping**: `WorkTimeline`'s job history (`jobs` array,
-  currently "Company Name" / "X yrs"), `About`'s portrait (monogram glyph, no real photo),
-  `FeaturedSlider`'s 3 slides (generic teaser copy, no real articles — ties back to the orphaned
-  `Blog.tsx` route above).
+- `About`'s portrait is a real photo; `WorkTimeline` carries real job history.
+- Footer readouts are live values: `Built` is injected at build time (`__BUILD_TIME__` via Vite
+  `define`), `LCP` is measured per visit (PerformanceObserver), and the status light pings
+  `/api/health` in production (`local dev` in dev).

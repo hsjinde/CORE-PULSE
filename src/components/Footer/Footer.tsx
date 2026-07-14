@@ -1,23 +1,69 @@
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { Code2, ExternalLink, Mail, Terminal, Clock, Activity } from 'lucide-react'
 import SignalField from '../Hero/SignalField'
 
+/* 三個讀數全部是真的(儀器的誠實):
+   Built 來自建置時注入的 __BUILD_TIME__;LCP 是當次造訪的實測值;
+   狀態燈是 /api/health 的即時回應(邊緣 Functions 是否在服務)。 */
 function BuildInfo() {
-  const buildTime = new Date().toISOString().slice(0, 10)
+  const [lcp, setLcp] = useState<number | null>(null)
+  /* vite dev 沒有 Pages Functions,直接以 dev 起始而非假裝 operational */
+  const [api, setApi] = useState<'checking' | 'ok' | 'down' | 'dev'>(
+    import.meta.env.PROD ? 'checking' : 'dev',
+  )
+
+  useEffect(() => {
+    if (typeof PerformanceObserver === 'undefined') return
+    try {
+      const po = new PerformanceObserver((list) => {
+        const entries = list.getEntries()
+        const last = entries[entries.length - 1]
+        if (last) setLcp(last.startTime)
+      })
+      po.observe({ type: 'largest-contentful-paint', buffered: true })
+      return () => po.disconnect()
+    } catch {
+      /* 瀏覽器不支援 LCP entry type 時直接不顯示該讀數 */
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!import.meta.env.PROD) return
+    const ctrl = new AbortController()
+    const timer = setTimeout(() => ctrl.abort(), 5000)
+    fetch('/api/health', { signal: ctrl.signal })
+      .then((r) => setApi(r.ok ? 'ok' : 'down'))
+      .catch(() => setApi('down'))
+      .finally(() => clearTimeout(timer))
+    return () => { clearTimeout(timer); ctrl.abort() }
+  }, [])
+
+  const lcpSeconds = lcp === null ? null : lcp / 1000
+  const lcpGood = lcpSeconds !== null && lcpSeconds <= 2.5
+  const apiText = { checking: 'checking api…', ok: 'edge api operational', down: 'api unreachable', dev: 'local dev' }[api]
+  const apiColor = { checking: 'var(--text-tertiary)', ok: 'var(--accent-green)', down: 'var(--accent-red)', dev: 'var(--text-tertiary)' }[api]
+
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap', fontSize: '0.75rem', color: 'var(--text-tertiary)', fontFamily: 'var(--font-body)' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
         <Clock size={11} />
-        <span>Built {buildTime}</span>
+        <span>Built {__BUILD_TIME__.slice(0, 10)}</span>
       </div>
+      {lcpSeconds !== null && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+          <Activity size={11} style={{ color: lcpGood ? 'var(--accent-green)' : 'var(--accent-orange)' }} />
+          <span style={{ color: lcpGood ? 'var(--accent-green)' : 'var(--accent-orange)' }}>
+            LCP {lcpSeconds.toFixed(1)}s
+          </span>
+        </div>
+      )}
       <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-        <Activity size={11} style={{ color: 'var(--accent-green)' }} />
-        <span style={{ color: 'var(--accent-green)' }}>LCP 0.8s</span>
-      </div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-        <span className="status-dot" style={{ width: 6, height: 6 }} />
-        <span style={{ color: 'var(--accent-green)' }}>All systems operational</span>
+        <span
+          className="status-dot"
+          style={{ width: 6, height: 6, ...(api !== 'ok' ? { background: apiColor, boxShadow: 'none' } : {}) }}
+        />
+        <span style={{ color: apiColor }}>{apiText}</span>
       </div>
     </div>
   )
@@ -162,8 +208,20 @@ export default function Footer() {
             {/* Col 3: Contact */}
             <div>
               <p className="path-label" style={{ marginBottom: 20 }}>contact</p>
-              <p className="text-body" style={{ fontSize: '0.875rem', marginBottom: 18 }}>
+              <p className="text-body" style={{ fontSize: '0.875rem', marginBottom: 12 }}>
                 有合作機會或技術討論？歡迎直接來信聯絡！
+              </p>
+              {/* 純文字 email:給不用系統郵件客戶端的人直接複製 */}
+              <p
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.8125rem',
+                  color: 'var(--text-secondary)',
+                  marginBottom: 18,
+                  userSelect: 'all',
+                }}
+              >
+                ethan19980803@gmail.com
               </p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                 <a
