@@ -51,11 +51,11 @@ export default function About() {
             <motion.p variants={item} className="text-body" style={{ maxWidth: 480, marginBottom: 16 }}>
               本業在國防部做資安軟體開發，日常就是 CVE 研究跟防毒引擎。下班後的時間大多丟給自架服務：
               郵件系統、LLM 代理、AI 助理、筆記站，全部 Docker 化跑在 VPS 上，再用 Cloudflare
-              串成一套 push 上去就自動部署的邊緣架構——每一個都實際在用，不是玩具。
+              串成一套 push 上去就自動部署的邊緣架構，平常收信、查筆記都跑在這上面。
             </motion.p>
             <motion.p variants={item} className="text-body" style={{ maxWidth: 480 }}>
               研究所留下的底子是 NLP：碩論用 RNN 把自然語言轉成 SPARQL 查詢，發表在 IEEE
-              Access。我相信的事一直很簡單——自己架一遍，才算真的懂。
+              Access。至於為什麼什麼都想自己架，大概就是好奇——架下去才知道文件沒寫的坑在哪。
             </motion.p>
           </div>
 
