@@ -13,6 +13,7 @@ export default function WorkTimeline() {
 
   return (
     <section
+      id="work"
       className="section-padding"
       style={{ background: 'var(--bg-primary)', position: 'relative', overflow: 'visible' }}
     >
@@ -40,7 +41,7 @@ export default function WorkTimeline() {
             >
               <div className="timeline-year">{job.year}</div>
               <div className="timeline-body">
-                <h4>{job.company}</h4>
+                <h3>{job.company}</h3>
                 <p className="timeline-dur">{job.duration}</p>
                 <p className="timeline-role">{job.role}</p>
               </div>

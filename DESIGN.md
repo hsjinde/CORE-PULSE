@@ -126,11 +126,12 @@ durations globally.
 
 - `Blog.tsx` (list view) is restyled but not routed anywhere — `App.tsx` only has `/blog/:id`,
   and `Home.tsx` doesn't render `<Blog />`. Pre-existing, unrelated to this retheme.
-- Fonts still load via Google Fonts CDN (render-blocking `@import`); local vendoring was noted as
-  optional in the retheme plan, not done.
+- Fonts still load from the Google Fonts CDN (now via `<link>` + preconnect in `index.html`, no
+  longer a render-blocking `@import`); local vendoring remains optional and not done.
 - `--tracking-ultra` / `--tracking-wider2` tokens are unused leftovers from the old eyebrow
   pattern; harmless, not cleaned up.
-- **Placeholder content to replace before shipping**: `WorkTimeline`'s job history (`jobs` array,
-  currently "Company Name" / "X yrs"), `About`'s portrait (monogram glyph, no real photo),
-  `FeaturedSlider`'s 3 slides (generic teaser copy, no real articles — ties back to the orphaned
-  `Blog.tsx` route above).
+- `About`'s portrait is a deliberate monogram treatment (caption `❯ portrait --render monogram`);
+  swap in a real photo when one exists. `WorkTimeline` now carries real job history.
+- Footer readouts are live values: `Built` is injected at build time (`__BUILD_TIME__` via Vite
+  `define`), `LCP` is measured per visit (PerformanceObserver), and the status light pings
+  `/api/health` in production (`local dev` in dev).

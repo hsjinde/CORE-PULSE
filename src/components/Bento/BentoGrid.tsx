@@ -135,17 +135,19 @@ export default function BentoGrid() {
                 <span className="path-label">stack</span>
               </div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+                {/* 色彩即訊號:hue 依真實類別固定——語言=teal(對齊 code)、
+                    基礎架構=blue、CI/CD=orange、AI=purple(見 DESIGN.md 語意表) */}
                 {[
-                  { label: 'Python',             color: 'var(--accent-green)'  },
+                  { label: 'Python',             color: 'var(--accent-teal)'   },
                   { label: 'C / Java',            color: 'var(--accent-teal)'   },
                   { label: 'Docker',              color: 'var(--accent-blue)'   },
-                  { label: 'GitHub Actions',      color: 'var(--accent-purple)' },
+                  { label: 'GitHub Actions',      color: 'var(--accent-orange)' },
                   { label: 'GitLab CI',           color: 'var(--accent-orange)' },
-                  { label: 'Cloudflare',          color: 'var(--accent-orange)' },
-                  { label: 'SQLite / Django',     color: 'var(--accent-teal)'   },
+                  { label: 'Cloudflare',          color: 'var(--accent-blue)'   },
+                  { label: 'SQLite / Django',     color: 'var(--accent-blue)'   },
                   { label: 'React / Tailwind',    color: 'var(--accent-blue)'   },
-                  { label: 'PyTorch',             color: 'var(--accent-red)'    },
-                  { label: 'TensorFlow',          color: 'var(--accent-orange)' },
+                  { label: 'PyTorch',             color: 'var(--accent-purple)' },
+                  { label: 'TensorFlow',          color: 'var(--accent-purple)' },
                   { label: 'LLM / RAG',           color: 'var(--accent-purple)' },
                 ].map((s) => (
                   <span

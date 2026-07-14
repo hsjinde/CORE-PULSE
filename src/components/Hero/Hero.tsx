@@ -79,7 +79,7 @@ export default function Hero() {
         <motion.div
           initial={{ opacity: 0, y: 20, scale: 0.95 }}
           animate={{ opacity: 1, y: 0,  scale: 1    }}
-          transition={{ delay: 0.15, duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
+          transition={{ delay: 0.15, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           style={{
             display: 'inline-flex',
             alignItems: 'center',
@@ -228,7 +228,7 @@ export default function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.6, duration: 0.5 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2"
+        className="hero-scroll-hint absolute bottom-10 left-1/2 -translate-x-1/2"
         style={{
           display: 'flex',
           flexDirection: 'column',

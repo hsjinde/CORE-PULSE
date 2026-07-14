@@ -56,7 +56,7 @@ export default function About() {
 
           <motion.div variants={item} className="about-portrait">
             <span className="about-portrait-mark">E</span>
-            <span className="about-portrait-caption">// portrait placeholder</span>
+            <span className="about-portrait-caption">❯ portrait --render monogram</span>
           </motion.div>
         </motion.div>
       </div>

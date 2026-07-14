@@ -609,7 +609,7 @@
   align-items: center;
   gap: 6px;
   padding: 5px 14px;
-  border-radius: 980px;
+  border-radius: var(--radius-xs); /* 儀器直角;pill 已退役(見 DESIGN.md Radius) */
   font-family: var(--font-body);
   font-size: 0.75rem;
   font-weight: 600;
@@ -688,8 +688,41 @@
   align-items: center;
   gap: 7px;
   flex-shrink: 0;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   color: var(--text-secondary);
+}
+
+/* ── PSR 行動版漸進揭露:預設只露 result,problem/solution 摺疊 ── */
+.psr-toggle { display: none; }
+
+@media (max-width: 768px) {
+  .psr-panel { display: flex; flex-direction: column; }
+  .psr-result { order: 1; }
+  .psr-toggle {
+    order: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    padding: 11px 16px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+  .psr-toggle:hover { border-color: var(--border-hover); color: var(--text-primary); }
+  .psr-collapsible { order: 3; }
+  .psr-collapsible[data-open='false'] { display: none; }
+}
+
+/* 行動版隱藏 hero scroll 提示(與 social row 間距不足且資訊冗餘)。
+   !important:元件以 inline style 設 display:flex,需在此蓋過。 */
+@media (max-width: 640px) {
+  .hero-scroll-hint { display: none !important; }
 }
 
 .project-term-dot {
@@ -932,7 +965,7 @@
   border-color: var(--border-hover);
 }
 
-.timeline-body h4 {
+.timeline-body h3 {
   font-size: 0.95rem;
   font-weight: 600;
   color: var(--text-primary);

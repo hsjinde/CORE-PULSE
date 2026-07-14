@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { ExternalLink, Code2, ArrowUpRight } from 'lucide-react'
 import SignalField from '../Hero/SignalField'
@@ -96,18 +96,18 @@ function PSRBlock({ label, text, accentColor }: { label: string; text: string; a
         marginBottom: 10,
       }}
     >
+      {/* 路徑文法標籤(~/problem),取代已退役的 uppercase eyebrow */}
       <p
         style={{
-          fontSize: '0.6875rem',
-          fontWeight: 700,
-          fontFamily: 'var(--font-body)',
+          fontSize: '0.75rem',
+          fontWeight: 600,
+          fontFamily: 'var(--font-mono)',
           color: accentColor,
-          textTransform: 'uppercase',
-          letterSpacing: '0.1em',
+          letterSpacing: '-0.01em',
           marginBottom: 6,
         }}
       >
-        {label}
+        ~/{label}
       </p>
       <p style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', lineHeight: 1.65, fontFamily: 'var(--font-body)' }}>
         {text}
@@ -119,6 +119,8 @@ function PSRBlock({ label, text, accentColor }: { label: string; text: string; a
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
+  /* 行動版漸進揭露:預設只露 result,problem/solution 需展開(桌機恆展開) */
+  const [psrOpen, setPsrOpen] = useState(false)
 
   return (
     <motion.div
@@ -229,7 +231,8 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                       gap: 7,
                       padding: '9px 20px',
                       background: project.accentColor,
-                      color: '#fff',
+                      /* 近黑文字:彩底上的白字對比僅 2.1–3.5:1,黑字全數 ≥5.9:1 */
+                      color: '#050505',
                       borderRadius: 'var(--radius-xs)',
                       fontSize: '0.875rem',
                       fontFamily: 'var(--font-mono)',
@@ -257,10 +260,22 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             </div>
 
             {/* ── Right: PSR Panel ── */}
-            <div>
-              <PSRBlock label="Problem"  text={project.problem}  accentColor={project.accentColor} />
-              <PSRBlock label="Solution" text={project.solution} accentColor={project.accentColor} />
-              <PSRBlock label="Result"   text={project.result}   accentColor={project.accentColor} />
+            <div className="psr-panel">
+              <div className="psr-collapsible" data-open={psrOpen}>
+                <PSRBlock label="problem"  text={project.problem}  accentColor={project.accentColor} />
+                <PSRBlock label="solution" text={project.solution} accentColor={project.accentColor} />
+              </div>
+              <div className="psr-result">
+                <PSRBlock label="result" text={project.result} accentColor={project.accentColor} />
+              </div>
+              <button
+                type="button"
+                className="psr-toggle"
+                aria-expanded={psrOpen}
+                onClick={() => setPsrOpen((v) => !v)}
+              >
+                ❯ {psrOpen ? 'fold' : 'cat'} problem solution
+              </button>
             </div>
           </div>
         </div>
