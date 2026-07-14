@@ -242,11 +242,18 @@ export default function BentoGrid() {
                   讀論文 →
                 </a>
                 <a
-                  href="https://github.com/hsjinde/Enhancing-SPARQL-Query-Performance-With-Recurrent-Neural-Networks"
+                  href="https://github.com/hsjinde/Traing-phase-Enhancing-SPARQL-Query-Performance-With-Recurrent-Neural-Networks"
                   target="_blank" rel="noopener noreferrer"
                   style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', textDecoration: 'none' }}
                 >
-                  Code ↗
+                  Train ↗
+                </a>
+                <a
+                  href="https://github.com/hsjinde/Query-phase-Enhancing-SPARQL-Query-Performance-With-Recurrent-Neural-Networks"
+                  target="_blank" rel="noopener noreferrer"
+                  style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', textDecoration: 'none' }}
+                >
+                  Query ↗
                 </a>
               </div>
             </BentoCard>

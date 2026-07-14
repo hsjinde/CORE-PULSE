@@ -16,6 +16,7 @@ interface Project {
   slug: string
   status: string
   sourceUrl?: string
+  sourceUrls?: { label: string; url: string }[]
   demoUrl?: string
   demoLabel?: string
 }
@@ -33,7 +34,10 @@ const projects: Project[] = [
     accentColor: '#bf5af2',
     slug: 'rnn-sparql-research',
     status: 'ieee access · published',
-    sourceUrl: 'https://github.com/hsjinde/Enhancing-SPARQL-Query-Performance-With-Recurrent-Neural-Networks',
+    sourceUrls: [
+      { label: 'Train', url: 'https://github.com/hsjinde/Traing-phase-Enhancing-SPARQL-Query-Performance-With-Recurrent-Neural-Networks' },
+      { label: 'Query', url: 'https://github.com/hsjinde/Query-phase-Enhancing-SPARQL-Query-Performance-With-Recurrent-Neural-Networks' },
+    ],
     demoUrl: 'https://ieeexplore.ieee.org/document/10230082',
     demoLabel: 'Read Paper',
   },
@@ -234,6 +238,25 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                     Source
                   </a>
                 )}
+                {project.sourceUrls?.map(({ label, url }) => (
+                  <a
+                    key={url}
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-ghost"
+                    style={{
+                      padding: '9px 20px',
+                      fontSize: '0.875rem',
+                      borderColor: `${project.accentColor}30`,
+                      color: project.accentColor,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <Code2 size={14} />
+                    {label}
+                  </a>
+                ))}
                 {project.demoUrl && (
                   <a
                     href={project.demoUrl}
