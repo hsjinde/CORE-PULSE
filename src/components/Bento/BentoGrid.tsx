@@ -215,9 +215,10 @@ export default function BentoGrid() {
               </p>
               <div className="bento-metrics-row" style={{ marginBottom: 18 }}>
                 {[
-                  { metric: 'QALD-8',  value: '93.9%', color: 'var(--accent-green)'  },
-                  { metric: 'QALD-7',  value: '82.6%', color: 'var(--accent-blue)'   },
-                  { metric: 'LC-QuAD', value: '+12%',  color: 'var(--accent-purple)' },
+                  { metric: 'QALD-7',  value: '+4.34%', color: 'var(--accent-blue)'   },
+                  { metric: 'QALD-8',  value: '+3.03%', color: 'var(--accent-green)'  },
+                  { metric: 'QALD-9',  value: '+4.87%', color: 'var(--accent-orange)' },
+                  { metric: 'LC-QuAD', value: '+12%',   color: 'var(--accent-purple)' },
                 ].map(({ metric, value, color }) => (
                   <div key={metric}>
                     <p className="text-label" style={{ marginBottom: 4 }}>{metric}</p>
