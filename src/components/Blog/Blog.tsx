@@ -1,26 +1,10 @@
 import { useRef, useEffect, useState, useMemo } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
-import { BookOpen, Clock, Tag, ArrowUpRight, GraduationCap, Wrench, Briefcase, Coffee, Search, X, FileText } from 'lucide-react'
+import { BookOpen, Clock, Tag, ArrowUpRight, Search, X, FileText } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { getPosts } from '@/services/api'
-import type { Post, PostType } from '@/services/api'
-
-const postTypeConfig: Record<PostType, { color: string; label: string; Icon: React.ElementType }> = {
-  Learning: { color: '#ff9f0a', label: '個人學習', Icon: GraduationCap },
-  Tools:    { color: '#30d158', label: '好工具推薦', Icon: Wrench        },
-  Work:     { color: '#2997ff', label: '工作專案', Icon: Briefcase      },
-  Daily:    { color: '#bf5af2', label: '日常',     Icon: Coffee         },
-}
-
-type FilterType = 'All' | PostType
-
-const filterTabs: { key: FilterType; label: string; color?: string; Icon?: React.ElementType }[] = [
-  { key: 'All',      label: '全部'       },
-  { key: 'Learning', label: '個人學習', color: '#ff9f0a', Icon: GraduationCap },
-  { key: 'Tools',    label: '好工具推薦', color: '#30d158', Icon: Wrench        },
-  { key: 'Work',     label: '工作專案', color: '#2997ff', Icon: Briefcase      },
-  { key: 'Daily',    label: '日常',     color: '#bf5af2', Icon: Coffee         },
-]
+import type { Post } from '@/services/api'
+import { postTypeConfig, filterTabs, type FilterType } from './postTypeConfig'
 
 function PostCard({ post, index }: { post: Post; index: number }) {
   const ref = useRef<HTMLDivElement>(null)
@@ -34,7 +18,7 @@ function PostCard({ post, index }: { post: Post; index: number }) {
       ref={ref}
       initial={{ opacity: 0, y: 28 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.55, delay: index * 0.09, ease: [0.34, 1.1, 0.64, 1] }}
+      transition={{ duration: 0.55, delay: index * 0.09, ease: [0.22, 1, 0.36, 1] }}
       onClick={() => navigate(`/blog/${post.id}`)}
       className="blog-card"
     >
@@ -168,7 +152,7 @@ export default function Blog() {
             initial={{ scaleX: 0 }}
             whileInView={{ scaleX: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.2, ease: [0.34, 1.1, 0.64, 1] }}
+            transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
             style={{ marginBottom: 16 }}
           />
 

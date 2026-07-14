@@ -4,19 +4,13 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeHighlight from 'rehype-highlight'
 import 'highlight.js/styles/github-dark-dimmed.css'
-import { ArrowLeft, Clock, Calendar, GraduationCap, Wrench, Briefcase, Coffee } from 'lucide-react'
+import { ArrowLeft, Clock, Calendar } from 'lucide-react'
 import Navbar from '@/components/Navbar/Navbar'
 import Footer from '@/components/Footer/Footer'
 import { getPostById } from '@/services/api'
-import type { Post, PostType } from '@/services/api'
+import type { Post } from '@/services/api'
 import { extractText, slugify, extractLanguage } from '@/lib/markdown'
-
-const postTypeConfig: Record<PostType, { color: string; label: string; Icon: React.ElementType }> = {
-  Learning: { color: '#ff9f0a', label: '個人學習', Icon: GraduationCap },
-  Tools:    { color: '#30d158', label: '好工具推薦', Icon: Wrench        },
-  Work:     { color: '#2997ff', label: '工作專案', Icon: Briefcase      },
-  Daily:    { color: '#bf5af2', label: '日常',     Icon: Coffee         },
-}
+import { postTypeConfig } from '@/components/Blog/postTypeConfig'
 
 // ─── Copy Code Block ─────────────────────────────────────────
 function PreBlock({ children }: { children?: React.ReactNode }) {

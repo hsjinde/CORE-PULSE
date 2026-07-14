@@ -72,3 +72,6 @@ logs/
 # Playwright 產出物（每次跑 e2e 都會變動，不進版控）
 playwright-report/
 test-results/
+
+# impeccable skill 工作目錄（critique 快照與 live-server 暫存）
+.impeccable/
