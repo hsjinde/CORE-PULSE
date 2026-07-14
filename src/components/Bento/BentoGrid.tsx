@@ -211,13 +211,13 @@ export default function BentoGrid() {
                 IEEE Access 2023 · RNN × SPARQL
               </p>
               <p className="text-body" style={{ fontSize: '0.8125rem', marginBottom: 18 }}>
-                碩論解的問題：不會寫 SPARQL 的人也能查知識圖譜。用 RNN＋多標籤學習把自然語言直接轉成查詢。
+                碩論解的問題：不會寫 SPARQL 的人也能查知識圖譜。把查詢生成轉化為多標籤分類，再以 Ensemble BR 學習 RDF triple 間的關聯，複雜問句也能精準生成查詢。
               </p>
               <div className="bento-metrics-row" style={{ marginBottom: 18 }}>
                 {[
                   { metric: 'QALD-8',  value: '93.9%', color: 'var(--accent-green)'  },
                   { metric: 'QALD-7',  value: '82.6%', color: 'var(--accent-blue)'   },
-                  { metric: 'LC-QuAD', value: '+10%',  color: 'var(--accent-purple)' },
+                  { metric: 'LC-QuAD', value: '+12%',  color: 'var(--accent-purple)' },
                 ].map(({ metric, value, color }) => (
                   <div key={metric}>
                     <p className="text-label" style={{ marginBottom: 4 }}>{metric}</p>

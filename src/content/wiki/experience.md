@@ -13,7 +13,7 @@ sensitivity: public
 
 研究方向是自然語言處理與知識圖譜問答（KGQA）。碩士論文成果與指導教授合著，發表於 **IEEE Access**（Vol. 11, 2023, pp. 92209–92224, DOI: 10.1109/ACCESS.2023.3308691）：《Enhancing SPARQL Query Performance With Recurrent Neural Networks》。
 
-把 SPARQL 的 RDF 三元組視為標籤，用 Binary Relevance 與 Classifier Chains 兩種多標籤學習結合 RNN 分類器（GloVe / BERT / POS 詞嵌入），把自然語言問題自動轉成 SPARQL 查詢；並提出 Ensemble BR 納入標籤間關聯。Ensemble BR 在 QALD-7/8/9 與 LC-QuAD 四個基準達到 82.6% / 93.94% / 76.82% / 76.1% 的準確率，End-to-End 表現優於 QAMP、DTQA 等系統。
+把 SPARQL 的 RDF 三元組視為標籤，將查詢生成重塑為多標籤分類，用 Binary Relevance 與 Classifier Chains 結合 RNN 分類器（GloVe / BERT / POS 詞嵌入），把自然語言問題自動轉成 SPARQL 查詢；再提出 Ensemble BR，以堆疊（stacking）把多個 BR 模型的輸出作為新模型輸入，補足 BR 假設標籤獨立的缺陷、學習 RDF triple 間的關聯。Ensemble BR 在 QALD-7/8/9 與 LC-QuAD 四個基準達到 82.6% / 93.94% / 76.82% / 76.1% 的準確率，其中複雜問句占 72.1% 的 LC-QuAD 較單獨 BR（64.1%）提升 12%；End-to-End 表現優於 QAMP、DTQA 等系統。
 
 - 論文：https://ieeexplore.ieee.org/document/10230082
 - 論文全文 repo：https://github.com/hsjinde/Enhancing-SPARQL-Query-Performance-With-Recurrent-Neural-Networks

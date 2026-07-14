@@ -17,8 +17,8 @@ sensitivity: public
 
 - 與指導教授合著，發表於 **IEEE Access**（Vol. 11, 2023, pp. 92209–92224, DOI: 10.1109/ACCESS.2023.3308691）
 - 問題：知識圖譜要用 SPARQL 才查得動，一般人不會寫；前期研究 Light-QAwizard 雖將查詢成本降低 50%，但標籤轉換造成樣本不平衡、準確率受損
-- 方法：把 SPARQL 的 RDF 三元組視為標籤，用 Binary Relevance 與 Classifier Chains 結合 RNN 分類器（GloVe / BERT / POS 詞嵌入），並提出 Ensemble BR 以集成學習納入標籤間關聯
-- 結果：Ensemble BR 在 QALD-7/8/9 與 LC-QuAD 達 82.6% / 93.94% / 76.82% / 76.1% 準確率，LC-QuAD 較前期方法提升逾 10%；End-to-End 優於 QAMP、DTQA
+- 方法：把 SPARQL 的 RDF 三元組視為標籤，將查詢生成重塑為多標籤分類，用 Binary Relevance 與 Classifier Chains 結合 RNN 分類器（GloVe / BERT / POS 詞嵌入）；再提出 Ensemble BR，以堆疊（stacking）把多個 BR 模型的輸出作為新模型輸入，補足 BR 假設標籤獨立的缺陷、學習 RDF triple 間的關聯
+- 結果：Ensemble BR 在 QALD-7/8/9 與 LC-QuAD 達 82.6% / 93.94% / 76.82% / 76.1% 準確率，其中複雜問句占 72.1% 的 LC-QuAD 較單獨 BR（64.1%）大幅提升 12%；End-to-End 優於 QAMP、DTQA
 - 論文：https://ieeexplore.ieee.org/document/10230082
 - 程式碼開源：訓練階段（Traing-phase-…）與查詢階段（Query-phase-…）兩個 repo 都在我的 GitHub 上
 
