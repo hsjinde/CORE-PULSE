@@ -82,6 +82,12 @@
   }
 }
 
+/* ── 鍵盤焦點:白色 2px focus ring,全站一致(見 PRODUCT.md) ── */
+:focus-visible {
+  outline: 2px solid var(--accent-signature);
+  outline-offset: 2px;
+}
+
 /* ─── Design Tokens — Terminal Editorial (灰階 + 訊號色) ───────── */
 /* 色彩即訊號:白色是唯一的品牌強調色。hue 只出現在有語義的地方
    (Telemetry 狀態、圖表、表單回饋)。詳見 PRODUCT.md「設計原則」。 */
@@ -608,8 +614,6 @@
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: -0.01em;
-  backdrop-filter: var(--blur-sm);
-  -webkit-backdrop-filter: var(--blur-sm);
   transition: transform 0.2s var(--ease-out-quint), filter 0.2s ease, border-color 0.2s ease;
   cursor: default;
 }
@@ -835,24 +839,40 @@
 
 .slider-dots {
   display: flex;
-  gap: 8px;
+  gap: 0; /* 圓點按鈕本身已含 8px 空白熱區 */
 }
 
+/* 24×24 觸控目標(WCAG 2.5.8),視覺圓點用 ::before 繪製 */
 .slider-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.22);
+  position: relative;
+  width: 24px;
+  height: 24px;
+  background: transparent;
   border: none;
   cursor: pointer;
   padding: 0;
-  transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1), background 0.35s ease;
 }
 
-.slider-dot.active {
-  width: 22px;
-  border-radius: 4px;
+.slider-dot::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.22);
+  transition: background 0.35s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.slider-dot:hover::before {
+  background: rgba(255,255,255,0.45);
+}
+
+.slider-dot.active::before {
   background: var(--text-primary);
+  transform: scale(1.45);
 }
 
 /* ─── Work Timeline ────────────────────────────────────────────── */
@@ -1088,8 +1108,6 @@
   background: var(--glass-2);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  backdrop-filter: var(--blur-lg);
-  -webkit-backdrop-filter: var(--blur-lg);
   transition: border-color 0.25s ease, box-shadow 0.25s ease;
   overflow: hidden;
 }
@@ -1172,8 +1190,6 @@
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.2s ease;
-  backdrop-filter: var(--blur-sm);
-  -webkit-backdrop-filter: var(--blur-sm);
 }
 
 .blog-filter-tab:hover {
@@ -1421,7 +1437,7 @@
   color: rgba(245, 245, 247, 0.55);
   border: 1px solid rgba(255, 255, 255, 0.12);
   flex-shrink: 0;
-  transition: all 0.25s cubic-bezier(0.34, 1.1, 0.64, 1);
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .blog-card:hover .blog-card-arrow {
@@ -1542,8 +1558,6 @@
   font-weight: 500;
   transition: all 0.25s ease;
   margin-bottom: 40px;
-  backdrop-filter: var(--blur-md);
-  -webkit-backdrop-filter: var(--blur-md);
 }
 
 .blogpost-back-btn:hover {
@@ -1662,8 +1676,6 @@
   background: var(--glass-2);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  backdrop-filter: var(--blur-lg);
-  -webkit-backdrop-filter: var(--blur-lg);
 }
 
 .blogpost-toc-title {
@@ -1784,12 +1796,12 @@
 .prose strong { color: var(--text-primary); font-weight: 600; }
 
 .prose blockquote {
-  border-left: 3px solid var(--accent-signature);
+  border: 1px solid var(--border);
   padding: 1.25rem 1.5rem;
   color: rgba(245, 245, 247, 0.70);
   margin: 0 0 1.6em 0;
   background: rgba(255, 255, 255, 0.04);
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  border-radius: var(--radius-sm);
   font-style: normal;
 }
 
@@ -1860,8 +1872,6 @@
   font-size: 0.9em;
   margin: 1.6em 0;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
-  backdrop-filter: var(--blur-md);
-  -webkit-backdrop-filter: var(--blur-md);
 }
 
 .prose-code-header {
