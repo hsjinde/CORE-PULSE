@@ -2,10 +2,10 @@
 export const TERMINAL_SCRIPT: { cmd: string; output: string[] }[] = [
   { cmd: 'whoami', output: ['ethan — security software engineer'] },
   {
-    cmd: 'skills --list',
-    output: ['python · c · java · react', 'cve research · docker · cloudflare'],
+    cmd: 'ls ~/self-hosted',
+    output: ['mail/  llm-proxy/  notes/  osaka/', 'status: all live'],
   },
-  { cmd: 'uptime', output: ['containers: 8 up · coffee: refilled'] },
+  { cmd: 'stats', output: ['repos: 40+ · containers: 8', 'coffee: refilled'] },
 ]
 
 export type TermLine = { kind: 'cmd' | 'out'; text: string }

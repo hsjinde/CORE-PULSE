@@ -1,9 +1,9 @@
-import { useRef, useState, useEffect } from 'react'
+import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, useInView } from 'framer-motion'
 import {
   Server, Shield, Cpu, Activity, Globe, Code2,
-  GitBranch, Bot,
+  GitBranch, Bot, Flag,
 } from 'lucide-react'
 import SignalField from '../Hero/SignalField'
 import TerminalCard from './TerminalCard'
@@ -15,27 +15,6 @@ interface BentoCardProps {
   className?: string
   style?: React.CSSProperties
   delay?: number
-}
-
-/* ─── Animated Counter ───────────────────────────────────────── */
-function AnimatedCounter({ target, suffix = '' }: { target: number; suffix?: string }) {
-  const [count, setCount] = useState(0)
-  const ref = useRef<HTMLSpanElement>(null)
-  const inView = useInView(ref, { once: true })
-
-  useEffect(() => {
-    if (!inView) return
-    let start = 0
-    const step = target / 55
-    const timer = setInterval(() => {
-      start += step
-      if (start >= target) { setCount(target); clearInterval(timer) }
-      else setCount(Math.floor(start))
-    }, 16)
-    return () => clearInterval(timer)
-  }, [inView, target])
-
-  return <span ref={ref}>{count}{suffix}</span>
 }
 
 /* ─── Bento Card Wrapper ─────────────────────────────────────── */
@@ -61,6 +40,28 @@ function BentoCard({ children, className = '', style, delay = 0 }: BentoCardProp
     </motion.div>
   )
 }
+
+/* ─── Self-hosted services（實際在跑的服務清單）───────────────── */
+const SERVICES: {
+  name: string
+  desc: string
+  href?: string
+  color: string
+}[] = [
+  { name: 'mail',      desc: 'Postfix · Dovecot · DKIM，日常實際在用的信箱',      href: 'https://postfix-manager.19980803.xyz/login/', color: 'var(--accent-blue)'   },
+  { name: 'llm-proxy', desc: 'CLIProxyAPI 統一管理各家模型 API，/ask 的大腦',                                                          color: 'var(--accent-purple)' },
+  { name: 'notes',     desc: 'Obsidian 筆記庫上網，兼 AI 知識庫',                 href: NOTES_URL,                                     color: 'var(--accent-green)'  },
+  { name: 'osaka',     desc: '旅遊儀表板，收藏用 D1 跨裝置同步',                  href: 'https://osaka.19980803.xyz/',                 color: 'var(--accent-orange)' },
+  { name: 'www',       desc: '本站：React 19 + Pages Functions + D1 / R2',                                                            color: 'var(--accent-teal)'   },
+]
+
+/* ─── 開源 Claude Code Skills ────────────────────────────────── */
+const AGENT_SKILLS: { name: string; desc: string; href: string }[] = [
+  { name: 'note-maintain',         desc: 'Obsidian 筆記庫例行維護，一個指令跑完', href: 'https://github.com/hsjinde/note-maintain' },
+  { name: 'ui-fix-verify',         desc: 'UI 修改先量測、後截圖，驗證過才准回報完成', href: 'https://github.com/hsjinde/ui-fix-verify' },
+  { name: 'cloudflare-use',        desc: '繞開 wrangler，直打 REST API 操作 D1 / R2', href: 'https://github.com/hsjinde/cloudflare-use-skill' },
+  { name: 'server-security-audit', desc: 'Docker 伺服器可重複執行的唯讀安全巡檢', href: 'https://github.com/hsjinde/server-security-audit-skills' },
+]
 
 /* ─── Main Component ─────────────────────────────────────────── */
 export default function BentoGrid() {
@@ -127,66 +128,106 @@ export default function BentoGrid() {
             </BentoCard>
           </div>
 
-          {/* ── Card 2: Core Stack (8 cols) ── */}
+          {/* ── Card 2: Self-Hosted Infrastructure — 主角 (8 cols) ── */}
           <div className="bento-col-8">
             <BentoCard delay={0.1} className="h-full">
-              <div className="flex items-center gap-2" style={{ marginBottom: 20 }}>
-                <Code2 size={15} style={{ color: 'var(--accent-blue)' }} />
-                <span className="path-label">stack</span>
+              <div className="flex items-center gap-2" style={{ marginBottom: 14 }}>
+                <Server size={15} style={{ color: 'var(--accent-green)' }} />
+                <span className="path-label">self-hosted</span>
               </div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
-                {[
-                  { label: 'Python',             color: 'var(--accent-green)'  },
-                  { label: 'C / Java',            color: 'var(--accent-teal)'   },
-                  { label: 'Docker',              color: 'var(--accent-blue)'   },
-                  { label: 'GitHub Actions',      color: 'var(--accent-purple)' },
-                  { label: 'GitLab CI',           color: 'var(--accent-orange)' },
-                  { label: 'Cloudflare',          color: 'var(--accent-orange)' },
-                  { label: 'SQLite / Django',     color: 'var(--accent-teal)'   },
-                  { label: 'React / Tailwind',    color: 'var(--accent-blue)'   },
-                  { label: 'PyTorch',             color: 'var(--accent-red)'    },
-                  { label: 'TensorFlow',          color: 'var(--accent-orange)' },
-                  { label: 'LLM / RAG',           color: 'var(--accent-purple)' },
-                ].map((s) => (
+              <p className="text-title" style={{ color: 'var(--text-primary)', marginBottom: 8, fontFamily: 'var(--font-heading)' }}>
+                一台 VPS＋Cloudflare 邊緣
+              </p>
+              <p className="text-body" style={{ fontSize: '0.8125rem', marginBottom: 18, maxWidth: 560 }}>
+                八個容器常駐在 VPS 上，前面用 Cloudflare 接邊緣。每個服務都是日常實際在用——收得到信、查得到筆記，不是架好看的。
+              </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 18 }}>
+                {SERVICES.map(({ name, desc, href, color }) => (
+                  <div key={name} style={{ display: 'flex', alignItems: 'baseline', gap: 10, flexWrap: 'wrap' }}>
+                    <span
+                      style={{
+                        width: 6,
+                        height: 6,
+                        borderRadius: '50%',
+                        background: color,
+                        boxShadow: `0 0 6px color-mix(in srgb, ${color} 80%, transparent)`,
+                        flexShrink: 0,
+                        alignSelf: 'center',
+                      }}
+                    />
+                    {href ? (
+                      <a
+                        href={href}
+                        target="_blank" rel="noopener noreferrer"
+                        style={{
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: '0.8125rem',
+                          fontWeight: 600,
+                          color,
+                          textDecoration: 'none',
+                        }}
+                      >
+                        {name} ↗
+                      </a>
+                    ) : (
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8125rem', fontWeight: 600, color }}>
+                        {name}
+                      </span>
+                    )}
+                    <span style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', fontFamily: 'var(--font-body)' }}>
+                      {desc}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                {['Pages', 'Functions', 'D1', 'R2', 'Tunnel', 'Zero Trust'].map((cf) => (
                   <span
-                    key={s.label}
-                    className="skill-badge"
+                    key={cf}
                     style={{
-                      background: `color-mix(in srgb, ${s.color} 12%, transparent)`,
-                      border: `1px solid color-mix(in srgb, ${s.color} 30%, transparent)`,
-                      color: s.color,
-                      padding: '7px 18px',
-                      fontSize: '0.875rem',
                       fontFamily: 'var(--font-mono)',
+                      fontSize: '0.6875rem',
+                      color: 'var(--text-tertiary)',
+                      border: '1px solid rgba(255,255,255,0.08)',
+                      borderRadius: 'var(--radius-xs)',
+                      padding: '3px 10px',
                     }}
                   >
-                    {s.label}
+                    CF {cf}
                   </span>
                 ))}
               </div>
             </BentoCard>
           </div>
 
-          {/* ── Card 3: AI / OpenClaw (5 cols) ── */}
+          {/* ── Card 3: Research — IEEE Access (5 cols) ── */}
           <div className="bento-col-5">
-            <BentoCard
-              delay={0.15}
-              className="h-full"
-              style={{ minHeight: 210 }}
-            >
-              <div className="flex items-center gap-2 relative z-10" style={{ marginBottom: 14 }}>
-                <Bot size={15} style={{ color: 'var(--accent-purple)' }} />
-                <span className="path-label">agent</span>
+            <BentoCard delay={0.15} className="h-full" style={{ minHeight: 210 }}>
+              <div className="flex items-center gap-2" style={{ marginBottom: 14 }}>
+                <Cpu size={15} style={{ color: 'var(--accent-purple)' }} />
+                <span className="path-label">research</span>
               </div>
-              <p className="text-title relative z-10" style={{ color: 'var(--text-primary)', marginBottom: 8, fontFamily: 'var(--font-heading)' }}>
-                LLM & Knowledge Base
+              <p className="text-title" style={{ color: 'var(--text-primary)', marginBottom: 8, fontFamily: 'var(--font-heading)' }}>
+                IEEE Access 2023 · RNN × SPARQL
               </p>
-              <p className="text-body relative z-10" style={{ fontSize: '0.8125rem', marginBottom: 20 }}>
-                利用 CLIProxyAPI 統一管理 API，並整合 Obsidian 作為個人的 AI 知識庫與 RAG 後端。
+              <p className="text-body" style={{ fontSize: '0.8125rem', marginBottom: 18 }}>
+                碩論解的問題：不會寫 SPARQL 的人也能查知識圖譜。用 RNN＋多標籤學習把自然語言直接轉成查詢。
               </p>
-              <div className="flex items-center gap-4 relative z-10">
+              <div className="bento-metrics-row" style={{ marginBottom: 18 }}>
+                {[
+                  { metric: 'QALD-8',  value: '93.9%', color: 'var(--accent-green)'  },
+                  { metric: 'QALD-7',  value: '82.6%', color: 'var(--accent-blue)'   },
+                  { metric: 'LC-QuAD', value: '+10%',  color: 'var(--accent-purple)' },
+                ].map(({ metric, value, color }) => (
+                  <div key={metric}>
+                    <p className="text-label" style={{ marginBottom: 4 }}>{metric}</p>
+                    <p style={{ color, fontFamily: 'var(--font-mono)', fontSize: '1.25rem', fontWeight: 700 }}>{value}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="flex items-center gap-4">
                 <a
-                  href={NOTES_URL}
+                  href="https://ieeexplore.ieee.org/document/10230082"
                   target="_blank" rel="noopener noreferrer"
                   className="btn-ghost"
                   style={{
@@ -198,24 +239,20 @@ export default function BentoGrid() {
                     textDecoration: 'none',
                   }}
                 >
-                  開啟筆記 Notes →
+                  讀論文 →
                 </a>
                 <a
-                  href="https://github.com/hsjinde/my-note"
+                  href="https://github.com/hsjinde/Enhancing-SPARQL-Query-Performance-With-Recurrent-Neural-Networks"
                   target="_blank" rel="noopener noreferrer"
-                  style={{
-                    fontSize: '0.75rem',
-                    color: 'var(--text-tertiary)',
-                    textDecoration: 'none',
-                  }}
+                  style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', textDecoration: 'none' }}
                 >
-                  Repo ↗
+                  Code ↗
                 </a>
               </div>
             </BentoCard>
           </div>
 
-          {/* ── Card 4: Infrastructure (4 cols) ── */}
+          {/* ── Card 4: Security（量化但隱諱）(4 cols) ── */}
           <div className="bento-col-4">
             <BentoCard delay={0.2} className="h-full relative overflow-hidden">
               {/* Static CRT scanline texture only — a flat terminal identity with no animated
@@ -230,10 +267,10 @@ export default function BentoGrid() {
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
                     {[
-                      { icon: Shield,    label: 'CVE Research',     status: 'Active', color: 'var(--accent-red)'    },
-                      { icon: Activity,  label: 'Antivirus Dev',    status: 'Core',   color: 'var(--accent-purple)' },
-                      { icon: Server,    label: 'System Security',  status: 'Deep',   color: 'var(--accent-blue)'   },
-                      { icon: Globe,     label: 'Zero Trust CDN',   status: 'CF',     color: 'var(--accent-orange)' },
+                      { icon: Shield,   label: 'CVE 復現研究',  status: '6+',   color: 'var(--accent-red)'    },
+                      { icon: Activity, label: '防毒引擎開發',  status: '本業', color: 'var(--accent-purple)' },
+                      { icon: Flag,     label: 'CTF 參賽',      status: '2025', color: 'var(--accent-orange)' },
+                      { icon: Globe,    label: 'Zero Trust 防護', status: '全站', color: 'var(--accent-green)'  },
                     ].map(({ icon: Icon, label, status, color }) => (
                       <div key={label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -285,7 +322,7 @@ export default function BentoGrid() {
             </BentoCard>
           </div>
 
-          {/* ── Card 5: CI/CD (3 cols) ── */}
+          {/* ── Card 5: CI/CD — 真實 pipeline (3 cols) ── */}
           <div className="bento-col-3">
             <BentoCard delay={0.25} className="h-full">
               <div className="flex items-center gap-2" style={{ marginBottom: 20 }}>
@@ -294,12 +331,12 @@ export default function BentoGrid() {
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 {[
-                  { step: 'Code Push',    ok: true  },
-                  { step: 'Security Scan',ok: true  },
-                  { step: 'Test / Build', ok: true  },
-                  { step: 'Dockerize',    ok: true  },
-                  { step: 'Auto Fix',     ok: false },
-                ].map(({ step, ok }) => (
+                  { step: 'git push',         mark: '✓' },
+                  { step: 'type-check',       mark: '✓' },
+                  { step: 'build',            mark: '✓' },
+                  { step: 'deploy · CF Pages', mark: '✓' },
+                  { step: 'manual steps',     mark: '0' },
+                ].map(({ step, mark }) => (
                   <div key={step} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontFamily: 'var(--font-body)' }}>{step}</span>
                     <span
@@ -312,13 +349,14 @@ export default function BentoGrid() {
                         justifyContent: 'center',
                         fontSize: '0.625rem',
                         fontWeight: 700,
-                        background: ok ? 'rgba(48,209,88,0.15)' : 'rgba(255,159,10,0.15)',
-                        color: ok ? 'var(--accent-green)' : 'var(--accent-orange)',
-                        border: `1px solid ${ok ? 'rgba(48,209,88,0.25)' : 'rgba(255,159,10,0.25)'}`,
+                        background: 'rgba(48,209,88,0.15)',
+                        color: 'var(--accent-green)',
+                        border: '1px solid rgba(48,209,88,0.25)',
                         flexShrink: 0,
+                        fontFamily: 'var(--font-mono)',
                       }}
                     >
-                      {ok ? '✓' : '⟳'}
+                      {mark}
                     </span>
                   </div>
                 ))}
@@ -326,67 +364,86 @@ export default function BentoGrid() {
             </BentoCard>
           </div>
 
-          {/* ── Card 6: Performance (6 cols) ── */}
+          {/* ── Card 6: 開源 Claude Code Skills (6 cols) ── */}
           <div className="bento-col-6">
-            <BentoCard delay={0.3}>
-              <div className="flex items-center gap-2 relative z-10" style={{ marginBottom: 20 }}>
-                <Code2 size={15} style={{ color: 'var(--accent-blue)' }} />
-                <span className="path-label">research</span>
+            <BentoCard delay={0.3} className="h-full">
+              <div className="flex items-center gap-2" style={{ marginBottom: 14 }}>
+                <Bot size={15} style={{ color: 'var(--accent-purple)' }} />
+                <span className="path-label">agent tools</span>
               </div>
-              <div className="bento-metrics-row">
-                {[
-                  { metric: 'NLP / RNN', value: 'IEEE',   label: 'Published Paper',     color: 'var(--accent-green)'  },
-                  { metric: 'SPARQL',    value: 'Query',  label: 'Performance Enhance', color: 'var(--accent-blue)'   },
-                  { metric: 'YOLO',      value: 'Vision', label: 'Object Detection',    color: 'var(--accent-purple)' },
-                ].map(({ metric, value, label, color }) => (
-                  <div key={metric}>
-                    <p className="text-label" style={{ marginBottom: 6 }}>{metric}</p>
-                    <p
-                      className="text-title"
+              <p className="text-title" style={{ color: 'var(--text-primary)', marginBottom: 8, fontFamily: 'var(--font-heading)' }}>
+                開源 Claude Code Skills × 4
+              </p>
+              <p className="text-body" style={{ fontSize: '0.8125rem', marginBottom: 18 }}>
+                寫給 AI agent 用的工具，全部開源、上架 skills.sh——每一個都是自己每天在用，才敢放上去的。
+              </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 18 }}>
+                {AGENT_SKILLS.map(({ name, desc, href }) => (
+                  <div key={name} style={{ display: 'flex', alignItems: 'baseline', gap: 10, flexWrap: 'wrap' }}>
+                    <a
+                      href={href}
+                      target="_blank" rel="noopener noreferrer"
                       style={{
-                        color,
-                        marginBottom: 6,
                         fontFamily: 'var(--font-mono)',
-                        fontSize: '1.5rem',
+                        fontSize: '0.8125rem',
+                        fontWeight: 600,
+                        color: 'var(--accent-purple)',
+                        textDecoration: 'none',
                       }}
                     >
-                      {value}
-                    </p>
-                    <p style={{ fontSize: '0.6875rem', color: 'var(--text-tertiary)', fontFamily: 'var(--font-body)' }}>{label}</p>
+                      {name} ↗
+                    </a>
+                    <span style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', fontFamily: 'var(--font-body)' }}>
+                      {desc}
+                    </span>
                   </div>
                 ))}
               </div>
+              <a
+                href="https://www.skills.sh/hsjinde"
+                target="_blank" rel="noopener noreferrer"
+                style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', textDecoration: 'none' }}
+              >
+                skills.sh/hsjinde ↗
+              </a>
             </BentoCard>
           </div>
 
-          {/* ── Card 7: Build Stats (6 cols) ── */}
+          {/* ── Card 7: Core Stack (6 cols) ── */}
           <div className="bento-col-6">
-            <BentoCard delay={0.35}>
+            <BentoCard delay={0.35} className="h-full">
               <div className="flex items-center gap-2" style={{ marginBottom: 20 }}>
-                <Cpu size={15} style={{ color: 'var(--text-tertiary)' }} />
-                <span className="path-label">stats</span>
+                <Code2 size={15} style={{ color: 'var(--accent-blue)' }} />
+                <span className="path-label">stack</span>
               </div>
-              <div className="bento-metrics-row">
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
                 {[
-                  { label: 'Repositories', value: 40,  suffix: '+' },
-                  { label: 'Containers',   value: 8,   suffix: ''  },
-                  { label: 'IEEE Papers',  value: 1,   suffix: ''  },
-                ].map(({ label, value, suffix }) => (
-                  <div key={label}>
-                    <p
-                      style={{
-                        color: 'var(--text-primary)',
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: '2.25rem',
-                        fontWeight: 700,
-                        marginBottom: 4,
-                        letterSpacing: '-0.01em',
-                      }}
-                    >
-                      <AnimatedCounter target={value} suffix={suffix} />
-                    </p>
-                    <p className="text-label">{label}</p>
-                  </div>
+                  { label: 'Python',               color: 'var(--accent-green)'  },
+                  { label: 'TypeScript',           color: 'var(--accent-blue)'   },
+                  { label: 'C / Java',             color: 'var(--accent-teal)'   },
+                  { label: 'React 19',             color: 'var(--accent-blue)'   },
+                  { label: 'Django · SQLite',      color: 'var(--accent-teal)'   },
+                  { label: 'Docker',               color: 'var(--accent-blue)'   },
+                  { label: 'GitHub Actions',       color: 'var(--accent-purple)' },
+                  { label: 'GitLab CI',            color: 'var(--accent-orange)' },
+                  { label: 'Cloudflare',           color: 'var(--accent-orange)' },
+                  { label: 'PyTorch · TensorFlow', color: 'var(--accent-red)'    },
+                  { label: 'LLM · RAG',            color: 'var(--accent-purple)' },
+                ].map((s) => (
+                  <span
+                    key={s.label}
+                    className="skill-badge"
+                    style={{
+                      background: `color-mix(in srgb, ${s.color} 12%, transparent)`,
+                      border: `1px solid color-mix(in srgb, ${s.color} 30%, transparent)`,
+                      color: s.color,
+                      padding: '7px 18px',
+                      fontSize: '0.875rem',
+                      fontFamily: 'var(--font-mono)',
+                    }}
+                  >
+                    {s.label}
+                  </span>
                 ))}
               </div>
             </BentoCard>

@@ -5,9 +5,9 @@ import SignalField from './SignalField'
 
 const roles = [
   'Security Software Engineer',
-  'Backend Developer',
   'Self-Hosted Infra Builder',
-  'AI Systems Tinkerer',
+  'IEEE-Published NLP Researcher',
+  'AI Agent Toolsmith',
 ]
 
 export default function Hero() {

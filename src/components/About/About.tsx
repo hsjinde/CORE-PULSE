@@ -45,13 +45,17 @@ export default function About() {
                 fontFamily: 'var(--font-body)',
               }}
             >
-              嗨，我是 Ethan。一名把<em style={{ fontStyle: 'italic', color: 'var(--text-primary)' }}>資安</em>當本業、
-              把基礎設施當愛好的軟體工程師。
+              嗨，我是 Ethan。白天寫資安軟體，
+              下班把一台 VPS 當<em style={{ fontStyle: 'italic', color: 'var(--text-primary)' }}>自己的機房</em>玩。
+            </motion.p>
+            <motion.p variants={item} className="text-body" style={{ maxWidth: 480, marginBottom: 16 }}>
+              本業在國防部做資安軟體開發，日常就是 CVE 研究跟防毒引擎。下班後的時間大多丟給自架服務：
+              郵件系統、LLM 代理、AI 助理、筆記站，全部 Docker 化跑在 VPS 上，再用 Cloudflare
+              串成一套 push 上去就自動部署的邊緣架構——每一個都實際在用，不是玩具。
             </motion.p>
             <motion.p variants={item} className="text-body" style={{ maxWidth: 480 }}>
-              我在國防部做資安軟體開發，平常跟 CVE 和防毒引擎打交道。工作之外，我把一台 VPS
-              經營成自己的機房：自架郵件系統、LLM 代理、Discord AI 助理，再用 Cloudflare
-              把它們串成一套完整的邊緣架構。我相信自己架過一遍，才算真的懂。
+              研究所留下的底子是 NLP：碩論用 RNN 把自然語言轉成 SPARQL 查詢，發表在 IEEE
+              Access。我相信的事一直很簡單——自己架一遍，才算真的懂。
             </motion.p>
           </div>
 
