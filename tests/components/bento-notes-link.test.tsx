@@ -40,14 +40,16 @@ beforeAll(() => {
 });
 
 describe('BentoGrid 筆記主入口', () => {
-  it('AI Agent Infrastructure 卡片主按鈕導向筆記站', () => {
+  it('self-hosted 卡片的 notes 服務連結導向筆記站', () => {
     render(
       <MemoryRouter>
         <BentoGrid />
       </MemoryRouter>
     );
-    const link = screen.getByRole('link', { name: /開啟筆記 Notes/ });
-    expect(link).toHaveAttribute('href', NOTES_URL);
+    // Skills & Infrastructure 改版後,筆記入口是 self-hosted 服務清單中的「notes ↗」連結
+    const links = screen.getAllByRole('link');
+    const link = links.find((l) => l.getAttribute('href') === NOTES_URL);
+    expect(link).toBeTruthy();
     expect(link).toHaveAttribute('target', '_blank');
     expect(link).toHaveAttribute('rel', expect.stringContaining('noopener'));
   });
