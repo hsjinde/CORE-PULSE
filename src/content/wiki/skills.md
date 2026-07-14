@@ -27,7 +27,7 @@ sensitivity: public
 
 - 部署維運開源專案 **CLIProxyAPI** 統一管理 LLM API（代理本身是開源專案；/ask 頁面的 SSE 串流、限流、prompt guardrails 則是我自己實作的）
 - **Cloudflare Workers AI**：my-note-web 的筆記問答功能
-- **AI agent 工具開發**：寫過兩個開源 Claude Code skills——server-security-audit（Docker 伺服器唯讀安全掃描）與 cloudflare-use（D1 / R2 直連 REST 操作），都是自己每天在用的工具
+- **AI agent 工具開發**：寫過四個開源 Claude Code skills——server-security-audit（Docker 伺服器唯讀安全掃描）、cloudflare-use（D1 / R2 直連 REST 操作）、ui-fix-verify（UI 修改強制截圖驗證）、note-maintain（Obsidian 筆記庫自動化維護），都是自己每天在用的工具，全部上架 skills.sh
 - OpenClaw / Hermes AI 助理，串 Discord 使用
 - 研究所時期：PyTorch、RNN、多標籤學習（BR / CC / Ensemble BR），成果發表於 IEEE Access
 

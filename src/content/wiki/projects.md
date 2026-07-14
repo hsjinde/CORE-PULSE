@@ -43,10 +43,12 @@ sensitivity: public
 
 ## 開源 Claude Code Skills
 
-自己寫、自己每天在用的兩個 AI agent 工具，都開源在 GitHub 上：
+自己寫、自己每天在用的四個 AI agent 工具，全部開源在 GitHub，並上架到 skills.sh：
 
-- **server-security-audit**（github.com/hsjinde/server-security-audit-skills）：對 Docker Linux 伺服器做可重複的唯讀安全掃描——容器盤點、防火牆 / SSH / fail2ban 體檢、Postfix + Dovecot 登入與寄信活動分析。源自一次真實的事件應變：當時抓到 fail2ban filter 對長達數小時的暴力破解完全沒反應、mail server 連登入日誌都沒開，這些教訓都內建成檢查項目。附「哪些可自動修、哪些必須先問過」的安全政策。
-- **cloudflare-use**（github.com/hsjinde/cloudflare-use-skill）：讓 AI agent 安全快速操作 Cloudflare D1 / R2 的 skill——繞開 shell 與 wrangler、直接打 REST API，零設定自動探測資料庫與 bucket，解掉 Windows PowerShell BOM 亂碼與 wrangler 冷啟動慢的實戰痛點。
+- **server-security-audit**（github.com/hsjinde/server-security-audit-skills ｜ skills.sh/hsjinde/server-security-audit-skills）：對 Docker Linux 伺服器做可重複的唯讀安全掃描——容器盤點、防火牆 / SSH / fail2ban 體檢、Postfix + Dovecot 登入與寄信活動分析。源自一次真實的事件應變：當時抓到 fail2ban filter 對長達數小時的暴力破解完全沒反應、mail server 連登入日誌都沒開，這些教訓都內建成檢查項目。附「哪些可自動修、哪些必須先問過」的安全政策。
+- **cloudflare-use**（github.com/hsjinde/cloudflare-use-skill ｜ skills.sh/hsjinde/cloudflare-use-skill）：讓 AI agent 安全快速操作 Cloudflare D1 / R2 的 skill——繞開 shell 與 wrangler、直接打 REST API，零設定自動探測資料庫與 bucket，解掉 Windows PowerShell BOM 亂碼與 wrangler 冷啟動慢的實戰痛點。
+- **ui-fix-verify**（github.com/hsjinde/ui-fix-verify ｜ skills.sh/hsjinde/ui-fix-verify）：強制 AI 的 UI 修改走「量測 → 改 → 截圖驗證 → 回報」流程——解決 AI 改完 CSS 就宣稱完成、實際還是歪的老問題。把「太高了」這種主觀描述轉成具體像素數據，改動前先建 checkpoint commit 可一鍵退回，手機版 375px 強制驗證。
+- **note-maintain**（github.com/hsjinde/note-maintain ｜ skills.sh/hsjinde/note-maintain）：Obsidian 筆記庫的自動化維護——健康檢查（孤立頁面、斷裂連結、過時內容）、安全修正、消化網頁剪藏、規則同步、記錄日誌一次跑完。能自動修的直接修，需要人工決策的收成編號清單，減少往返。
 
 ## OpenClaw / Hermes — Discord AI 助理
 
