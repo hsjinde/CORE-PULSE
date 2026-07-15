@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>林晉德 Ethan Lin — Resume</title>
+<style>
+  @page { size: A4; margin: 14mm 16mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body {
+    font-family: "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", sans-serif;
+    font-size: 9.5pt; line-height: 1.45; color: #2b2b2b;
+    max-width: 178mm; margin: 0 auto; padding: 24px 8px;
+  }
+  h1 { font-size: 20pt; font-weight: 700; letter-spacing: .5px; }
+  h1 .en { font-size: 12pt; font-weight: 600; color: #555; margin-left: 6px; }
+  .role { font-size: 10.5pt; color: #444; margin-top: 2px; }
+  .contact { font-size: 8.5pt; color: #777; margin-top: 4px; }
+  .contact a { color: #777; text-decoration: none; }
+  .summary { margin: 10px 0 4px; color: #333; }
+  h2 {
+    font-size: 10.5pt; font-weight: 700; color: #1a1a1a;
+    border-bottom: 1px solid #d9d9d9; padding-bottom: 3px;
+    margin: 14px 0 7px;
+  }
+  .item { margin-bottom: 8px; }
+  .item-head { display: flex; justify-content: space-between; align-items: baseline; }
+  .item-head b { font-size: 10pt; }
+  .item-head .meta { font-size: 8.5pt; color: #888; white-space: nowrap; margin-left: 12px; }
+  ul { margin: 3px 0 0 16px; }
+  li { margin-bottom: 2px; }
+  .cite { font-size: 9pt; color: #333; margin-bottom: 3px; }
+  @media print { body { padding: 0; } }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>林晉德<span class="en">Ethan Lin</span></h1>
+  <div class="role">資安軟體工程師 · Security Software Engineer</div>
+  <div class="contact">ethan19980803@gmail.com · github.com/hsjinde · www.19980803.xyz · LinkedIn: 晉德 林</div>
+</header>
+
+<p class="summary">
+現任職於國防部的資安軟體工程師，從事軍用軟體開發，專注 CVE 弱點研究與防毒相關開發，約三年經驗。碩士論文成果發表於 IEEE Access。
+工作之外長期自架並維運基礎設施：8 個 Docker 容器組成的郵件系統（穩定運行 2 年以上）、Cloudflare 邊緣全端網站、自架 LLM 代理，
+並開源 4 個 agentic 工具上架 skills.sh。正朝 AI systems / SRE / DevSecOps 方向累積——相信「自己架一遍，才算真的懂」。
+</p>
+
+<h2>工作經歷</h2>
+<div class="item">
+  <div class="item-head"><b>國防部 — 資安軟體工程師</b><span class="meta">2023/11 – 現在</span></div>
+  <ul>
+    <li>軍用軟體之設計與開發</li>
+    <li>CVE 弱點研究與分析、防毒相關軟體開發</li>
+    <li>因單位性質特殊，專案細節不便公開</li>
+  </ul>
+</div>
+
+<h2>學歷</h2>
+<div class="item">
+  <div class="item-head"><b>國立中興大學 — 資訊管理學系 碩士</b><span class="meta">2020/9 – 2023/1</span></div>
+  <ul>
+    <li>研究方向：自然語言處理、多標籤學習與知識圖譜查詢</li>
+  </ul>
+</div>
+
+<h2>論文發表</h2>
+<div class="item">
+  <p class="cite">Y.-H. Chen, E. J.-L. Lu, and J.-D. Lin, “Enhancing SPARQL Query Performance With Recurrent Neural Networks”, <i>IEEE Access</i>, vol. 11, pp. 92209–92224, 2023. DOI: 10.1109/ACCESS.2023.3308691</p>
+  <ul>
+    <li>以 Binary Relevance / Classifier Chains 多標籤學習結合 RNN（GloVe / BERT / POS 詞嵌入），將自然語言問題自動轉換為 SPARQL 查詢</li>
+    <li>提出 Ensemble BR 納入標籤關聯：QALD-7/8/9 與 LC-QuAD 準確率 82.6% / 93.94% / 76.82% / 76.1%，複雜問句佔 72.1% 的 LC-QuAD 較單獨 BR 提升 12%；End-to-End 優於 QAMP、DTQA</li>
+    <li>訓練與查詢兩階段程式碼開源於 GitHub</li>
+  </ul>
+</div>
+
+<h2>Side Projects（皆實際運行中）</h2>
+
+<div class="item">
+  <div class="item-head"><b>CORE PULSE — 個人網站全端開發</b><span class="meta">www.19980803.xyz</span></div>
+  <ul>
+    <li>React 19 + TypeScript 前端；Cloudflare Pages Functions + D1 + R2 邊緣後端，HMAC 簽章 session 的自製 CMS 後台</li>
+    <li>SSE 串流 LLM 問答頁：每日 per-IP 限流、輸入清洗、prompt guardrails</li>
+    <li>GitHub Actions CI/CD，push 即自動 type-check、build、部署</li>
+  </ul>
+</div>
+
+<div class="item">
+  <div class="item-head"><b>自架郵件系統（開源）</b><span class="meta">github.com/hsjinde/mail-server</span></div>
+  <ul>
+    <li>Postfix / Dovecot / OpenDKIM / Django / nginx / certbot 共 8 個容器全套容器化，通過 SPF、DKIM 驗證，穩定運行 2 年以上、每日實際使用</li>
+  </ul>
+</div>
+
+<div class="item">
+  <div class="item-head"><b>my-note-web — Obsidian 筆記發佈平台</b><span class="meta">note.19980803.xyz</span></div>
+  <ul>
+    <li>單一 Cloudflare Worker（Hono）服務 React SPA 與 API：GitHub webhook 增量同步至 KV、線上編輯自動 commit 回 vault、公私內容白名單隔離</li>
+    <li>RAG 筆記問答：以筆記庫為知識庫檢索、Workers AI 生成回答</li>
+  </ul>
+</div>
+
+<div class="item">
+  <div class="item-head"><b>自架 LLM 基礎設施</b><span class="meta">cli.19980803.xyz</span></div>
+  <ul>
+    <li>部署維運開源專案 CLIProxyAPI 統一管理多家 LLM API，支撐個人網站 /ask 與 Discord AI 助理的推論流量</li>
+  </ul>
+</div>
+
+<div class="item">
+  <div class="item-head"><b>開源 Claude Code Skills × 4（上架 skills.sh）</b><span class="meta">github.com/hsjinde</span></div>
+  <ul>
+    <li><b>server-security-audit</b>：Docker 伺服器唯讀安全掃描（防火牆 / SSH / fail2ban / 郵件登入分析），源自真實事件應變經驗</li>
+    <li><b>cloudflare-use</b>：繞開 wrangler 直連 REST 操作 D1 / R2 的 agent 工具；<b>ui-fix-verify</b>：UI 修改強制「量測 → 截圖驗證」流程；<b>note-maintain</b>：Obsidian 筆記庫自動化健檢與維護</li>
+  </ul>
+</div>
+
+<h2>技能</h2>
+<ul>
+  <li><b>程式語言</b>：Python、C、Java、TypeScript</li>
+  <li><b>資安</b>：CVE 弱點研究、防毒軟體開發</li>
+  <li><b>基礎設施</b>：Docker、Cloudflare（Pages / Functions / D1 / R2 / Tunnel / Zero Trust）、GitHub Actions CI/CD、Linux VPS、nginx、Postfix</li>
+  <li><b>AI / ML</b>：LLM 整合、RAG、Agentic 工具開發、PyTorch、RNN、多標籤學習、SPARQL / 知識圖譜</li>
+</ul>
+
+</body>
+</html>

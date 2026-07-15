@@ -24,7 +24,7 @@ sensitivity: public
 
 下班後的時間大多花在自架服務上：
 
-- **自架郵件系統**：Postfix / Dovecot / OpenDKIM / Django / nginx / certbot，全部 Docker 化跑在 VPS 上，日常實際在用；管理介面 postfix-manager.19980803.xyz
+- **自架郵件系統**：Postfix / Dovecot / OpenDKIM / Django / nginx / certbot，全部 Docker 化部署在對外的 VPS 上；ethan@19980803.xyz 是真的收得到信、我每天在用的信箱，通過 SPF / DKIM 驗證、親手維運，管理介面 postfix-manager.19980803.xyz
 - **my-note-web**（note.19980803.xyz）：把 Obsidian 筆記庫發佈成網站——GitHub webhook 增量同步、KV 索引、線上編輯自動 commit 回 repo、Workers AI 筆記問答
 - **LLM 基礎設施**：在 VPS 上部署維運開源專案 CLIProxyAPI（cli.19980803.xyz，管理介面 cli.19980803.xyz/management.html）統一管理各家模型 API，這個網站 /ask 的大腦就接在上面
 - **OpenClaw / Hermes**：串進 Discord 的 AI 助理，偶爾幫我處理雜事

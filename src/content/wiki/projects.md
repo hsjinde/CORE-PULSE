@@ -30,9 +30,10 @@ sensitivity: public
 
 ## 自架郵件系統
 
-- 在 VPS 上用 Docker 自架完整郵件服務：Postfix（SMTP）+ Dovecot（IMAP/POP3）+ OpenDKIM（簽章）+ Django（管理層）+ nginx + certbot（自動 TLS）
-- 通過 SPF / DKIM 驗證，是我日常實際在用的信箱，不是玩具
-- 管理介面：postfix-manager.19980803.xyz
+- 在對外的 VPS 上用 Docker 自架完整郵件服務：Postfix（SMTP）+ Dovecot（IMAP/POP3）+ OpenDKIM（簽章）+ Django（管理層）+ nginx + certbot（自動 TLS）
+- **真的能寄信**：你現在就可以寄一封信到 ethan@19980803.xyz，它會進到這套系統的收件匣——不是展示用的假信箱
+- 部署在真實環境、長期穩定運行：通過 SPF / DKIM 驗證，對外寄得出、不被退信也不落垃圾桶，是我每天實際在用的信箱
+- 親手維運：管理後台 postfix-manager.19980803.xyz 掌握帳號與收發狀態
 - 程式碼開源：https://github.com/hsjinde/mail-server
 
 ## 自架 LLM 基礎設施
