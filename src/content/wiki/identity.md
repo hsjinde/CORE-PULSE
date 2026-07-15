@@ -9,4 +9,4 @@ sensitivity: public
 
 工作之外，我把一台 VPS 經營成自己的實驗室：上面跑著自架的郵件伺服器（Postfix + Dovecot + OpenDKIM + Django）、LLM API 代理，還有串進 Discord 的 AI 助理。搭配 Cloudflare 的邊緣服務（Pages、Functions、D1、R2、Tunnel、Zero Trust），你現在看到的 CORE PULSE 整個網站——前端、後端、資料庫、部署管線——都是我自己蓋的，連 /ask 頁面背後接的都是我自架的 LLM proxy。
 
-資安是我的本業，自架基礎設施是我的愛好，SRE 與 AI 系統則是我正在用 side project 一步步累積的方向。
+資安是我的本業，自架基礎設施是我的愛好，AI systems、SRE 與 DevSecOps 則是我正在用 side project 一步步累積的方向。
