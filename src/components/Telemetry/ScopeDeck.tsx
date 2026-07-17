@@ -1,4 +1,5 @@
 import { Gauge, Layers, Waves } from "lucide-react";
+import { AsciiMeter } from "@/components/Telemetry/AsciiMeter";
 import type { SignalSample } from "@/hooks/useSignalClock";
 import { cn } from "@/lib/utils";
 
@@ -25,17 +26,6 @@ function Cell({
 					{unit && <span className="ml-1 text-[10px] text-dim">{unit}</span>}
 				</div>
 			</div>
-		</div>
-	);
-}
-
-function Meter({ value }: { value: number }) {
-	return (
-		<div className="h-1.5 w-full overflow-hidden rounded-full bg-carbon-600">
-			<div
-				className="h-full rounded-full bg-gradient-to-r from-beacon-600 to-beacon-300"
-				style={{ width: `${Math.max(2, Math.min(100, value * 100))}%` }}
-			/>
 		</div>
 	);
 }
@@ -72,7 +62,7 @@ export function ScopeDeck({ sample }: { sample: SignalSample }) {
 							{(sample.phase * 100).toFixed(0)}%
 						</span>
 					</div>
-					<Meter value={sample.phase} />
+					<AsciiMeter value={sample.phase} />
 				</div>
 			</div>
 
