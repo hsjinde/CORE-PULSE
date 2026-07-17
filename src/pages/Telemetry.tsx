@@ -4,6 +4,8 @@ import { ChannelLegend } from "@/components/Telemetry/ChannelLegend";
 import { Readout } from "@/components/Telemetry/Readout";
 import { ReticleFrame } from "@/components/Telemetry/Reticle";
 import { ScopeDeck } from "@/components/Telemetry/ScopeDeck";
+import { SyslogFeed } from "@/components/Telemetry/SyslogFeed";
+import { Typewriter } from "@/components/Telemetry/Typewriter";
 import { ShaderComponent } from "@/components/ui/waves-shader";
 import { useSignalClock } from "@/hooks/useSignalClock";
 
@@ -69,7 +71,7 @@ export default function Telemetry() {
 							</span>
 						</div>
 						<h1 className="font-mono text-3xl font-medium tracking-tight glow-beacon sm:text-5xl">
-							CORE.OSCILLON
+							<Typewriter text="CORE.OSCILLON" />
 						</h1>
 						<p className="mt-2 max-w-xs text-balance text-[10px] uppercase tracking-wider text-dim sm:text-xs">
 							Live Signal Analyser · GPU Coswarp Domain Trace
@@ -103,10 +105,11 @@ export default function Telemetry() {
 					</div>
 				</header>
 
-				{/* Mid band: live readout (left) + channel legend (right). */}
+				{/* Mid band: live readout + syslog (left) + channel legend (right). */}
 				<div className="flex flex-1 items-center justify-between gap-4 my-4">
-					<div className="pointer-events-auto animate-fade-in">
+					<div className="pointer-events-auto flex animate-fade-in flex-col gap-3">
 						<Readout sample={sample} />
+						<SyslogFeed className="hidden lg:block" />
 					</div>
 					<div className="pointer-events-auto hidden animate-fade-in sm:block">
 						<ChannelLegend sample={sample} />
