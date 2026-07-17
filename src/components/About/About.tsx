@@ -45,17 +45,17 @@ export default function About() {
                 fontFamily: 'var(--font-body)',
               }}
             >
-              嗨，我是 Ethan。白天寫資安軟體，
-              下班把一台 VPS 當<em style={{ fontStyle: 'italic', color: 'var(--text-primary)' }}>自己的機房</em>玩。
+              我是 Ethan。白天寫資安軟體，
+              下班顧一台<em style={{ fontStyle: 'italic', color: 'var(--text-primary)' }}>自己的 VPS</em>。
             </motion.p>
             <motion.p variants={item} className="text-body" style={{ maxWidth: 480, marginBottom: 16 }}>
-              本業在國防部做資安軟體開發，日常就是 CVE 研究跟防毒引擎。下班後的時間大多丟給自架服務：
-              郵件系統、LLM 代理、AI 助理、筆記站，全部 Docker 化跑在 VPS 上，再用 Cloudflare
-              串成一套 push 上去就自動部署的邊緣架構，平常收信、查筆記都跑在這上面。
+              本業是資安軟體開發，日常就是 CVE 研究跟防毒引擎。下班的時間大多花在自架服務上：
+              郵件系統、LLM 代理、AI 助理、筆記站，全部 Docker 化跑在 VPS 上，用 Cloudflare
+              串起來，push 上去就自動部署。平常收信、查筆記用的就是這套。
             </motion.p>
             <motion.p variants={item} className="text-body" style={{ maxWidth: 480 }}>
-              研究所留下的底子是 NLP：碩論用 RNN 把自然語言轉成 SPARQL 查詢，發表在 IEEE
-              Access。至於為什麼什麼都想自己架，大概就是好奇——架下去才知道文件沒寫的坑在哪。
+              研究所做的是 NLP，碩論用 RNN 把自然語言轉成 SPARQL 查詢。至於為什麼什麼都自己架，
+              原因很簡單：文件沒寫的坑，架下去才會知道。
             </motion.p>
           </div>
 

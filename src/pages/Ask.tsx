@@ -109,8 +109,8 @@ export default function Ask() {
           ) : (
             <div className="ask-empty">
               <p className="ask-empty-lead">
-                嗨，我是 Ethan（<span style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-primary)' }}>hsjinde</span>）。
-                問我任何關於我的事 —— 技術棧、專案、資安工作、怎麼聯絡。
+                我是 Ethan（<span style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-primary)' }}>hsjinde</span>）。
+                想知道什麼直接問：技術棧、專案、資安工作、聯絡方式都可以。
               </p>
               <div className="ask-chips">
                 {askSuggestions.map((s) => (
