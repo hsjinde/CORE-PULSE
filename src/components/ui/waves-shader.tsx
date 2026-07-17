@@ -38,6 +38,9 @@ export const ShaderComponent = () => {
         }
       `;
 
+			// 磷光示波器:近黑底 + 細格線 + 四條波形軌跡,對應 ChannelLegend 的
+			// CH·1(ring 10×)/CH·2(ring 20×)/WRP(coswarp)/REF(carrier)。
+			// 色彩紀律:底盤灰階,只有數據通道發色(beacon 綠、amber 琥珀)。
 			const fragmentShader = `
         precision highp float;
 
@@ -45,35 +48,44 @@ export const ShaderComponent = () => {
         uniform float u_time;
         varying vec2 vUv;
 
-        const float PI = 3.1415926535897932384626433832795;
-        const float TAU = PI * 2.;
-
-        void coswarp(inout vec3 trip, float warpsScale ){
-          trip.xyz += warpsScale * .1 * cos(3. * trip.yzx + (u_time * .25));
-          trip.xyz += warpsScale * .05 * cos(11. * trip.yzx + (u_time * .25));
-          trip.xyz += warpsScale * .025 * cos(17. * trip.yzx + (u_time * .25));
+        /* 軌跡亮度:銳利核心 + 微弱磷光暈 */
+        float trace(vec2 uv, float y, float sharp) {
+          float d = abs(uv.y - y);
+          return exp(-d * sharp) + exp(-d * 16.) * .16;
         }
 
         void main() {
-          vec2 uv = (gl_FragCoord.xy - u_resolution * .5) / u_resolution.yy + 0.5;
+          /* 置中座標,y 範圍約 [-.5, .5],x 依長寬比延伸 */
+          vec2 uv = (gl_FragCoord.xy - u_resolution * .5) / u_resolution.y;
+          float t = u_time;
 
-          float t = (u_time *.2) + length(fract((uv-.5) *10.));
-          float t2 = (u_time *.1) + length(fract((uv-.5) *20.));
+          vec3 color = vec3(.019);                       /* 近黑底盤 */
 
-          vec2 uv2 = uv;
-          vec3 w = vec3(uv.x, uv.y, 1.);
-          coswarp(w, 3.);
+          /* 示波器分度格線(灰階,克制) */
+          vec2 cell = fract(uv * 10. + .5);
+          float grid = step(.982, cell.x) + step(.982, cell.y);
+          color += vec3(grid * .03);
 
-          uv.x+= w.r;
-          uv.y+= w.g;
+          vec3 beacon = vec3(.188, .820, .345);          /* #30d158 */
+          vec3 amber  = vec3(.984, .749, .141);          /* amber-400 */
 
-          vec3 color = vec3(0., .5, uv2.x);
-          color.r = sin(u_time *.2) + sin(length(uv-.5) * 10.);
-          color.g = sin(u_time *.3) + sin(length(uv-.5) * 20.);
+          /* CH·1 — ring 10x,主磷光軌跡 */
+          float y1 = .16 * sin(uv.x * 10. + t * .9) * sin(uv.x * 3.1 - t * .35);
+          color += beacon * trace(uv, y1, 90.) * .50;
 
-          coswarp(color, 3.);
+          /* CH·2 — ring 20x,次軌跡 */
+          float y2 = -.02 + .09 * sin(uv.x * 20. - t * 1.3) * cos(uv.x * 5. + t * .5);
+          color += beacon * trace(uv, y2, 110.) * .26;
 
-          color = vec3(smoothstep(color.r, sin(t2), sin(t)));
+          /* WRP — coswarp 干涉(琥珀,壓低) */
+          float y3 = -.13 + .06 * cos(uv.x * 3. + t * .25)
+                          + .03 * cos(uv.x * 11. + t * .25)
+                          + .015 * cos(uv.x * 17. + t * .25);
+          color += amber * trace(uv, y3, 120.) * .12;
+
+          /* REF — carrier 基準線(灰,幾乎貼平) */
+          float y4 = .24 + .015 * sin(uv.x * 2. - t * .2);
+          color += vec3(.6) * trace(uv, y4, 140.) * .10;
 
           gl_FragColor = vec4(color, 1.0);
         }
