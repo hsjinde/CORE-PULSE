@@ -164,39 +164,3 @@ export async function getPostById(id: string): Promise<Post | undefined> {
   if (!res.ok) throw new Error('Failed to fetch post')
   return res.json()
 }
-
-export async function savePost(post: Post): Promise<void> {
-  if (!import.meta.env.PROD) {
-    await new Promise(resolve => setTimeout(resolve, 500))
-    const posts = initDB()
-    const index = posts.findIndex(p => p.id === post.id)
-    if (index >= 0) {
-      posts[index] = post
-    } else {
-      posts.unshift(post)
-    }
-    localStorage.setItem(DB_KEY, JSON.stringify(posts))
-    return
-  }
-  
-  const res = await fetch('/api/posts', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    credentials: 'include',
-    body: JSON.stringify(post)
-  })
-  if (!res.ok) throw new Error('Failed to save post')
-}
-
-export async function deletePost(id: string): Promise<void> {
-  if (!import.meta.env.PROD) {
-    await new Promise(resolve => setTimeout(resolve, 300))
-    const posts = initDB()
-    const newPosts = posts.filter(p => p.id !== id)
-    localStorage.setItem(DB_KEY, JSON.stringify(newPosts))
-    return
-  }
-  
-  const res = await fetch(`/api/posts/${id}`, { method: 'DELETE', credentials: 'include' })
-  if (!res.ok) throw new Error('Failed to delete post')
-}

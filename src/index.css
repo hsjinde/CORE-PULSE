@@ -1126,8 +1126,6 @@
 
   .hero-cta-row { margin-bottom: 40px; gap: 10px; }
   .hero-social-row { gap: 16px; flex-wrap: wrap; }
-
-  .admin-main { padding: 100px 16px 80px; }
 }
 
 /* ─── Blog Search & Filter ────────────────────────────────────── */
@@ -1507,64 +1505,6 @@
     width: 34px;
     height: 34px;
   }
-}
-
-/* ─── Admin Dashboard ────────────────────────────────────────── */
-.admin-main {
-  flex: 1;
-  padding: 140px 24px 80px;
-  max-width: 1000px;
-  margin: 0 auto;
-  width: 100%;
-}
-
-.admin-table-scroll {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  padding: 8px 12px;
-}
-
-/* Admin table — prevent text clipping */
-.admin-table-scroll table {
-  table-layout: fixed;
-  width: 100%;
-  min-width: 640px;
-}
-
-.admin-table-scroll th,
-.admin-table-scroll td {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  vertical-align: middle;
-}
-
-/* Title column gets the most space */
-.admin-table-scroll th:first-child,
-.admin-table-scroll td:first-child {
-  width: 45%;
-  word-break: break-word;
-  overflow-wrap: break-word;
-  white-space: normal;
-  overflow: visible;
-  text-overflow: unset;
-}
-
-/* Date column */
-.admin-table-scroll th:nth-child(2),
-.admin-table-scroll td:nth-child(2) {
-  width: 20%;
-}
-
-/* Status column */
-.admin-table-scroll th:nth-child(3),
-.admin-table-scroll td:nth-child(3) {
-  width: 15%;
-}
-
-/* Actions column */
-.admin-table-scroll th:last-child,
-.admin-table-scroll td:last-child {
-  width: 20%;
 }
 
 /* ─── Blog Post Page ──────────────────────────────────────────── */

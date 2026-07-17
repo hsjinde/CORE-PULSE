@@ -14,7 +14,6 @@ database_id = "e3aa19cf-79fc-4d04-8a05-cada7626b559"
 # RATE_LIMIT_DAILY   = "30"
 # WIKI_TOKEN_BUDGET  = "16000"
 # TURNSTILE_ENABLED  = "false"
-# LOGIN_MAX_ATTEMPTS = "10"          # admin 登入 15 分鐘視窗內最大失敗次數
 # Secrets (DO NOT put here):
 #   LLM_API_KEY
 #   RATE_LIMIT_SALT
