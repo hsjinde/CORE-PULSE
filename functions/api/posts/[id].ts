@@ -1,16 +1,11 @@
-import { verifySession } from '../auth-shared';
-
 interface Env {
   core_pulse_blog: {
     prepare: (query: string) => {
       bind: (...args: (string | number | boolean | null)[]) => {
         first: () => Promise<Record<string, unknown> | null>;
-        run: () => Promise<unknown>;
       };
     };
   };
-  ADMIN_PASSWORD: string;
-  SESSION_SECRET: string;
 }
 
 interface EventContext {
@@ -32,7 +27,7 @@ function corsHeaders(origin: string | null): HeadersInit {
   return {
     'Access-Control-Allow-Origin': allowed,
     'Access-Control-Allow-Credentials': 'true',
-    'Access-Control-Allow-Methods': 'GET, DELETE, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Vary': 'Origin',
   };
@@ -62,47 +57,6 @@ export const onRequestGet = async (context: EventContext) => {
   };
 
   return new Response(JSON.stringify(parsedPost), {
-    status: 200,
-    headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) },
-  });
-};
-
-// ---------- DELETE /api/posts/:id (protected) ----------
-
-export const onRequestDelete = async (context: EventContext) => {
-  const { request, env } = context;
-  const origin = request.headers.get('Origin');
-
-  // CORS preflight
-  if (request.method === 'OPTIONS') {
-    return new Response(null, { status: 204, headers: corsHeaders(origin) });
-  }
-
-  // ── Authentication check ──
-  const authenticated = await verifySession(request, env);
-  if (!authenticated) {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-      status: 401,
-      headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) },
-    });
-  }
-
-  const id = context.params.id;
-
-  // Sanity check: id must be a non-empty string
-  if (!id || typeof id !== 'string' || id.length > 200) {
-    return new Response(JSON.stringify({ error: 'Invalid id' }), {
-      status: 400,
-      headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) },
-    });
-  }
-
-  await env.core_pulse_blog
-    .prepare('DELETE FROM posts WHERE id = ?')
-    .bind(id)
-    .run();
-
-  return new Response(JSON.stringify({ success: true }), {
     status: 200,
     headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) },
   });

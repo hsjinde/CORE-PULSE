@@ -34,13 +34,3 @@ CREATE TABLE IF NOT EXISTS chat_rate_limits (
   PRIMARY KEY (ip_hash, date)
 );
 CREATE INDEX IF NOT EXISTS idx_chat_rl_last_ts ON chat_rate_limits(last_ts);
-
--- ── Admin login: brute-force 防護（每個 IP 於時間視窗內的失敗次數）──
-CREATE TABLE IF NOT EXISTS login_attempts (
-  ip_hash       TEXT NOT NULL,
-  window_start  INTEGER NOT NULL,    -- unix ms，15 分鐘視窗起點
-  count         INTEGER NOT NULL DEFAULT 0,
-  last_ts       INTEGER NOT NULL,    -- unix ms
-  PRIMARY KEY (ip_hash, window_start)
-);
-CREATE INDEX IF NOT EXISTS idx_login_attempts_window ON login_attempts(window_start);

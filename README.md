@@ -25,7 +25,6 @@
 | **Projects** | 蘋果式產品頁：Problem → Solution → Result |
 | **Blog/Notes** | LeetCode 演算法筆記 + SRE 技術文章（由 D1 資料庫即時提供） |
 | **Mascot Chat** | 浮動吉祥物（Lottie 動畫）+ LLM 聊天視窗，以第一人稱回答關於我的問題 |
-| **Admin CMS** | `/admin` 後台，登入後可即時新增／編輯／刪除文章（免重新部署） |
 | **Footer** | Build Time、LCP、系統健康度、聯絡表單 |
 
 ---
@@ -39,7 +38,7 @@
 | TypeScript | 5 | 型別安全 |
 | Vite | 5 | 建構工具 |
 | Tailwind CSS | v4 | 原子化樣式 |
-| React Router | 7 | SPA 路由（公開頁 + Admin CMS） |
+| React Router | 7 | SPA 路由 |
 | Framer Motion | Latest | 動畫效果 |
 | Lenis | Latest | 絲滑物理滾動 |
 | Lottie | Latest | 吉祥物動畫 |
@@ -49,8 +48,7 @@
 ### 後端（Cloudflare Pages Functions）
 | 模組 | 用途 |
 |------|------|
-| `functions/api/posts*` | 文章 CRUD API（讀 D1，寫入需登入） |
-| `functions/api/auth/*` | HMAC 簽章 Session（HttpOnly Cookie）登入／登出／驗證 |
+| `functions/api/posts*` | 文章讀取 API（公開，從 D1 讀取） |
 | `functions/api/chat*` | LLM 聊天 SSE 代理（限流、輸入淨化、Wiki 系統提示、Token 預算） |
 
 ### 基礎設施
@@ -101,10 +99,8 @@ npx tsc --noEmit     # 獨立型別檢查（CI build 前執行）
 core-pulse/
 ├── functions/
 │   └── api/                     # Cloudflare Pages Functions（檔案路徑即路由）
-│       ├── posts.ts             # GET(公開) / POST(需登入) 文章
-│       ├── posts/[id].ts        # 單篇讀取 / 刪除
-│       ├── auth/                # login / logout / check
-│       ├── auth-shared.ts       # HMAC Session Cookie 簽發與驗證
+│       ├── posts.ts             # GET(公開) 文章列表
+│       ├── posts/[id].ts        # 單篇讀取
 │       ├── chat.ts              # POST /api/chat（SSE 串流）
 │       ├── chat-*.ts            # 限流 / 淨化 / 提示組裝 / LLM 串接 / Wiki
 │       └── _wiki-gen.ts         # 自動產生，勿手改（git 忽略）
@@ -113,8 +109,7 @@ core-pulse/
 │   │   ├── Navbar/  Hero/  Bento/  Projects/  Blog/  Footer/
 │   │   └── Mascot/              # 浮動吉祥物 + 聊天視窗
 │   ├── pages/
-│   │   ├── Home.tsx  BlogPost.tsx
-│   │   └── Admin/               # AdminLogin / AdminDashboard / AdminEditor
+│   │   └── Home.tsx  BlogPost.tsx
 │   ├── services/
 │   │   ├── api.ts               # 文章資料層（dev: localStorage / prod: D1 fetch）
 │   │   └── chatClient.ts        # 聊天 SSE 用戶端
@@ -140,11 +135,6 @@ core-pulse/
 `src/services/api.ts` 依 `import.meta.env.PROD` 分流：開發時文章讀寫 `localStorage`（免後端），
 生產時打 `/api/posts*` 由 D1 提供。要測真正的後端寫入／刪除，需用 wrangler dev server（即 E2E 的
 webServer），而非 Vite dev server。
-
-### Admin 登入
-無狀態 HMAC 簽章 token 存於 **HttpOnly / Secure / SameSite=Strict** Cookie（`cp_session`，8 小時），
-以 `SESSION_SECRET` 簽發、常數時間比對驗證，登入密碼為 `ADMIN_PASSWORD`。前端 `ProtectedRoute`
-每次掛載時打 `/api/auth/check` 重新驗證。
 
 ### 聊天吉祥物
 `/api/chat` 為 SSE 端點：修剪對話歷史、以雜湊 IP + `RATE_LIMIT_SALT` 做每日限流、淨化輸入、
@@ -174,8 +164,6 @@ Deploy → Cloudflare Pages (wrangler@3)
 | 名稱 | 類型 | 說明 |
 |------|------|------|
 | `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` | GitHub Secret | Pages 部署授權 |
-| `SESSION_SECRET` | CF Secret | Admin Session 簽章金鑰 |
-| `ADMIN_PASSWORD` | CF Secret | Admin 登入密碼 |
 | `LLM_API_KEY` | CF Secret | 聊天模型 API Key |
 | `RATE_LIMIT_SALT` | CF Secret | 聊天限流 IP 雜湊鹽 |
 | `LLM_MODEL` / `LLM_BASE_URL` / `RATE_LIMIT_DAILY` / `WIKI_TOKEN_BUDGET` | CF Var | 聊天行為設定 |
@@ -188,7 +176,7 @@ Deploy → Cloudflare Pages (wrangler@3)
 - [x] **Phase 1** — Vite + React + TS + Tailwind v4 環境建置
 - [x] **Phase 2** — 完整靜態佈局（Hero / Bento / Projects / Blog / Footer）
 - [x] **Phase 3** — GitHub Actions CI/CD 工作流程建立
-- [x] **Phase 4.5** — Cloudflare D1 Serverless CMS + Admin 後台 + Session 認證
+- [x] **Phase 4.5** — Cloudflare D1 Serverless 文章資料庫
 - [x] **Phase 4.6** — LLM 聊天吉祥物（SSE 串流 + 限流 + Wiki 知識庫）
 - [ ] **Phase 4** — Cloudflare R2 圖床設定（`img.19980803.xyz`）
 - [ ] **Phase 5** — RackNerd VPS 啟動 OpenClaw Docker + CF Tunnel

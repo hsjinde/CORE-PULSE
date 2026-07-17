@@ -43,34 +43,17 @@ first. **To change chat/wiki content, edit `src/content/wiki/*.md`, not `_wiki-g
 
 ### Two runtimes, one repo
 - **Client** (`src/`): React SPA, path alias `@/` → `src/`. Routing via react-router-dom
-  in [src/App.tsx](src/App.tsx): public `/`, `/blog/:id`, `/telemetry` (SRE waveform
-  observation deck), `/ask` (full-page LLM chat), plus an admin CMS at
-  `/admin`, `/admin/dashboard`, `/admin/editor/:id?`.
+  in [src/App.tsx](src/App.tsx): `/`, `/blog/:id`, `/telemetry` (SRE waveform
+  observation deck), `/ask` (full-page LLM chat).
 - **Server** (`functions/api/`): Cloudflare Pages Functions. File path = route
   (`functions/api/posts.ts` → `/api/posts`, `functions/api/posts/[id].ts` → `/api/posts/:id`).
   Each function exports `onRequestGet` / `onRequestPost` / `onRequestOptions`.
 
 ### Data layer has a dev/prod split
 [src/services/api.ts](src/services/api.ts) branches on `import.meta.env.PROD`:
-- **Dev:** posts are read/written to `localStorage` (with artificial latency). No backend needed.
-- **Prod:** same functions call `/api/posts*`, backed by the D1 database `core_pulse_blog`
+- **Dev:** posts are read from `localStorage` (seeded with a default post, with artificial latency). No backend needed.
+- **Prod:** same functions call `/api/posts*` (GET-only), backed by the D1 database `core_pulse_blog`
   (binding declared in [wrangler.toml](wrangler.toml)). Tags are stored as a JSON string column.
-
-When testing CMS write/delete behavior against the real backend, you must run the wrangler
-dev server (Playwright's webServer), not the Vite dev server.
-
-### Auth (admin CMS)
-Stateless HMAC-signed session token in an **HttpOnly, Secure, SameSite=Strict** cookie
-(`cp_session`), implemented in [functions/api/auth-shared.ts](functions/api/auth-shared.ts).
-Token = `<exp>.<HMAC-SHA256(exp)>`, signed with `SESSION_SECRET`, 8h lifetime, verified with
-a constant-time compare. Login checks `ADMIN_PASSWORD`. The client's `ProtectedRoute`
-re-verifies with `/api/auth/check` on every mount (cookie is not JS-readable). Protected
-write endpoints call `verifySession()` and return 401 on failure.
-
-Login is additionally brute-force protected by
-[functions/api/auth-rate-limit.ts](functions/api/auth-rate-limit.ts): failed attempts per
-hashed IP are recorded in D1 (15-minute sliding window, `LOGIN_MAX_ATTEMPTS`, default 10);
-only failures count. This is separate from the chat rate limiter by design.
 
 ### Chat page `/ask` (LLM proxy)
 Full-page chat at [src/pages/Ask.tsx](src/pages/Ask.tsx), driven by
@@ -88,13 +71,13 @@ Wiki docs with frontmatter `sensitivity` other than `public` are filtered out of
 ### CORS
 All API functions gate CORS against a hardcoded `ALLOWED_ORIGINS` allowlist
 (prod domains + `http://localhost:5173`). If adding a new origin, update it in **each**
-function file that defines `corsHeaders` (auth-shared, chat-shared, posts — they're duplicated).
+function file that defines `corsHeaders` (chat-shared, posts — they're duplicated).
 
 ## Environment / secrets
 
 Non-secret vars live commented in [wrangler.toml](wrangler.toml); secrets are set via
 `wrangler pages secret put`. Server reads them off `context.env`:
-- Secrets: `LLM_API_KEY`, `RATE_LIMIT_SALT`, `SESSION_SECRET`, `ADMIN_PASSWORD`.
+- Secrets: `LLM_API_KEY`, `RATE_LIMIT_SALT`.
 - Vars: `LLM_MODEL`, `LLM_BASE_URL`, `RATE_LIMIT_DAILY`, `WIKI_TOKEN_BUDGET`, `TURNSTILE_ENABLED`.
 
 `scripts/*.mjs` are ad-hoc operational tools (checking deployed env, diagnosing the LLM
