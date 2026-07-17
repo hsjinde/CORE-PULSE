@@ -104,7 +104,7 @@ endpoint) — not part of the app build. For inspecting D1 / R2, use the `cloudf
 
 GitHub Actions ([.github/workflows/deploy.yml](.github/workflows/deploy.yml)) on push to
 `main`: type-check → build → deploy `dist/` to Cloudflare Pages via `wrangler@3`. PRs run
-lint/test/build only. Domains: `core-pulse.pages.dev` and `www.19980803.xyz`.
+lint/test/build only. Domains: `core-pulse.pages.dev` and `19980803.xyz` (apex).
 
 ## Conventions
 

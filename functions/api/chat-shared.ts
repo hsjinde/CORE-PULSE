@@ -55,7 +55,7 @@ export const DEFAULT_WIKI_TOKEN_BUDGET = 16000;
 
 const ALLOWED_ORIGINS = [
   'https://core-pulse.pages.dev',
-  'https://www.19980803.xyz',
+  'https://19980803.xyz',
   'http://localhost:5173',
 ];
 

@@ -22,7 +22,7 @@ interface EventContext {
 
 const ALLOWED_ORIGINS = [
   'https://core-pulse.pages.dev',
-  'https://www.19980803.xyz',
+  'https://19980803.xyz',
   'http://localhost:5173',
 ];
 

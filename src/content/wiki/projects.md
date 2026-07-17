@@ -11,7 +11,7 @@ sensitivity: public
 - **後端**：Cloudflare Pages Functions + D1（文章資料庫）+ R2（圖床），全部跑在邊緣
 - **AI**：/ask 頁面是 SSE 串流的 LLM 對話，後端接我自架的 CLIProxyAPI，含每日限流、輸入清洗與 prompt guardrails
 - **維運**：GitHub Actions CI/CD，push 到 main 自動部署；後台用 HMAC 簽章的 HttpOnly cookie 驗證
-- **網址**：https://www.19980803.xyz
+- **網址**：https://19980803.xyz
 
 ## 碩士論文 — Enhancing SPARQL Query Performance With Recurrent Neural Networks
 

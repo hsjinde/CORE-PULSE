@@ -10,7 +10,7 @@ sensitivity: public
 - **GitHub**：https://github.com/hsjinde
 - **LinkedIn**：https://www.linkedin.com/in/%E6%99%89%E5%BE%B7-%E6%9E%97-99421a237/
 - **Email**：ethan19980803@gmail.com
-- **個人網站**：https://www.19980803.xyz
+- **個人網站**：https://19980803.xyz
 
 Email 或 LinkedIn 私訊都可以，我通常在下班後回覆（GMT+8），一般一兩天內會回。
 
