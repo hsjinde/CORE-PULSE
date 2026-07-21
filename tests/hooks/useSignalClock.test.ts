@@ -7,7 +7,7 @@ describe("useSignalClock hook", () => {
 		vi.stubGlobal("requestAnimationFrame", (cb: FrameRequestCallback) => {
 			return setTimeout(() => cb(Date.now()), 16);
 		});
-		vi.stubGlobal("cancelAnimationFrame", (id: any) => {
+		vi.stubGlobal("cancelAnimationFrame", (id: ReturnType<typeof setTimeout>) => {
 			clearTimeout(id);
 		});
 		vi.useFakeTimers();

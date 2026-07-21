@@ -140,7 +140,7 @@ export default function SignalField({ intensity = 0.85 }: SignalFieldProps) {
       window.removeEventListener('resize', onResize)
       clearTimeout(rt)
     }
-  }, [reduced])
+  }, [reduced, intensity])
 
   return (
     <canvas
