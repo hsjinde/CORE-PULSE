@@ -1,6 +1,11 @@
 # PLAN — Terminal Editorial 全站改版(灰階 + 訊號色)
 
-> 狀態:**待確認**。確認後依 Phase 順序執行。
+> 狀態:**Phase 1–5 已執行上線;Phase 6 大部分完成,唯獨「移除相容層、類名歸一」一項未採用**。
+> 實際決定是把舊類名(`.glass-card`/`.btn-primary`/`.btn-ghost`)與舊 token
+> (`--accent-signature`/`--accent-purple`/`--accent-teal`/`beacon-*` 等)保留為永久相容別名,
+> 而非依 §2.3、Phase 6 第 1 項全站改名移除。現況以根目錄 [`DESIGN.md`](../../DESIGN.md) 與
+> [`core-pulse-design-system` skill](../../.claude/skills/core-pulse-design-system/SKILL.md)
+> 為準,兩者都已同步記載雙軌類名為最終狀態。本文件以下內容保留作為改版歷程紀錄。
 > 參考作品:`D:\claude-directory\portfolios\monogram-terminal-h42`(Monogram Terminal)
 > 已確認的三個方向:①灰階為主、狀態色是全站唯一色相 ②整套設計語言更換(非只換色票)③範圍全站,含 Admin CMS 與 Mascot。
 
@@ -125,9 +130,11 @@ grain/scanline 質感、印刷雜誌式排版紀律。**白色是品牌唯一的
 - 決定是否加 Merriweather italic pull-quote(Blog)。
 
 ### Phase 6 — 收尾
-1. 移除 Phase 1 的相容層,全站類名歸一;確認 `--accent-*`、`beacon` 字樣 grep 為 0。
-2. 更新 `.claude/skills/core-pulse-design-system`(整份改寫為 Terminal Editorial 規範,否則未來的 UI 任務會把玻璃擬態加回來)。
-3. 產出根目錄 `DESIGN.md`(從最終 code 擷取 token / 元件規範)。
+1. ~~移除 Phase 1 的相容層,全站類名歸一;確認 `--accent-*`、`beacon` 字樣 grep 為 0。~~
+   **未採用**——舊類名/token 使用量遠高於新別名(如 `.glass-card` 7 處 vs `.tx-card` 0 處),
+   最終改成永久保留雙軌別名,詳見文件頂端狀態說明。
+2. ✅ 更新 `.claude/skills/core-pulse-design-system`(整份改寫為 Terminal Editorial 規範,否則未來的 UI 任務會把玻璃擬態加回來)。
+3. ✅ 產出根目錄 `DESIGN.md`(從最終 code 擷取 token / 元件規範)。
 4. 對比度驗證(§6)、`npm test`、`npm run build`、e2e(`npm run test:e2e`,需先 build)。
 5. (選配)字體本地化 vendoring。
 
