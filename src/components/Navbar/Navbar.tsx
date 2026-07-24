@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Terminal, Code2, X, AlignRight } from 'lucide-react'
+import { Terminal, Code2, X, AlignRight, Sun, Moon } from 'lucide-react'
+import { useTheme } from '@/hooks/useTheme'
 
 const navLinks: { href: string; label: string; external?: boolean; route?: boolean }[] = [
   { href: '#skills',   label: 'Skills'   },
@@ -9,6 +10,46 @@ const navLinks: { href: string; label: string; external?: boolean; route?: boole
   { href: '#contact',  label: 'Contact'  },
   { href: '/ask',      label: 'Ask', route: true },
 ]
+
+/* 主題切換鈕 —— 桌機與行動版共用。
+   圖示顯示的是「按下去會變成什麼」,不是目前狀態:深色時顯示太陽(=去淺色)。
+   這比顯示現況直覺,因為使用者按它是為了改變,不是為了確認。 */
+function ThemeToggle() {
+  const { theme, toggle } = useTheme()
+  const goingTo = theme === 'dark' ? '淺色' : '深色'
+
+  return (
+    <button
+      onClick={toggle}
+      aria-label={`切換到${goingTo}模式`}
+      title={`切換到${goingTo}模式`}
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 44,
+        height: 44,
+        padding: 0,
+        background: 'transparent',
+        border: '1px solid var(--border)',
+        borderRadius: 'var(--radius-xs)',
+        color: 'var(--text-secondary)',
+        cursor: 'pointer',
+        transition: 'border-color 0.2s ease, color 0.2s ease',
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.borderColor = 'var(--border-hover)'
+        e.currentTarget.style.color = 'var(--text-primary)'
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = 'var(--border)'
+        e.currentTarget.style.color = 'var(--text-secondary)'
+      }}
+    >
+      {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+    </button>
+  )
+}
 
 export default function Navbar() {
   const [scrolled,    setScrolled]    = useState(false)
@@ -48,7 +89,7 @@ export default function Navbar() {
         zIndex: 200,
         transition: 'background 0.4s ease, border-color 0.4s ease, backdrop-filter 0.4s ease',
         ...(scrolled ? {
-          background:     'rgba(5, 5, 5, 0.72)',
+          background:     'var(--nav-bg)',
           backdropFilter: 'var(--blur-xl)',
           WebkitBackdropFilter: 'var(--blur-xl)',
           borderBottom:   '1px solid var(--border)',
@@ -151,35 +192,40 @@ export default function Navbar() {
           })}
         </nav>
 
-        {/* ── GitHub CTA ────────────────────────────── */}
+        {/* ── GitHub CTA + 主題切換 ─────────────────── */}
         <div className="hidden md:flex" style={{ alignItems: 'center', gap: 12 }}>
+          <ThemeToggle />
           <a href="https://github.com/hsjinde" target="_blank" rel="noopener noreferrer" className="btn-outline">
             <Code2 size={14} />
             github
           </a>
         </div>
 
-        {/* ── Mobile Hamburger ──────────────────────── */}
-        <button
-          className="flex md:hidden"
-          onClick={() => setMobileOpen(!mobileOpen)}
-          aria-label="Toggle menu"
-          style={{
-            background: 'transparent',
-            border: '1px solid var(--border)',
-            borderRadius: 'var(--radius-xs)',
-            color: 'var(--text-primary)',
-            cursor: 'pointer',
-            width: 44,
-            height: 44,
-            padding: 0,
-            alignItems: 'center',
-            justifyContent: 'center',
-            transition: 'border-color 0.2s ease',
-          }}
-        >
-          {mobileOpen ? <X size={18} /> : <AlignRight size={18} />}
-        </button>
+        {/* ── Mobile：主題切換 + 漢堡 ───────────────── */}
+        <div className="flex md:hidden" style={{ alignItems: 'center', gap: 8 }}>
+          <ThemeToggle />
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label="Toggle menu"
+            aria-expanded={mobileOpen}
+            style={{
+              display: 'inline-flex',
+              background: 'transparent',
+              border: '1px solid var(--border)',
+              borderRadius: 'var(--radius-xs)',
+              color: 'var(--text-primary)',
+              cursor: 'pointer',
+              width: 44,
+              height: 44,
+              padding: 0,
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'border-color 0.2s ease',
+            }}
+          >
+            {mobileOpen ? <X size={18} /> : <AlignRight size={18} />}
+          </button>
+        </div>
       </div>
 
       {/* ── Mobile Drawer ─────────────────────────── */}

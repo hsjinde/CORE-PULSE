@@ -60,15 +60,18 @@ export default function Hero() {
         style={{
           zIndex: 1,
           background: `
-            radial-gradient(ellipse 100% 68% at 50% -12%, rgba(255,255,255,0.05) 0%, transparent 60%),
-            radial-gradient(ellipse 120% 80% at 50% 50%, transparent 34%, rgba(5,5,5,0.55) 78%),
-            radial-gradient(ellipse 140% 90% at 50% 116%, rgba(0,0,0,0.55) 0%, transparent 72%)
+            radial-gradient(ellipse 100% 68% at 50% -12%, var(--hero-vignette-glow) 0%, transparent 60%),
+            radial-gradient(ellipse 120% 80% at 50% 50%, transparent 34%, var(--hero-vignette-mid) 78%),
+            radial-gradient(ellipse 140% 90% at 50% 116%, var(--hero-vignette-base) 0%, transparent 72%)
           `,
         }}
       />
 
       {/* Faint scanline texture — terminal signature (grayscale) */}
-      <div className="absolute inset-0 pointer-events-none scanlines" style={{ opacity: 0.3, zIndex: 1 }} />
+      <div
+        className="absolute inset-0 pointer-events-none scanlines"
+        style={{ opacity: 'var(--hero-scanline-opacity)', zIndex: 1 }}
+      />
 
       {/* ── Main Content ────────── */}
       <motion.div
@@ -87,8 +90,8 @@ export default function Hero() {
             marginBottom: 40,
             padding: '7px 16px',
             borderRadius: 'var(--radius-xs)',
-            background: 'rgba(48,209,88,0.08)',
-            border: '1px solid rgba(48,209,88,0.22)',
+            background: 'color-mix(in srgb, var(--accent-green) 8%, transparent)',
+            border: '1px solid color-mix(in srgb, var(--accent-green) 22%, transparent)',
           }}
         >
           <span className="status-dot" />

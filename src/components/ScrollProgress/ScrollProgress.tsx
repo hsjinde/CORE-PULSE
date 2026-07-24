@@ -113,7 +113,7 @@ export default function ScrollProgress() {
           gap: 7,
           padding: '5px 10px',
           borderRadius: 'var(--radius-xs)',
-          background: 'rgba(10,10,10,0.72)',
+          background: 'var(--nav-bg)',
           border: '1px solid var(--border)',
           backdropFilter: 'blur(6px)',
           WebkitBackdropFilter: 'blur(6px)',

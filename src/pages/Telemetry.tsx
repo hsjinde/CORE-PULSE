@@ -20,8 +20,14 @@ import { useSignalClock } from "@/hooks/useSignalClock";
 export default function Telemetry() {
 	const sample = useSignalClock();
 
+	/* data-theme="dark" 把這一頁釘成深色孤島 —— 磷光綠 #30d158 在白底只有 1.9:1,
+	   整個示波器隱喻會垮掉。真的儀器本來就永遠是黑面板。
+	   屬性掛在 <main> 上,底下所有 --* token 都取到深色值,不受全站切換影響。 */
 	return (
-		<main className="relative h-screen w-screen overflow-hidden bg-black text-white">
+		<main
+			data-theme="dark"
+			className="relative h-screen w-screen overflow-hidden bg-black text-white"
+		>
 			{/* ── Layer 0: the live WebGL field ─────────────────────────────────── */}
 			<div className="absolute inset-0 z-0">
 				<ShaderComponent />

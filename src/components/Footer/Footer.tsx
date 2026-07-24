@@ -83,7 +83,7 @@ export default function Footer() {
       id="contact"
       style={{
         background: 'var(--bg-primary)',
-        borderTop: '1px solid rgba(255,255,255,0.06)',
+        borderTop: '1px solid var(--nav-border)',
         padding: '80px 0 40px',
         position: 'relative',
         overflow: 'visible',
@@ -100,7 +100,7 @@ export default function Footer() {
           transform: 'translateX(-50%)',
           width: '100%',
           height: 200,
-          background: 'radial-gradient(ellipse 60% 100% at 50% 0%, rgba(255,255,255,0.04) 0%, transparent 100%)',
+          background: 'radial-gradient(ellipse 60% 100% at 50% 0%, var(--placeholder-glow) 0%, transparent 100%)',
           pointerEvents: 'none',
         }}
       />
@@ -267,7 +267,7 @@ export default function Footer() {
           <div
             style={{
               paddingTop: 24,
-              borderTop: '1px solid rgba(255,255,255,0.05)',
+              borderTop: '1px solid var(--nav-border)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',

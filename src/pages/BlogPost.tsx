@@ -182,8 +182,8 @@ export default function BlogPost() {
                 className="blogpost-category-badge"
                 style={{
                   color: cfg.color,
-                  borderColor: `${cfg.color}40`,
-                  background: `${cfg.color}12`,
+                  borderColor: `color-mix(in srgb, ${cfg.color} 25%, transparent)`,
+                  background: `color-mix(in srgb, ${cfg.color} 7%, transparent)`,
                 }}
               >
                 <Icon size={12} strokeWidth={2.5} />

@@ -7,6 +7,8 @@ describe("useSignalClock hook", () => {
 		vi.stubGlobal("requestAnimationFrame", (cb: FrameRequestCallback) => {
 			return setTimeout(() => cb(Date.now()), 16);
 		});
+		/* 上面的 rAF stub 回傳的是 setTimeout 的 handle,不是真的 rAF id,
+		   所以型別跟著 setTimeout 走(Node 下是 Timeout,瀏覽器下是 number)。 */
 		vi.stubGlobal("cancelAnimationFrame", (id: ReturnType<typeof setTimeout>) => {
 			clearTimeout(id);
 		});

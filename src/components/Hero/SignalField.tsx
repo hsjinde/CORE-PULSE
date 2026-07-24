@@ -20,6 +20,21 @@ export default function SignalField({ intensity = 0.85 }: SignalFieldProps) {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    /* 墨水從 token 讀,不寫死 —— 深色是近白線,淺色是黑線(見 index.css --signal-*)。
+       canvas 沒有 currentColor 可用,所以存的是 "R,G,B" 字串,自己組 rgba()。
+       gain 是紙面補償:黑墨在白紙上要比白線在黑底上更濃才看得出同樣的份量。 */
+    const readInk = () => {
+      const s = getComputedStyle(document.documentElement)
+      const pick = (name: string, fallback: string) =>
+        s.getPropertyValue(name).trim() || fallback
+      return {
+        ink: pick('--signal-ink', '244, 244, 245'),
+        accent: pick('--signal-accent', '48, 209, 88'),
+        gain: parseFloat(pick('--signal-gain', '1')) || 1,
+      }
+    }
+    let paint = readInk()
+
     let w = 0
     let h = 0
     let dpr = 1
@@ -78,7 +93,7 @@ export default function SignalField({ intensity = 0.85 }: SignalFieldProps) {
           if (x === 0) ctx.moveTo(x, yy)
           else ctx.lineTo(x, yy)
         }
-        ctx.strokeStyle = `rgba(244,244,245,${L.op * intensity})`
+        ctx.strokeStyle = `rgba(${paint.ink},${L.op * intensity * paint.gain})`
         ctx.lineWidth = 1
         ctx.stroke()
       }
@@ -91,9 +106,9 @@ export default function SignalField({ intensity = 0.85 }: SignalFieldProps) {
         ctx.arc(dx, dy, D.r, 0, 6.28)
         if (D.green) {
           const pulse = 0.5 + 0.5 * Math.abs(Math.sin(t + D.ph))
-          ctx.fillStyle = `rgba(48,209,88,${0.5 * pulse * intensity})`
+          ctx.fillStyle = `rgba(${paint.accent},${0.5 * pulse * intensity * paint.gain})`
         } else {
-          ctx.fillStyle = `rgba(244,244,245,${0.32 * intensity})`
+          ctx.fillStyle = `rgba(${paint.ink},${0.32 * intensity * paint.gain})`
         }
         ctx.fill()
       }
@@ -124,20 +139,40 @@ export default function SignalField({ intensity = 0.85 }: SignalFieldProps) {
       raf = requestAnimationFrame(loop)
     }
 
+    /* ResizeObserver 取代原本的「掛載時量一次 + window resize 才修正」。
+       useEffect 跑的時機版面不一定就緒(實測掛載當下量到 width=0,canvas 被
+       夾成 1px 寬),而 window resize 事件通常永遠不會發生,於是整層就一直是壞的。
+       RO 在 observe 當下會立刻回呼一次,拿到真實尺寸後自己補正。
+       只改 canvas 的 width/height 屬性,不動 CSS 版面,不會觸發 RO 迴圈。 */
     let rt: ReturnType<typeof setTimeout>
-    const onResize = () => {
+    const ro = new ResizeObserver(() => {
       clearTimeout(rt)
       rt = setTimeout(() => {
         fit()
-        if (reduced) draw()
-      }, 200)
-    }
-    window.addEventListener('resize', onResize)
+        /* 設定 canvas.width 會把畫布清空,所以立刻補一幀。
+           不能只在 reduced 時補 —— 一般模式下要等下一個 rAF,中間會空一幀;
+           rAF 若被瀏覽器節流(背景分頁)甚至會空到回前景為止。 */
+        draw()
+      }, 120)
+    })
+    ro.observe(canvas)
+
+    /* 主題切換時只換墨水,不重跑整個 effect —— 重跑會重新 seed lines/dots,
+       畫面會整片跳掉。reduced 模式沒有 rAF 在跑,所以要手動補畫一幀。 */
+    const themeObserver = new MutationObserver(() => {
+      paint = readInk()
+      if (reduced) draw()
+    })
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme'],
+    })
 
     return () => {
       cancelAnimationFrame(raf)
       window.removeEventListener('mousemove', onMouse)
-      window.removeEventListener('resize', onResize)
+      ro.disconnect()
+      themeObserver.disconnect()
       clearTimeout(rt)
     }
   }, [reduced, intensity])

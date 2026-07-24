@@ -75,10 +75,12 @@
 }
 
 /* ── Override Tailwind v4 Preflight white background ──────────── */
+/* 走 token,不再寫死 #000。!important 保留是為了壓過 Preflight 的 background:#fff,
+   但值本身跟著 [data-theme] 走(見下方 token 區塊)。 */
 @layer base {
   html, body {
-    background-color: #000000 !important;
-    color: #f5f5f7 !important;
+    background-color: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
   }
 }
 
@@ -91,7 +93,11 @@
 /* ─── Design Tokens — Terminal Editorial (灰階 + 訊號色) ───────── */
 /* 色彩即訊號:白色是唯一的品牌強調色。hue 只出現在有語義的地方
    (Telemetry 狀態、圖表、表單回饋)。詳見 PRODUCT.md「設計原則」。 */
-:root {
+/* 選擇器同時吃 :root 與任意層的 [data-theme='dark'] —— 後者是為了讓
+   /telemetry 這種「永遠深色」的孤島能在淺色站台裡就地把 token 重新宣告回深色。
+   custom property 會繼承,只掛屬性而不重新宣告是沒有作用的。 */
+:root,
+[data-theme='dark'] {
   /* Backgrounds */
   --bg-primary:       #050505;
   --bg-secondary:     #0a0a0a;
@@ -125,6 +131,8 @@
   --accent-orange:    #ff9f0a;
   --accent-red:       #ff453a;
   --accent-teal:      #5ac8fa;
+  /* pink —— Projects 其中一案的既有識別色,不在原本六色語意表內 */
+  --accent-pink:      #ff375f;
 
   /* Signature accent — white. The only decorative hue in the system. */
   --accent-signature:       #ffffff;
@@ -162,6 +170,169 @@
   /* Motion easing — exponential ease-out, no bounce (see DESIGN.md 動態系統) */
   --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-out-expo:  cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* ── Surface/chrome 語意 token ──────────────────────────────────
+     這些原本散在各處寫死 rgba(255,255,255,…)。深色下沒問題,淺色下
+     會整片隱形,所以全部收斂成 token,由 [data-theme] 一次翻。 */
+  --accent-signature-on:   #050505;  /* signature 填色上的文字 */
+
+  --card-sweep:      rgba(255, 255, 255, 0.55);  /* .tx-card 頂緣掃光 */
+  --card-bracket:    rgba(255, 255, 255, 0.50);  /* .tx-card 四角對焦括號 */
+  --card-inner-glow: rgba(255, 255, 255, 0.028); /* .tx-card hover 內光暈 */
+
+  --chip-bg:         rgba(255, 255, 255, 0.08);  /* tag / arrow / badge 底 */
+  --chip-bg-hover:   rgba(255, 255, 255, 0.12);
+  --chip-border:     rgba(255, 255, 255, 0.10);
+
+  --scrollbar-thumb:       rgba(255, 255, 255, 0.10);
+  --scrollbar-thumb-hover: rgba(255, 255, 255, 0.22);
+
+  --nav-bg:     rgba(5, 5, 5, 0.72);
+  --nav-border: rgba(255, 255, 255, 0.06);
+
+  --focus-halo: rgba(255, 255, 255, 0.08);  /* 輸入框 focus 外暈 */
+  --dot-idle:   rgba(255, 255, 255, 0.22);  /* slider 圓點 */
+  --dot-hover:  rgba(255, 255, 255, 0.45);
+
+  /* FeaturedSlider 讀字遮罩 —— 從內容側往外淡出 */
+  --slide-scrim-1: rgba(0, 0, 0, 0.88);
+  --slide-scrim-2: rgba(0, 0, 0, 0.55);
+
+  --quote-bg:      rgba(255, 255, 255, 0.04);
+  --table-head-bg: rgba(255, 255, 255, 0.08);
+  --table-zebra:   rgba(255, 255, 255, 0.03);
+  --table-hover:   rgba(255, 255, 255, 0.06);
+
+  --code-inline-bg:     rgba(255, 255, 255, 0.10);
+  --code-inline-border: rgba(255, 255, 255, 0.12);
+
+  /* SignalField 的墨水 —— canvas 用 rgba() 組字串,所以存的是 "R,G,B" 三元組。
+     gain 是淺色紙面的不透明度補償(黑墨在白紙上要比白線在黑底上更濃才等價)。 */
+  --signal-ink:    244, 244, 245;
+  --signal-accent: 48, 209, 88;
+  --signal-gain:   1;
+
+  /* Hero 暗角 —— 深色是「壓暗四周把標題頂出來」 */
+  --hero-vignette-glow: rgba(255, 255, 255, 0.05);
+  --hero-vignette-mid:  rgba(5, 5, 5, 0.55);
+  --hero-vignette-base: rgba(0, 0, 0, 0.55);
+  --hero-scanline-opacity: 0.3;
+
+  /* 各卡片頂緣的柔和掃光(比 --card-sweep 淡,用在 Bento/Blog/Projects 區塊分隔) */
+  --sweep-soft: rgba(255, 255, 255, 0.09);
+
+  /* FeaturedSlider 的 CSS-only 佔位藝術 */
+  --placeholder-glow:  rgba(255, 255, 255, 0.08);
+  --placeholder-glyph: rgba(255, 255, 255, 0.06);
+}
+
+/* ─── 淺色模式 — C·High-contrast 純白高反差 ──────────────────────
+   由 index.html 的 bootstrap script 蓋上 [data-theme];此處不設
+   @media (prefers-color-scheme) fallback,JS 關閉時停在深色。
+
+   兩個和深色相反的地方,是這個方案的刻意選擇:
+   1. 卡片比背景「暗」(#f7f7f7 on #ffffff) —— 階層語法反轉。
+   2. 卡片層是不透明灰階,不是半透明疊加 —— 閱讀面不讓 SignalField 透出。
+
+   訊號色整組換成壓深版:Apple 系統色在白底全部低於 4.5:1(藍 2.79、綠 1.87、
+   teal 1.74),不能沿用。hue 與語意不變,只降明度。
+
+   選擇器不綁 :root,和上面的 [data-theme='dark'] 對稱 —— 兩個方向都能巢狀。 */
+[data-theme='light'] {
+  --bg-primary:       #ffffff;
+  --bg-secondary:     #fafafa;
+  --bg-tertiary:      #f2f2f2;
+
+  /* 不透明灰階層 —— 數字越大離背景越遠(hover 時往下走,加大分離) */
+  --glass-1:          #fbfbfb;
+  --glass-2:          #f7f7f7;
+  --glass-3:          #efefef;
+  --glass-4:          #e4e4e4;
+
+  /* 淺色下卡片與底只差 1.07:1,分隔全靠這條髮絲線,所以比深色按比例加重 */
+  --border:           rgba(0, 0, 0, 0.18);
+  --border-hover:     rgba(0, 0, 0, 0.34);
+  --border-active:    rgba(0, 0, 0, 0.52);
+
+  --text-primary:     #000000;  /* 21:1 on #fff */
+  --text-secondary:   #3d3d3d;  /* 10.9:1 on #fff · 10.1:1 on 卡片 */
+  --text-tertiary:    #616161;  /*  6.2:1 on #fff ·  5.8:1 on 卡片 */
+
+  /* 壓深訊號色階 —— 全部 ≥6:1 on #ffffff */
+  --accent-blue:       #0b5fc7;  /* 6.0:1 */
+  --accent-blue-glow:  rgba(11, 95, 199, 0.18);
+  --accent-green:      #14702c;  /* 6.2:1 */
+  --accent-green-glow: rgba(20, 112, 44, 0.18);
+  --accent-purple:     #7326a8;  /* 8.2:1 */
+  --accent-purple-glow:rgba(115, 38, 168, 0.16);
+  --accent-orange:     #925000;  /* 6.2:1 */
+  --accent-red:        #b3261e;  /* 6.5:1 */
+  --accent-teal:       #0b6478;  /* 6.8:1 */
+  --accent-pink:       #b3123f;  /* 6.8:1 */
+
+  --accent-signature:       #000000;
+  --accent-signature-hover: #333333;
+  --accent-signature-glow:  rgba(0, 0, 0, 0.14);
+  --accent-signature-on:    #ffffff;
+
+  /* 陰影在紙面上要收斂 —— 深色那組的 .45–.55 黑會髒掉整張紙 */
+  --shadow-sm:   0 1px 3px  rgba(0, 0, 0, 0.08);
+  --shadow-md:   0 2px 10px rgba(0, 0, 0, 0.09);
+  --shadow-lg:   0 4px 18px rgba(0, 0, 0, 0.11);
+  --shadow-blue:   0 8px 40px rgba(11, 95, 199, 0.14);
+  --shadow-purple: 0 8px 40px rgba(115, 38, 168, 0.12);
+  --shadow-green:  0 8px 40px rgba(20, 112, 44, 0.12);
+  --shadow-signature: 0 4px 20px rgba(0, 0, 0, 0.10);
+
+  --card-sweep:      rgba(0, 0, 0, 0.42);
+  --card-bracket:    rgba(0, 0, 0, 0.42);
+  --card-inner-glow: rgba(0, 0, 0, 0.035);
+
+  --chip-bg:         rgba(0, 0, 0, 0.055);
+  --chip-bg-hover:   rgba(0, 0, 0, 0.085);
+  --chip-border:     rgba(0, 0, 0, 0.14);
+
+  --scrollbar-thumb:       rgba(0, 0, 0, 0.18);
+  --scrollbar-thumb-hover: rgba(0, 0, 0, 0.34);
+
+  --nav-bg:     rgba(255, 255, 255, 0.80);
+  --nav-border: rgba(0, 0, 0, 0.10);
+
+  --focus-halo: rgba(0, 0, 0, 0.10);
+  --dot-idle:   rgba(0, 0, 0, 0.24);
+  --dot-hover:  rgba(0, 0, 0, 0.45);
+
+  --slide-scrim-1: rgba(255, 255, 255, 0.92);
+  --slide-scrim-2: rgba(255, 255, 255, 0.62);
+
+  --quote-bg:      rgba(0, 0, 0, 0.035);
+  --table-head-bg: rgba(0, 0, 0, 0.055);
+  --table-zebra:   rgba(0, 0, 0, 0.022);
+  --table-hover:   rgba(0, 0, 0, 0.045);
+
+  --code-inline-bg:     rgba(0, 0, 0, 0.055);
+  --code-inline-border: rgba(0, 0, 0, 0.12);
+
+  --signal-ink:    0, 0, 0;
+  --signal-accent: 20, 112, 44;
+  /* 1.15 是量出來的,不是憑感覺:比較基準是感知亮度差 ΔL*,不是 WCAG 對比度
+     (對比度在深底會被壓縮,拿來比兩個主題會得到錯的結論)。
+     以深色為 1.0,此值讓 點陣 1.00× / 強線 1.05× / 淡線 1.47× / 綠點 0.88×,
+     平均 1.10×。試過 1.45,平均 1.39× —— 紙面上明顯過重。 */
+  --signal-gain:   1.15;
+
+  /* 紙面不需要「壓暗」,只要極淡的邊緣收斂,像紙張本身的陰影。
+     直接沿用深色那組 .55 的黑會把整張紙弄髒。 */
+  --hero-vignette-glow: transparent;
+  --hero-vignette-mid:  rgba(0, 0, 0, 0.03);
+  --hero-vignette-base: rgba(0, 0, 0, 0.045);
+  /* 掃描線在紙上會變成灰色橫紋,壓到深色的 4 成才不顯髒 */
+  --hero-scanline-opacity: 0.12;
+
+  --sweep-soft: rgba(0, 0, 0, 0.08);
+
+  --placeholder-glow:  rgba(0, 0, 0, 0.05);
+  --placeholder-glyph: rgba(0, 0, 0, 0.055);
 }
 
 /* ─── Base Reset ──────────────────────────────────────────────── */
@@ -192,13 +363,18 @@
     min-height: 100vh;
     overflow-x: hidden;
     max-width: 100vw;
+    /* 只過場底色與文字色。不做整頁 fade —— 那會讓所有元素同時閃一下,
+       比直接跳色更難看。240ms 剛好蓋掉切換的突兀感又不拖沓。
+       prefers-reduced-motion 由檔尾的全域 reduce 區塊接管。 */
+    transition: background-color 0.24s var(--ease-out-quint),
+                color 0.24s var(--ease-out-quint);
   }
 
   /* ─── Scrollbar ───────────────────────────────────────────────── */
   ::-webkit-scrollbar          { width: 3px; }
   ::-webkit-scrollbar-track    { background: transparent; }
-  ::-webkit-scrollbar-thumb    { background: rgba(255,255,255,0.10); border-radius: 2px; }
-  ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.22); }
+  ::-webkit-scrollbar-thumb    { background: var(--scrollbar-thumb); border-radius: 2px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
 }
 
 /* ─── Typography Scale ────────────────────────────────────────── */
@@ -272,7 +448,7 @@
   left: 10px;
   right: 10px;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  background: linear-gradient(90deg, transparent, var(--card-sweep), transparent);
   transform: scaleX(0);
   transform-origin: 0 50%;
   opacity: 0;
@@ -304,14 +480,14 @@
   opacity: 0;
   background-repeat: no-repeat;
   background-image:
-    linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.5)),
-    linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.5)),
-    linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.5)),
-    linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.5)),
-    linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.5)),
-    linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.5)),
-    linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.5)),
-    linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.5));
+    linear-gradient(var(--card-bracket), var(--card-bracket)),
+    linear-gradient(var(--card-bracket), var(--card-bracket)),
+    linear-gradient(var(--card-bracket), var(--card-bracket)),
+    linear-gradient(var(--card-bracket), var(--card-bracket)),
+    linear-gradient(var(--card-bracket), var(--card-bracket)),
+    linear-gradient(var(--card-bracket), var(--card-bracket)),
+    linear-gradient(var(--card-bracket), var(--card-bracket)),
+    linear-gradient(var(--card-bracket), var(--card-bracket));
   background-position:
     top left, top left,
     top right, top right,
@@ -333,7 +509,7 @@
 
 .tx-card:hover,
 .glass-card:hover {
-  box-shadow: inset 0 0 50px rgba(255, 255, 255, 0.028);
+  box-shadow: inset 0 0 50px var(--card-inner-glow);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -392,10 +568,10 @@
 
 /* ─── Navbar Glass ────────────────────────────────────────────── */
 .glass-nav {
-  background: rgba(0, 0, 0, 0.55);
+  background: var(--nav-bg);
   backdrop-filter: var(--blur-xl) saturate(200%);
   -webkit-backdrop-filter: var(--blur-xl) saturate(200%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid var(--nav-border);
 }
 
 /* ─── Status Dot ──────────────────────────────────────────────── */
@@ -422,7 +598,7 @@
   gap: 8px;
   padding: 13px 26px;
   background: var(--accent-signature);
-  color: #050505;
+  color: var(--accent-signature-on);
   border-radius: var(--radius-xs);
   font-family: var(--font-mono);
   font-size: 0.875rem;
@@ -448,7 +624,7 @@
 .btn-solid:active,
 .btn-primary:active {
   background: var(--accent-signature-hover);
-  color: #050505;
+  color: var(--accent-signature-on);
   border-color: var(--accent-signature-hover);
   transform: scale(0.97);
 }
@@ -832,7 +1008,7 @@
 .slide-scrim {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to right, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.55) 45%, transparent 82%);
+  background: linear-gradient(to right, var(--slide-scrim-1) 0%, var(--slide-scrim-2) 45%, transparent 82%);
 }
 
 .slide-content {
@@ -902,12 +1078,12 @@
   height: 8px;
   margin: -4px 0 0 -4px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.22);
+  background: var(--dot-idle);
   transition: background 0.35s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .slider-dot:hover::before {
-  background: rgba(255,255,255,0.45);
+  background: var(--dot-hover);
 }
 
 .slider-dot.active::before {
@@ -1152,7 +1328,7 @@
 
 .blog-search-input-wrap:focus-within {
   border-color: var(--text-primary);
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 3px var(--focus-halo);
 }
 
 .blog-search-icon {
@@ -1200,8 +1376,8 @@
 }
 
 .blog-search-clear:hover {
-  background: rgba(255, 69, 58, 0.15);
-  border-color: rgba(255, 69, 58, 0.35);
+  background: color-mix(in srgb, var(--accent-red) 15%, transparent);
+  border-color: color-mix(in srgb, var(--accent-red) 35%, transparent);
   color: var(--accent-red);
 }
 
@@ -1244,7 +1420,7 @@
 
 /* default active (All) */
 .blog-filter-tab.active:not([style]) {
-  color: #050505;
+  color: var(--accent-signature-on);
   border-color: var(--accent-signature);
   background: var(--accent-signature);
 }
@@ -1400,7 +1576,7 @@
   align-items: center;
   gap: 5px;
   font-size: 0.78rem;
-  color: rgba(245, 245, 247, 0.55);
+  color: var(--text-tertiary);
   font-family: var(--font-body);
 }
 
@@ -1424,7 +1600,7 @@
   font-size: 0.95rem;
   font-weight: 400;
   line-height: 1.75;
-  color: rgba(245, 245, 247, 0.78);
+  color: var(--text-secondary);
   margin-bottom: 22px;
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -1449,31 +1625,31 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  color: rgba(245, 245, 247, 0.60);
+  color: var(--text-tertiary);
   font-size: 0.75rem;
   font-family: var(--font-body);
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--chip-bg);
   padding: 4px 10px;
   border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.10);
+  border: 1px solid var(--chip-border);
   transition: all 0.2s ease;
 }
 
 .blog-card:hover .blog-card-tag {
-  background: rgba(255, 255, 255, 0.12);
-  color: rgba(245, 245, 247, 0.75);
+  background: var(--chip-bg-hover);
+  color: var(--text-secondary);
 }
 
 .blog-card-arrow {
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--chip-bg);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(245, 245, 247, 0.55);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-tertiary);
+  border: 1px solid var(--border);
   flex-shrink: 0;
   transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -1481,9 +1657,9 @@
 .blog-card:hover .blog-card-arrow {
   background: var(--accent-signature);
   border-color: var(--accent-signature);
-  color: #000000;
+  color: var(--accent-signature-on);
   transform: translate(2px, -2px);
-  box-shadow: 0 4px 16px rgba(255, 255, 255, 0.15);
+  box-shadow: var(--shadow-signature);
 }
 
 /* Blog responsive adjustments */
@@ -1527,7 +1703,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: rgba(245, 245, 247, 0.60);
+  color: var(--text-tertiary);
   background: var(--glass-2);
   border: 1px solid var(--border);
   border-radius: 980px;
@@ -1555,7 +1731,7 @@
   background: var(--accent-signature);
   z-index: 9999;
   transform-origin: left;
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.30);
+  box-shadow: 0 0 8px var(--accent-signature-glow);
 }
 
 .blogpost-header {
@@ -1590,7 +1766,7 @@
   align-items: center;
   gap: 6px;
   font-size: 0.875rem;
-  color: rgba(245, 245, 247, 0.55);
+  color: var(--text-tertiary);
   font-family: var(--font-body);
 }
 
@@ -1620,16 +1796,16 @@
   font-size: 0.8125rem;
   font-weight: 500;
   font-family: var(--font-body);
-  color: rgba(245, 245, 247, 0.72);
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-secondary);
+  background: var(--chip-bg);
+  border: 1px solid var(--border);
   transition: all 0.2s ease;
 }
 
 .blogpost-tag:hover {
-  background: rgba(255, 255, 255, 0.14);
+  background: var(--chip-bg-hover);
   color: var(--text-primary);
-  border-color: rgba(255, 255, 255, 0.20);
+  border-color: var(--border-hover);
 }
 
 .blogpost-cover {
@@ -1682,7 +1858,7 @@
   font-family: var(--font-body);
   font-size: 0.8125rem;
   line-height: 1.5;
-  color: rgba(245, 245, 247, 0.55);
+  color: var(--text-tertiary);
   text-decoration: none;
   padding: 6px 10px;
   border-radius: 8px;
@@ -1691,13 +1867,13 @@
 }
 
 .blogpost-toc-link:hover {
-  color: rgba(245, 245, 247, 0.85);
-  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  background: var(--table-hover);
 }
 
 .blogpost-toc-link.active {
   color: var(--accent-signature);
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--chip-bg);
   border-left-color: var(--accent-signature);
 }
 
@@ -1709,7 +1885,7 @@
 /* Enhanced Prose for Blog Posts */
 .prose {
   font-family: var(--font-body);
-  color: rgba(245, 245, 247, 0.78);
+  color: var(--text-secondary);
   line-height: 1.85;
   font-size: 1.0625rem;
   max-width: 72ch;
@@ -1778,9 +1954,9 @@
 .prose blockquote {
   border: 1px solid var(--border);
   padding: 1.25rem 1.5rem;
-  color: rgba(245, 245, 247, 0.70);
+  color: var(--text-secondary);
   margin: 0 0 1.6em 0;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--quote-bg);
   border-radius: var(--radius-sm);
   font-style: normal;
 }
@@ -1812,7 +1988,7 @@
 }
 
 .prose th {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--table-head-bg);
   color: var(--text-primary);
   font-weight: 600;
   text-align: left;
@@ -1824,25 +2000,30 @@
 .prose td {
   padding: 14px 18px;
   border-bottom: 1px solid var(--border);
-  color: rgba(245, 245, 247, 0.72);
+  color: var(--text-secondary);
 }
 
 .prose tr:last-child td { border-bottom: none; }
-.prose tr:nth-child(even) { background: rgba(255, 255, 255, 0.03); }
-.prose tr:hover { background: rgba(255, 255, 255, 0.06); }
+.prose tr:nth-child(even) { background: var(--table-zebra); }
+.prose tr:hover { background: var(--table-hover); }
 
 /* Inline code */
 .prose code {
   font-family: var(--font-mono);
-  background: rgba(255, 255, 255, 0.10);
+  background: var(--code-inline-bg);
   padding: 0.22em 0.5em;
   border-radius: 5px;
   font-size: 0.875em;
   color: var(--accent-teal);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--code-inline-border);
 }
 
 /* Code block enhancements */
+/* 永遠深色的孤島 —— 淺色模式下不翻色,紙上嵌一塊終端機。
+   這樣做有兩個理由:rehype-highlight 沒有載對應的 hljs 淺色主題,翻色會讓
+   語法著色失控;而且深色 code block 本來就是 Terminal Editorial 的語彙。
+   因為不跟著主題走,底下所有前景色都必須寫死亮色,不能用 --text-* token
+   (--text-primary 在淺色是 #000,壓在這塊近黑底上會直接消失)。 */
 .prose pre {
   background: rgba(10, 10, 14, 0.92) !important;
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -1852,6 +2033,8 @@
   font-size: 0.9em;
   margin: 1.6em 0;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  /* `.prose pre code` 是 color:inherit,靠這行拿到亮色;沒有它淺色模式全黑吃黑 */
+  color: #e9e9ec;
 }
 
 .prose-code-header {
@@ -1884,7 +2067,7 @@
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--text-tertiary);
+  color: rgba(233, 233, 236, 0.58); /* 孤島內固定亮色,不走 token */
   font-family: var(--font-body);
 }
 
@@ -1911,7 +2094,7 @@
 
 .prose-copy-btn:hover {
   background: rgba(255, 255, 255, 0.18);
-  color: var(--text-primary);
+  color: #f4f4f5; /* 孤島內固定亮色,不走 token */
   border-color: rgba(255, 255, 255, 0.25);
 }
 
@@ -2021,7 +2204,7 @@
 
   .blogpost-toc-link.active {
     border-color: var(--accent-signature);
-    background: rgba(255, 255, 255, 0.10);
+    background: var(--chip-bg-hover);
   }
 
   .blogpost-toc-link.level-3 {

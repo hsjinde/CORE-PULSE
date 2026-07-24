@@ -95,7 +95,7 @@ export default function BentoGrid() {
           transformOrigin: 'center',
           width: 'min(800px, 80%)',
           height: 1,
-          background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.10), transparent)',
+          background: 'linear-gradient(90deg, transparent, var(--sweep-soft), transparent)',
           pointerEvents: 'none',
         }}
       />
@@ -188,7 +188,7 @@ export default function BentoGrid() {
                       fontFamily: 'var(--font-mono)',
                       fontSize: '0.6875rem',
                       color: 'var(--text-tertiary)',
-                      border: '1px solid rgba(255,255,255,0.08)',
+                      border: '1px solid var(--chip-border)',
                       borderRadius: 'var(--radius-xs)',
                       padding: '3px 10px',
                     }}
@@ -234,7 +234,7 @@ export default function BentoGrid() {
                   style={{
                     padding: '8px 18px',
                     fontSize: '0.8125rem',
-                    borderColor: 'rgba(191,90,242,0.35)',
+                    borderColor: 'color-mix(in srgb, var(--accent-purple) 35%, transparent)',
                     color: 'var(--accent-purple)',
                     cursor: 'pointer',
                     textDecoration: 'none',
@@ -357,9 +357,9 @@ export default function BentoGrid() {
                         justifyContent: 'center',
                         fontSize: '0.625rem',
                         fontWeight: 700,
-                        background: 'rgba(48,209,88,0.15)',
+                        background: 'color-mix(in srgb, var(--accent-green) 15%, transparent)',
                         color: 'var(--accent-green)',
-                        border: '1px solid rgba(48,209,88,0.25)',
+                        border: '1px solid color-mix(in srgb, var(--accent-green) 25%, transparent)',
                         flexShrink: 0,
                         fontFamily: 'var(--font-mono)',
                       }}

@@ -5,11 +5,56 @@ For the full rewrite rationale and phase log, see [docs/plans/PLAN-terminal-edit
 
 ## Theme
 
-**Terminal Editorial** — a strictly near-black canvas, hairline borders, JetBrains Mono as the
-display typeface, and flat instrument-panel cards. Forced dark; no light mode. Color is a signal
-system, not decoration: white is the only decorative accent, and the Apple system-color palette
-(blue/green/purple/orange/red/teal) is reserved for genuine categorization and status —
-consistent hue per category, never randomized for visual variety.
+**Terminal Editorial** — hairline borders, JetBrains Mono as the display typeface, and flat
+instrument-panel cards. Color is a signal system, not decoration: the signature accent is the only
+decorative hue, and the semantic palette (blue/green/purple/orange/red/teal/pink) is reserved for
+genuine categorization and status — consistent hue per category, never randomized for visual variety.
+
+Two themes, both first-class. Every color is a CSS custom property; nothing about the theme is
+hardcoded in a component.
+
+| | Dark (default) | Light — *High-contrast 純白* |
+|---|---|---|
+| Canvas | `#050505` near-black | `#ffffff` pure white |
+| Card layer | translucent white overlay, **lighter** than canvas | opaque grey `#f7f7f7`, **darker** than canvas |
+| Signature accent | `#ffffff` | `#000000` |
+| Border | white @ .12 | black @ **.18** |
+
+Three consequences of the light theme worth knowing before touching UI code:
+
+1. **Card/canvas separation collapses to 1.07:1.** Dark mode gets depth from a white overlay;
+   light mode has almost no fill difference, so *the 1px hairline carries the entire separation*.
+   That is why light's border alphas are heavier than dark's — don't "harmonize" them.
+2. **The signal palette does not cross over.** The Apple system colors are tuned for dark grounds
+   and all fail on white (blue 2.79:1, green 1.87:1, teal 1.74:1). Light mode ships its own
+   value-compressed ramp — same hue, same semantics, all ≥6:1 on `#ffffff`. Never reference a
+   raw signal hex in a component; always `var(--accent-*)`.
+3. **The hierarchy grammar inverts.** Cards are lighter than the page in dark, darker in light.
+   Hover always moves *away* from the canvas in both.
+
+### Theme switching
+
+`index.html` runs a synchronous bootstrap in `<head>` that stamps `data-theme` on `<html>` before
+any CSS parses — without it the page paints dark then flashes to light. It reads
+`localStorage['theme']` first, falling back to `prefers-color-scheme`. [src/hooks/useTheme.ts](src/hooks/useTheme.ts)
+owns everything after first paint; the Navbar toggle persists the choice, and once persisted the
+system preference is ignored. There is no `@media (prefers-color-scheme)` fallback in CSS — with
+JS off the site stays dark, which is the pre-existing behavior.
+
+Token blocks are `:root, [data-theme='dark']` and `[data-theme='light']` — deliberately *not*
+`:root`-scoped, so either theme can be re-declared on a nested element. Custom properties inherit,
+so setting the attribute alone does nothing; the selector must re-declare.
+
+### Forced-dark islands
+
+Two surfaces stay dark regardless of theme:
+
+- **`/telemetry`** — `data-theme="dark"` on its `<main>`. The phosphor green is `1.9:1` on white;
+  the oscilloscope metaphor requires a black panel, the same way a real instrument does.
+- **`.prose pre` (code blocks)** — a terminal inset on paper. `rehype-highlight` ships no light
+  hljs theme here, so inverting would leave syntax colors unmanaged. Everything inside that block
+  hardcodes light foregrounds and must **not** use `--text-*` tokens (`--text-primary` is `#000`
+  in light mode and would vanish).
 
 ## Page Composition (Home)
 
@@ -36,32 +81,45 @@ rather than stock photography or broken `<img>` tags. (`About`'s portrait is now
 
 ### Base (chroma 0)
 
-| Token | Value | Use |
-|---|---|---|
-| `--bg-primary` | `#050505` | Page background |
-| `--bg-secondary` | `#0a0a0a` | Alternating section background |
-| `--bg-tertiary` | `#0e0e0e` | Deep surface layer |
-| `--glass-1` .. `--glass-4` | `rgba(255,255,255,.025–.13)` | Flat card backgrounds (not blurred) |
-| `--border` / `--border-hover` / `--border-active` | `rgba(255,255,255,.12/.26/.40)` | Hairline borders |
-| `--text-primary` | `#f4f4f5` | ~19:1 on bg-primary |
-| `--text-secondary` | `rgba(244,244,245,.70)` | ~9:1 |
-| `--text-tertiary` | `rgba(244,244,245,.58)` | ~6:1 on bg, ~5.9:1 on card — safe for small text |
+| Token | Dark | Light | Use |
+|---|---|---|---|
+| `--bg-primary` | `#050505` | `#ffffff` | Page background |
+| `--bg-secondary` | `#0a0a0a` | `#fafafa` | Alternating section background |
+| `--bg-tertiary` | `#0e0e0e` | `#f2f2f2` | Deep surface layer, `.btn-outline` fill |
+| `--glass-1`..`--glass-4` | `rgba(255,255,255,.025–.13)` translucent | `#fbfbfb` → `#e4e4e4` **opaque** | Flat card backgrounds (never blurred) |
+| `--border` / `-hover` / `-active` | white `.12/.26/.40` | black `.18/.34/.52` | Hairline borders |
+| `--text-primary` | `#f4f4f5` (~19:1) | `#000000` (21:1) | |
+| `--text-secondary` | `rgba(244,244,245,.70)` (~9:1) | `#3d3d3d` (10.9:1) | |
+| `--text-tertiary` | `rgba(244,244,245,.58)` (~6:1) | `#616161` (6.2:1 / 5.8:1 on card) | Smallest safe text |
+
+Light's card layers are **opaque** on purpose: reading surfaces must not let the site-wide
+`SignalField` canvas show through.
 
 ### Signature accent
 
-`--accent-signature: #ffffff` — the only purely decorative hue. Primary buttons, link hovers,
-cursors, focus rings, path-label prefixes.
+`--accent-signature` — the only purely decorative hue. `#ffffff` dark / `#000000` light.
+Primary buttons, link hovers, cursors, focus rings, path-label prefixes.
+`--accent-signature-on` is its contrast partner (`#050505` dark / `#ffffff` light) and is the
+correct token for text sitting on *any* accent fill — the two ramps invert in lockstep, so it
+resolves to ≥6:1 in both themes without per-theme branching.
 
 ### Semantic signal colors
 
-| Token | Hex | Meaning | Where it appears |
-|---|---|---|---|
-| `--accent-blue` | `#2997ff` | Primary action / links / architecture | Blog eyebrow icon, BentoGrid Core Stack, "Django Mail Server" project |
-| `--accent-green` | `#30d158` | Status normal / success / health | Hero availability badge, `.status-dot`, CI/CD checkmarks, Security header icon |
-| `--accent-purple` | `#bf5af2` | AI / deep technical | BentoGrid "AI Agent Infrastructure", "RNN SPARQL Optimizer" project |
-| `--accent-orange` | `#ff9f0a` | Tutorial / in-progress / CI-CD | CI/CD icon, Blog "個人學習" category |
-| `--accent-red` | `#ff453a` | Error / destructive | Form errors, delete actions, Mascot error state |
-| `--accent-teal` | `#5ac8fa` | Inline code | `.prose code` |
+Light values are ratios against `#ffffff`. Same hue, same meaning — only value is compressed.
+
+| Token | Dark | Light | Meaning | Where it appears |
+|---|---|---|---|---|
+| `--accent-blue` | `#2997ff` | `#0b5fc7` (6.0:1) | Primary action / links / architecture | Blog eyebrow icon, BentoGrid Core Stack, "Django Mail Server" project |
+| `--accent-green` | `#30d158` | `#14702c` (6.2:1) | Status normal / success / health | Hero availability badge, `.status-dot`, CI/CD checkmarks, Security header icon |
+| `--accent-purple` | `#bf5af2` | `#7326a8` (8.2:1) | AI / deep technical | BentoGrid "AI Agent Infrastructure", "RNN SPARQL Optimizer" project |
+| `--accent-orange` | `#ff9f0a` | `#925000` (6.2:1) | Tutorial / in-progress / CI-CD | CI/CD icon, Blog "個人學習" category |
+| `--accent-red` | `#ff453a` | `#b3261e` (6.5:1) | Error / destructive | Form errors, delete actions, chat error state |
+| `--accent-teal` | `#5ac8fa` | `#0b6478` (6.8:1) | Inline code | `.prose code` |
+| `--accent-pink` | `#ff375f` | `#b3123f` (6.8:1) | No assigned semantic | One Projects card's existing identity colour |
+
+Because these are `var()` and no longer raw hex, **tint/border derivations must use
+`color-mix(in srgb, …)`** — the old `` `${color}12` `` hex-alpha concatenation produces invalid
+CSS against a `var()` and silently drops the declaration.
 
 Rule: a category keeps the same color everywhere it appears (e.g. Blog's "個人學習" is always
 orange). Never assign color for pure visual variety on non-categorical elements.
@@ -117,6 +175,25 @@ Easing: `cubic-bezier(0.22, 1, 0.36, 1)` (ease-out-quint) site-wide, replacing t
 `cubic-bezier(0.34, 1.1, 0.64, 1)`. Card hover no longer lifts (`translateY`); depth comes from
 border/background contrast only. `prefers-reduced-motion: reduce` disables all animation
 durations globally.
+
+Theme switching transitions `background-color` and `color` on `body` over 240ms — deliberately
+*not* a whole-page fade, which makes every element flicker at once and reads worse than an
+instant swap.
+
+### SignalField and the two inks
+
+The animated background survives both themes unchanged — the algorithm is identical and only the
+ink flips, via `--signal-ink` / `--signal-accent` (stored as `"R, G, B"` triplets because canvas
+has no `currentColor`) and `--signal-gain`. A `MutationObserver` on `data-theme` swaps the ink
+in place rather than re-running the effect, which would reseed the lines and jump the picture.
+
+`--signal-gain` compensates the light theme (`1.15`). It was fitted against **ΔL\*** — perceived
+lightness delta — not WCAG contrast ratio, which compresses on dark grounds and gives the wrong
+answer when comparing two themes. At 1.15 the light ink lands at 1.10× the dark ink's perceptual
+weight on average; the intuitive-looking 1.45 measures 1.39× and reads visibly heavy on paper.
+
+Conceptually the metaphor changes with the ground: phosphor persistence on a dark tube, a plotter
+inking a chart on light paper.
 
 ## Known gaps / follow-ups
 

@@ -30,8 +30,8 @@ function PostCard({ post, index }: { post: Post; index: number }) {
               className="blog-category-badge"
               style={{
                 color: cfg.color,
-                borderColor: `${cfg.color}40`,
-                background: `${cfg.color}12`,
+                borderColor: `color-mix(in srgb, ${cfg.color} 25%, transparent)`,
+                background: `color-mix(in srgb, ${cfg.color} 7%, transparent)`,
               }}
             >
               <Icon size={12} strokeWidth={2.5} />
@@ -118,7 +118,7 @@ export default function Blog() {
           transform: 'translateX(-50%)',
           width: 900,
           height: 1,
-          background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent)',
+          background: 'linear-gradient(90deg, transparent, var(--sweep-soft), transparent)',
           pointerEvents: 'none',
         }}
       />
@@ -212,9 +212,9 @@ export default function Blog() {
                   className={`blog-filter-tab${isActive ? ' active' : ''}`}
                   style={isActive && tab.color ? {
                     color: tab.color,
-                    borderColor: `${tab.color}50`,
-                    background: `${tab.color}15`,
-                    boxShadow: `0 0 12px ${tab.color}20`,
+                    borderColor: `color-mix(in srgb, ${tab.color} 31%, transparent)`,
+                    background: `color-mix(in srgb, ${tab.color} 8%, transparent)`,
+                    boxShadow: `0 0 12px color-mix(in srgb, ${tab.color} 13%, transparent)`,
                   } : undefined}
                   onClick={() => setActiveFilter(tab.key)}
                 >

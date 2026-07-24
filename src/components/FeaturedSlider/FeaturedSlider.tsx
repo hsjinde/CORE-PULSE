@@ -76,7 +76,7 @@ export default function FeaturedSlider() {
                   style={{
                     position: 'absolute',
                     inset: 0,
-                    background: `radial-gradient(ellipse 70% 60% at ${slide.glowPos}, rgba(255,255,255,0.08) 0%, transparent 65%), var(--bg-tertiary)`,
+                    background: `radial-gradient(ellipse 70% 60% at ${slide.glowPos}, var(--placeholder-glow) 0%, transparent 65%), var(--bg-tertiary)`,
                   }}
                 />
                 <div className="grain" style={{ position: 'absolute', inset: 0, opacity: 0.05 }} />
@@ -90,7 +90,7 @@ export default function FeaturedSlider() {
                     fontFamily: 'var(--font-mono)',
                     fontSize: 'clamp(3rem, 8vw, 6rem)',
                     fontWeight: 700,
-                    color: 'rgba(255,255,255,0.06)',
+                    color: 'var(--placeholder-glyph)',
                     letterSpacing: '-0.02em',
                     pointerEvents: 'none',
                   }}

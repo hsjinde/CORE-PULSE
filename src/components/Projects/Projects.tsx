@@ -31,7 +31,7 @@ const projects: Project[] = [
     solution: '將 SPARQL 的 RDF 三元組視為標籤，把查詢生成重塑為多標籤分類，以 Binary Relevance 與 Classifier Chains 搭配 RNN 分類器（GloVe / BERT / POS 詞嵌入）；再提出 Ensemble BR，以堆疊（stacking）方式把多個 BR 模型的輸出作為新模型的輸入，補足 BR 假設標籤獨立的缺陷，學習 RDF triple 之間的關聯。',
     result: 'Ensemble BR 在 QALD-7/8/9 與 LC-QuAD 四個基準達到 82.6% / 93.94% / 76.82% / 76.1% 準確率，其中複雜問句占 72.1% 的 LC-QuAD 較單獨 BR（64.1%）大幅提升 12%；End-to-End 的 Precision / Recall / F-measure 優於 QAMP、DTQA 等系統。',
     tags: ['RNN', 'Multi-label Learning', 'SPARQL', 'Semantic Web', 'GloVe / BERT'],
-    accentColor: '#bf5af2',
+    accentColor: 'var(--accent-purple)',
     slug: 'rnn-sparql-research',
     status: 'ieee access · published',
     sourceUrls: [
@@ -50,7 +50,7 @@ const projects: Project[] = [
     solution: '全套服務 Docker 化並部署在對外的 VPS 上：Postfix（SMTP）+ Dovecot（IMAP/POP3）+ OpenDKIM（簽章），Django 提供管理介面，certbot 自動更新 TLS 憑證，nginx 反向代理；管理後台 postfix-manager.19980803.xyz 隨時掌握帳號與收發狀態。',
     result: '系統長期穩定運行、通過 SPF / DKIM 驗證：對外寄得出、不被退信也不落垃圾桶，對內 ethan@19980803.xyz 真的收得到信。這是我每天在用、親手維運的郵件基礎設施，不是玩具。',
     tags: ['Docker', 'Postfix', 'Dovecot', 'OpenDKIM', 'Django'],
-    accentColor: '#2997ff',
+    accentColor: 'var(--accent-blue)',
     slug: 'self-hosted-mail',
     status: 'self-hosted · running',
     sourceUrl: 'https://github.com/hsjinde/mail-server',
@@ -66,7 +66,7 @@ const projects: Project[] = [
     solution: 'GitHub webhook 推送後增量同步至 Cloudflare KV 並重建索引；線上編輯透過 GitHub Contents API 自動 commit 回 vault；AI 問答以 Workers AI 讀取指定範圍的筆記作答，私有目錄以白名單隔離。',
     result: '筆記推上 GitHub 後網站自動更新，行動裝置可直接編輯回寫，公開/私有內容嚴格分流，已於 note.19980803.xyz 日常運行。',
     tags: ['Cloudflare Workers', 'Hono', 'KV', 'Workers AI', 'React'],
-    accentColor: '#ff9f0a',
+    accentColor: 'var(--accent-orange)',
     slug: 'my-note-web',
     status: 'live · running',
     sourceUrl: 'https://github.com/hsjinde/my-note-web',
@@ -82,7 +82,7 @@ const projects: Project[] = [
     solution: 'Obsidian vault 作為唯一資料來源，build 時以 Zod schema 驗證轉成型別安全的資料；收藏 / 待辦狀態存 Cloudflare D1 跨裝置同步；vault push 自動觸發重建，Cloudflare Pages 與 GitHub Pages 雙平台部署。',
     result: '改筆記就更新網站，手機隨開隨查、收藏跨裝置同步，整趟旅程實際使用的儀表板。',
     tags: ['Obsidian', 'Zod', 'Cloudflare D1', 'React', 'GitHub Pages'],
-    accentColor: '#ff375f',
+    accentColor: 'var(--accent-pink)',
     slug: 'osaka-web',
     status: 'live · running',
     sourceUrl: 'https://github.com/hsjinde/Osaka-web',
@@ -98,7 +98,7 @@ const projects: Project[] = [
     solution: '前端以 React 19 + Vite 構建；後端用 Cloudflare Pages Functions + D1 + R2 全部跑在邊緣；/api/chat 以 SSE 串流接自架 LLM proxy，內建每日限流、輸入清洗與 prompt guardrails。',
     result: '部署於 Cloudflare 全球 CDN，含自製 CMS 後台與 AI 問答頁 /ask，GitHub Actions 全自動部署，持續迭代中。',
     tags: ['React', 'TypeScript', 'Cloudflare', 'D1 / R2', 'LLM'],
-    accentColor: '#30d158',
+    accentColor: 'var(--accent-green)',
     slug: 'core-pulse',
     status: 'live · deployed',
     sourceUrl: 'https://github.com/hsjinde/CORE-PULSE',
@@ -111,8 +111,8 @@ function PSRBlock({ label, text, accentColor }: { label: string; text: string; a
       style={{
         padding: '14px 16px',
         borderRadius: 'var(--radius-sm)',
-        background: 'rgba(255,255,255,0.03)',
-        border: '1px solid rgba(255,255,255,0.06)',
+        background: 'var(--quote-bg)',
+        border: '1px solid var(--border)',
         marginBottom: 10,
       }}
     >
@@ -178,7 +178,8 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                     height: 8,
                     borderRadius: '50%',
                     background: project.accentColor,
-                    boxShadow: `0 0 8px ${project.accentColor}80`,
+                    /* accentColor 現在是 var(),不能再接 hex alpha(…80),改用 color-mix */
+                    boxShadow: `0 0 8px color-mix(in srgb, ${project.accentColor} 50%, transparent)`,
                     flexShrink: 0,
                   }}
                 />
@@ -210,8 +211,8 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                     key={tag}
                     className="skill-badge"
                     style={{
-                      background: `${project.accentColor}12`,
-                      border: `1px solid ${project.accentColor}24`,
+                      background: `color-mix(in srgb, ${project.accentColor} 7%, transparent)`,
+                      border: `1px solid color-mix(in srgb, ${project.accentColor} 14%, transparent)`,
                       color: project.accentColor,
                     }}
                   >
@@ -270,8 +271,10 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                       gap: 7,
                       padding: '9px 20px',
                       background: project.accentColor,
-                      /* 近黑文字:彩底上的白字對比僅 2.1–3.5:1,黑字全數 ≥5.9:1 */
-                      color: '#050505',
+                      /* 彩底上的文字。深色主題的訊號色是亮的(配黑字 ≥6.7:1),
+                         淺色主題整組壓深(配白字 ≥6.0:1)—— 兩邊剛好反向,
+                         所以直接沿用 signature 的對比色,不必各自寫死。 */
+                      color: 'var(--accent-signature-on)',
                       borderRadius: 'var(--radius-xs)',
                       fontSize: '0.875rem',
                       fontFamily: 'var(--font-mono)',
@@ -354,7 +357,7 @@ export default function Projects() {
           transformOrigin: 'center',
           width: 'min(900px, 82%)',
           height: 1,
-          background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)',
+          background: 'linear-gradient(90deg, transparent, var(--sweep-soft), transparent)',
           pointerEvents: 'none',
         }}
       />
