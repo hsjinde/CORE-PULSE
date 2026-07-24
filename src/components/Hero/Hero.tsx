@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
 import { ArrowDown, Code2, ExternalLink, Terminal } from 'lucide-react'
 import SignalField from './SignalField'
@@ -16,11 +16,31 @@ export default function Hero() {
   const [isDeleting,  setIsDeleting]  = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
 
-  /* ── Scroll parallax ─── */
+  /* ── Scroll parallax ───
+     淡出距離跟著視口高走,不寫死 px。原本是固定 450px —— 那個值大概是在矮螢幕上
+     調的,在 1270px 高的螢幕只佔 35% 視口,結果內容在 hero 還佔著 65% 畫面時就
+     整個消失,底下留一大片空白背景。
+     0.15–0.75vh 讓淡出和內容自己捲出畫面的節奏同步:終點時內容底緣剛好只剩
+     數十 px 在畫面上。y 的 0.55vh 在 1270px 螢幕上等於原本的 700,行為不變,
+     只是換成會隨視口縮放。 */
+  const [vh, setVh] = useState(() =>
+    typeof window === 'undefined' ? 800 : window.innerHeight
+  )
+  useEffect(() => {
+    const onResize = () => setVh(window.innerHeight)
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [])
+
+  /* memo 過的區間 —— 打字機效果讓 Hero 每 35–75ms 就 re-render 一次,
+     每次都建新陣列會讓 useTransform 反覆重建。 */
+  const yRange       = useMemo(() => [0, vh * 0.55], [vh])
+  const opacityRange = useMemo(() => [vh * 0.15, vh * 0.75], [vh])
+
   const { scrollY } = useScroll()
-  const rawY  = useTransform(scrollY, [0, 700], [0, -130])
+  const rawY  = useTransform(scrollY, yRange, [0, -130])
   const y     = useSpring(rawY, { stiffness: 70, damping: 18 })
-  const opacity = useTransform(scrollY, [0, 450], [1, 0])
+  const opacity = useTransform(scrollY, opacityRange, [1, 0])
 
   /* ── Typewriter ─────── */
   useEffect(() => {
