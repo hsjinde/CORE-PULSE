@@ -228,6 +228,11 @@
   /* FeaturedSlider 的 CSS-only 佔位藝術 */
   --placeholder-glow:  rgba(255, 255, 255, 0.08);
   --placeholder-glyph: rgba(255, 255, 255, 0.06);
+
+  /* Footer 頂緣的環境光 —— 自己的 token,不再借用 --placeholder-glow。
+     那是「佔位藝術」的語意,而這是版面的地面光,兩者不該連動。
+     必須配合滿版 100vw 使用,見 Footer.tsx 註解。 */
+  --footer-glow: rgba(255, 255, 255, 0.06);
 }
 
 /* ─── 淺色模式 — C·High-contrast 純白高反差 ──────────────────────
@@ -341,6 +346,10 @@
 
   --placeholder-glow:  rgba(0, 0, 0, 0.05);
   --placeholder-glyph: rgba(0, 0, 0, 0.055);
+
+  /* Footer 環境光在淺色歸零 —— 同上,它是變暗層,白紙上是實打實的灰帶。
+     Footer 的分隔本來就由 border-top 髮絲線承擔,不需要地面光。 */
+  --footer-glow: transparent;
 }
 
 /* ─── Base Reset ──────────────────────────────────────────────── */

@@ -91,16 +91,20 @@ export default function Footer() {
     >
       <SignalField />
 
-      {/* Ambient gradient at top */}
+      {/* Ambient gradient at top —— 滿版 100vw,和 SignalField 同一個出血層。
+          原本是 width:100%,也就是被裁在 .site-frame 的 1150px 裡:白 6% 的
+          橢圓在 1150px 內就衰減不完,於是框線左右各切出一道硬邊,footer 頂部
+          變成一塊比頁面亮(淺色是暗)的矩形 —— 正是 DESIGN.md 要求「框線永遠
+          不可見」的反例。改成 100vw 後衰減落在視口外,沒有邊可看。 */}
       <div
         style={{
           position: 'absolute',
           top: 0,
           left: '50%',
           transform: 'translateX(-50%)',
-          width: '100%',
+          width: '100vw',
           height: 200,
-          background: 'radial-gradient(ellipse 60% 100% at 50% 0%, var(--placeholder-glow) 0%, transparent 100%)',
+          background: 'radial-gradient(ellipse 60% 100% at 50% 0%, var(--footer-glow) 0%, transparent 100%)',
           pointerEvents: 'none',
         }}
       />

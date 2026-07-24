@@ -213,6 +213,28 @@ to lift a headline off its ground, and `#000` on `#fff` is already 21:1.
 Telemetry's own scanlines/grain use Tailwind opacity utilities, not this token — that page is a
 forced-dark island and is unaffected either way.
 
+### Ambient light layers are full-bleed, never frame-width
+
+Any decorative wash that fades out — the Footer's top ambient light, the Hero vignette — must be
+laid out like `SignalField`: `left: 50%; width: 100vw; transform: translateX(-50%)`. Never
+`width: 100%`, which is `.site-frame`'s 1150px.
+
+The reason is that `radial-gradient(ellipse 60% 100% …)` gives *radii*, not extent: `60%` of a
+1150px box is a 690px radius from a centre only 575px from the edge, so the wash is still at ~25%
+strength when the box ends and the frame edge becomes a hard vertical seam. That is measurable,
+not theoretical — the Footer's `rgba(255,255,255,.08)` wash read 24/255 at centre against a
+5/255 page, a 1150×200px lighter rectangle with two hard edges (light mode: Δ26). Sized against
+`100vw` the same gradient runs off-screen instead, and the frame edge sees identical values on
+both sides.
+
+This is the same rule the frame's removed side hairlines exist for (see *Page Composition*):
+the 1150px column is a **content** boundary; nothing in the background layer may reveal it.
+
+`--footer-glow` (dark `rgba(255,255,255,.06)` / light `transparent`) owns that wash. It used to
+borrow `--placeholder-glow`, which belongs to `FeaturedSlider`'s placeholder art — different
+purpose, and they should not move together. Light is `transparent` for the reason above: it is a
+`rgba(0,0,0,…)` layer, and the Footer is already separated by its `border-top` hairline.
+
 ## Known gaps / follow-ups
 
 - `Blog.tsx` (list view) is restyled but not routed anywhere — `App.tsx` only has `/blog/:id`,
