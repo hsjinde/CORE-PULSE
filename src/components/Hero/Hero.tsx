@@ -90,7 +90,7 @@ export default function Hero() {
       {/* Faint scanline texture — terminal signature (grayscale) */}
       <div
         className="absolute inset-0 pointer-events-none scanlines"
-        style={{ opacity: 'var(--hero-scanline-opacity)', zIndex: 1 }}
+        style={{ opacity: 'calc(0.3 * var(--texture-strength))', zIndex: 1 }}
       />
 
       {/* ── Main Content ────────── */}

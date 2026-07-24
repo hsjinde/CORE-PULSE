@@ -79,7 +79,14 @@ export default function FeaturedSlider() {
                     background: `radial-gradient(ellipse 70% 60% at ${slide.glowPos}, var(--placeholder-glow) 0%, transparent 65%), var(--bg-tertiary)`,
                   }}
                 />
-                <div className="grain" style={{ position: 'absolute', inset: 0, opacity: 0.05 }} />
+                <div
+                  className="grain"
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    opacity: 'calc(0.05 * var(--texture-strength))',
+                  }}
+                />
                 <span
                   aria-hidden="true"
                   style={{

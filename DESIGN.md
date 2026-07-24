@@ -195,6 +195,24 @@ weight on average; the intuitive-looking 1.45 measures 1.39× and reads visibly 
 Conceptually the metaphor changes with the ground: phosphor persistence on a dark tube, a plotter
 inking a chart on light paper.
 
+### Decorative dark textures are dark-only
+
+`--texture-strength` (`1` dark / `0` light) scales every decorative `rgba(0,0,0,…)` overlay —
+`.noise-overlay`, the Hero and BentoGrid `.scanlines`, the FeaturedSlider `.grain`. Consumers
+multiply their own base value: `opacity: calc(0.3 * var(--texture-strength))`.
+
+It must stay `0` in light. These overlays *darken*, which on `#050505` is a near no-op (5 → 4.8,
+invisible) but on `#ffffff` is a real change — and because each one is clipped to its own
+element (the Hero `<section>`, a single Bento card), the result is a visibly grey rectangle
+sitting on a white page, with a hard seam where the next section begins. Dialing them down
+doesn't help: the eye reads *edges* far more readily than absolute lightness, so even 1–2%
+shows the boundary. Light mode's texture is the `SignalField` instead — full-bleed `100vw`,
+no element boundary to reveal. The same reasoning zeroes `--hero-vignette-*`; a vignette exists
+to lift a headline off its ground, and `#000` on `#fff` is already 21:1.
+
+Telemetry's own scanlines/grain use Tailwind opacity utilities, not this token — that page is a
+forced-dark island and is unaffected either way.
+
 ## Known gaps / follow-ups
 
 - `Blog.tsx` (list view) is restyled but not routed anywhere — `App.tsx` only has `/blog/:id`,

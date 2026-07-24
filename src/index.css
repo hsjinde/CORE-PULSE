@@ -216,7 +216,11 @@
   --hero-vignette-glow: rgba(255, 255, 255, 0.05);
   --hero-vignette-mid:  rgba(5, 5, 5, 0.55);
   --hero-vignette-base: rgba(0, 0, 0, 0.55);
-  --hero-scanline-opacity: 0.3;
+
+  /* 裝飾性暗紋總開關(掃描線 / 顆粒 / 噪點)。各處以 calc() 乘上自己的基礎值,
+     所以只要調這一個數字就能整批縮放。
+     深色 = 1(原樣)。淺色必須是 0,理由見淺色區塊的註解。 */
+  --texture-strength: 1;
 
   /* 各卡片頂緣的柔和掃光(比 --card-sweep 淡,用在 Bento/Blog/Projects 區塊分隔) */
   --sweep-soft: rgba(255, 255, 255, 0.09);
@@ -321,13 +325,17 @@
      平均 1.10×。試過 1.45,平均 1.39× —— 紙面上明顯過重。 */
   --signal-gain:   1.15;
 
-  /* 紙面不需要「壓暗」,只要極淡的邊緣收斂,像紙張本身的陰影。
-     直接沿用深色那組 .55 的黑會把整張紙弄髒。 */
+  /* 暗角與暗紋在淺色一律歸零 —— 這不是「調淡一點」的問題,是方向錯了。
+     這些效果都是 rgba(0,0,0,…) 的變暗層:疊在 #050505 上幾乎沒作用(5→4.8,
+     肉眼無感),疊在 #ffffff 上卻是實打實的變暗。而它們只覆蓋自己所屬的區塊
+     (hero 是 1150px 寬的 section、bento 是單張卡片),下一個區塊沒有,
+     邊界就被眼睛抓成一個灰色方塊。
+     即使壓到 1–2%,邊緣仍然看得出來 —— 人眼對「邊」比對「亮度」敏感得多。
+     淺色的質感改由 SignalField 提供:它是滿版 100vw、沒有區塊邊界。 */
   --hero-vignette-glow: transparent;
-  --hero-vignette-mid:  rgba(0, 0, 0, 0.03);
-  --hero-vignette-base: rgba(0, 0, 0, 0.045);
-  /* 掃描線在紙上會變成灰色橫紋,壓到深色的 4 成才不顯髒 */
-  --hero-scanline-opacity: 0.12;
+  --hero-vignette-mid:  transparent;
+  --hero-vignette-base: transparent;
+  --texture-strength: 0;
 
   --sweep-soft: rgba(0, 0, 0, 0.08);
 
@@ -775,7 +783,7 @@
   inset: 0;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
   pointer-events: none;
-  opacity: 0.35;
+  opacity: calc(0.35 * var(--texture-strength, 1));
   z-index: 0;
 }
 

@@ -265,7 +265,10 @@ export default function BentoGrid() {
             <BentoCard delay={0.2} className="h-full relative overflow-hidden">
               {/* Static CRT scanline texture only — a flat terminal identity with no animated
                   shader shimmering behind the readout, so the security list stays crisp. */}
-              <div className="scanlines absolute inset-0 z-0 opacity-[0.06] pointer-events-none" />
+              <div
+                className="scanlines absolute inset-0 z-0 pointer-events-none"
+                style={{ opacity: 'calc(0.06 * var(--texture-strength))' }}
+              />
 
               <div className="relative z-10 flex flex-col justify-between h-full">
                 <div>
