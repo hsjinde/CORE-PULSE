@@ -40,27 +40,49 @@ export default function SignalField({ intensity = 0.85 }: SignalFieldProps) {
     let dpr = 1
     const mouse = { x: 0, y: 0, tx: 0, ty: 0 }
 
-    interface Line { y: number; amp: number; ph: number; sp: number; op: number }
-    interface Dot { x: number; y: number; r: number; sp: number; ph: number; green: boolean }
-    let lines: Line[] = []
-    let dots: Dot[] = []
+    /* 密度以「像素」為單位固定,數量才由區塊實際高度算出來 ——
+       原本是固定 7 條線 / 54 點擺在正規化座標上,於是線距 = 0.125 × 區塊高度:
+       矮的區塊(Footer)被壓密、長的區塊(Projects)被拉稀,全站看起來不是同一層。
+       基準值取自 Hero(100vh ≈ 900px)原本的手感,所以 Hero 觀感不變,其他區塊向它對齊。 */
+    const LINE_PITCH = 112 // 髮絲線垂直間距(px)
+    const DOT_PITCH = 16.7 // 每多少 px 高度配一顆點
+    const MAX_LINES = 48
+    const MAX_DOTS = 360
 
-    const seed = () => {
-      lines = Array.from({ length: 7 }, (_, i) => ({
-        y: 0.1 + i * 0.125,
-        amp: 12 + Math.random() * 22,
-        ph: Math.random() * 6.28,
-        sp: 0.18 + Math.random() * 0.28,
-        op: 0.045 + Math.random() * 0.10,
-      }))
-      dots = Array.from({ length: 54 }, () => ({
-        x: Math.random(),
-        y: Math.random(),
-        r: Math.random() * 1.5 + 0.4,
-        sp: 0.02 + Math.random() * 0.05,
-        ph: Math.random() * 6.28,
-        green: Math.random() < 0.07,
-      }))
+    interface Line { amp: number; ph: number; sp: number; op: number }
+    interface Dot { x: number; y: number; r: number; sp: number; ph: number; green: boolean }
+    /* pool 只增不減:resize 讓數量變動時,既有的線/點參數原封不動,
+       只在尾端補新的,畫面不會整片重抽而跳掉。 */
+    const linePool: Line[] = []
+    const dotPool: Dot[] = []
+    let lineCount = 0
+    let dotCount = 0
+    let lineY0 = 0
+
+    const layout = () => {
+      lineCount = Math.min(MAX_LINES, Math.max(2, Math.floor(h / LINE_PITCH)))
+      dotCount = Math.min(MAX_DOTS, Math.max(8, Math.round(h / DOT_PITCH)))
+      /* 間距固定,剩下的餘量平均分到上下兩端,線陣在區塊裡置中 */
+      lineY0 = (h - (lineCount - 1) * LINE_PITCH) / 2
+
+      while (linePool.length < lineCount) {
+        linePool.push({
+          amp: 12 + Math.random() * 22,
+          ph: Math.random() * 6.28,
+          sp: 0.18 + Math.random() * 0.28,
+          op: 0.045 + Math.random() * 0.10,
+        })
+      }
+      while (dotPool.length < dotCount) {
+        dotPool.push({
+          x: Math.random(),
+          y: Math.random(),
+          r: Math.random() * 1.5 + 0.4,
+          sp: 0.02 + Math.random() * 0.05,
+          ph: Math.random() * 6.28,
+          green: Math.random() < 0.07,
+        })
+      }
     }
 
     const fit = () => {
@@ -71,6 +93,7 @@ export default function SignalField({ intensity = 0.85 }: SignalFieldProps) {
       canvas.width = Math.max(1, Math.floor(w * dpr))
       canvas.height = Math.max(1, Math.floor(h * dpr))
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+      layout()
     }
 
     let t = 0
@@ -81,13 +104,16 @@ export default function SignalField({ intensity = 0.85 }: SignalFieldProps) {
       const ox = mouse.x * 26
       const oy = mouse.y * 18
 
-      for (let i = 0; i < lines.length; i++) {
-        const L = lines[i]
+      for (let i = 0; i < lineCount; i++) {
+        const L = linePool[i]
+        /* 視差係數改為在 0.4–0.96 之間依序攤開,而不是 0.4 + i×0.08 ——
+           線數現在隨高度變,直接乘 i 會讓長區塊最下面幾條被推得太遠。 */
+        const depth = 0.4 + (lineCount > 1 ? i / (lineCount - 1) : 0) * 0.56
         ctx.beginPath()
         for (let x = 0; x <= w; x += 6) {
           const yy =
-            L.y * h +
-            oy * (0.4 + i * 0.08) +
+            lineY0 + i * LINE_PITCH +
+            oy * depth +
             Math.sin(x * 0.012 + L.ph + t * L.sp) * L.amp +
             Math.sin(x * 0.03 - t * 0.3) * 6
           if (x === 0) ctx.moveTo(x, yy)
@@ -98,10 +124,11 @@ export default function SignalField({ intensity = 0.85 }: SignalFieldProps) {
         ctx.stroke()
       }
 
-      for (let k = 0; k < dots.length; k++) {
-        const D = dots[k]
+      for (let k = 0; k < dotCount; k++) {
+        const D = dotPool[k]
         const dx = D.x * w + ox * 1.2
-        const dy = (D.y + Math.sin(t * D.sp + D.ph) * 0.02) * h + oy * 1.2
+        /* 漂移幅度也固定成 px(原本是 0.02 × 高度,矮區塊幾乎不動、長區塊晃很大) */
+        const dy = D.y * h + Math.sin(t * D.sp + D.ph) * 18 + oy * 1.2
         ctx.beginPath()
         ctx.arc(dx, dy, D.r, 0, 6.28)
         if (D.green) {
@@ -120,7 +147,6 @@ export default function SignalField({ intensity = 0.85 }: SignalFieldProps) {
     }
 
     fit()
-    seed()
 
     let raf = 0
     if (reduced) {
