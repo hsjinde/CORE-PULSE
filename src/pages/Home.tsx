@@ -23,14 +23,19 @@ export default function Home() {
 
     registerLenis(lenis)
 
+    /* rAF handle 要留著 —— 原本 cleanup 只呼叫 lenis.destroy(),遞迴的 raf 沒被取消,
+       於是每次離開首頁都遺留一個永遠跑下去的迴圈(還在對已銷毀的實例呼叫 .raf())。
+       首頁 → 文章 → 首頁 來回幾次就疊了好幾層,主執行緒被白吃。 */
+    let handle = 0
     function raf(time: number) {
       lenis.raf(time)
-      requestAnimationFrame(raf)
+      handle = requestAnimationFrame(raf)
     }
 
-    requestAnimationFrame(raf)
+    handle = requestAnimationFrame(raf)
 
     return () => {
+      cancelAnimationFrame(handle)
       registerLenis(null)
       lenis.destroy()
     }
