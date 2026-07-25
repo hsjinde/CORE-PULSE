@@ -149,29 +149,7 @@ export default function Footer() {
                     aria-label={label}
                     target={href.startsWith('http') ? '_blank' : undefined}
                     rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                    style={{
-                      width: 38,
-                      height: 38,
-                      borderRadius: '50%',
-                      border: '1px solid var(--border)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: 'var(--text-tertiary)',
-                      background: 'var(--glass-1)',
-                      transition: 'all 0.2s ease',
-                      cursor: 'pointer',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.color = 'var(--text-primary)'
-                      e.currentTarget.style.borderColor = 'var(--border-hover)'
-                      e.currentTarget.style.background = 'var(--glass-3)'
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.color = 'var(--text-tertiary)'
-                      e.currentTarget.style.borderColor = 'var(--border)'
-                      e.currentTarget.style.background = 'var(--glass-1)'
-                    }}
+                    className="footer-social"
                   >
                     <Icon size={15} />
                   </a>
@@ -192,16 +170,7 @@ export default function Footer() {
                   <a
                     key={label}
                     href={href}
-                    style={{
-                      fontSize: '0.875rem',
-                      fontFamily: 'var(--font-mono)',
-                      color: 'var(--text-secondary)',
-                      textDecoration: 'none',
-                      transition: 'color 0.18s ease',
-                      cursor: 'pointer',
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--text-primary)')}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-secondary)')}
+                    className="footer-nav-link"
                   >
                     {label}
                   </a>

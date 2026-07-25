@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { ArrowUp } from 'lucide-react'
 import {
   motion,
   useMotionValue,
@@ -7,7 +8,7 @@ import {
   useMotionValueEvent,
   useReducedMotion,
 } from 'framer-motion'
-import { subscribeLenisProgress } from '@/lib/lenisController'
+import { subscribeLenisProgress, scrollToTop } from '@/lib/lenisController'
 
 /* 招牌捲動特效 —— 頂部細捲動進度條 + 前緣游標節點 + 右下角遙測讀數。
    2px 白色訊號線像儀表游標隨閱讀進度推進;線頭有一顆發光節點,
@@ -98,34 +99,26 @@ export default function ScrollProgress() {
         }}
       />
 
-      {/* 右下角遙測讀數 */}
-      <motion.div
-        aria-hidden="true"
+      {/* 右下角遙測讀數 —— 同時是回到頁首的控制項。
+          首頁在 375px 下有 12 個螢幕高,原本沒有任何返回頂端的捷徑;
+          這顆讀數本來就錨在拇指可及的右下角、也本來就隨捲動淡入,
+          與其另外疊一顆 back-to-top,不如讓這個既有的儀表真的可按——
+          讀數是誠實的,操作也是。捲到頂時它淡出,同時退出 tab 序列
+          與無障礙樹,不會留下看不見卻聚焦得到的按鈕。 */}
+      <motion.button
+        type="button"
+        aria-hidden={!active}
+        tabIndex={active ? 0 : -1}
+        aria-label={`回到頁首(目前已讀 ${pct}%)`}
+        onClick={() => scrollToTop(!!reduced)}
+        className="scroll-readout"
         initial={false}
         animate={{ opacity: active ? 1 : 0, y: active ? 0 : 6 }}
         transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-        style={{
-          position: 'fixed',
-          right: 18,
-          bottom: 16,
-          display: 'flex',
-          alignItems: 'center',
-          gap: 7,
-          padding: '5px 10px',
-          borderRadius: 'var(--radius-xs)',
-          background: 'var(--nav-bg)',
-          border: '1px solid var(--border)',
-          backdropFilter: 'blur(6px)',
-          WebkitBackdropFilter: 'blur(6px)',
-          fontFamily: 'var(--font-mono)',
-          fontSize: '11px',
-          letterSpacing: '-0.01em',
-          color: 'var(--text-tertiary)',
-          zIndex: 300,
-          pointerEvents: 'none',
-        }}
+        style={{ pointerEvents: active ? 'auto' : 'none' }}
       >
         <span
+          aria-hidden="true"
           style={{
             width: 5,
             height: 5,
@@ -138,7 +131,8 @@ export default function ScrollProgress() {
           {String(pct).padStart(2, '0')}%
         </span>
         <span>read</span>
-      </motion.div>
+        <ArrowUp size={11} aria-hidden="true" strokeWidth={2.4} />
+      </motion.button>
     </>
   )
 }

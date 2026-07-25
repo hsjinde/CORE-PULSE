@@ -716,6 +716,110 @@
   .nav-link::after { transition: none; }
 }
 
+/* ─── 分類實心按鈕(Projects 的 Live Demo / Read Paper …)──────
+   底色由該專案的語意色從 JS 帶入,其餘一律走 token。文字用
+   --accent-signature-on:深色主題訊號色偏亮配黑字、淺色整組壓深配白字,
+   兩邊剛好反向,實測 5.78–10.08:1(深)/6.04–8.17:1(淺),無需分主題寫死。 */
+.btn-category {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 20px;
+  color: var(--accent-signature-on);
+  border-radius: var(--radius-xs);
+  font-size: 0.875rem;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: filter 0.25s var(--ease-out-quint), transform 0.25s var(--ease-out-quint);
+}
+
+.btn-category:hover { filter: brightness(1.12); transform: translateY(-1px); }
+.btn-category:active { transform: translateY(0); }
+
+/* ─── Footer 社群圓鈕 / 導覽連結 ─────────────────────────────── */
+.footer-social {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-tertiary);
+  background: var(--glass-1);
+  cursor: pointer;
+  transition: color 0.2s var(--ease-out-quint), border-color 0.2s var(--ease-out-quint),
+              background-color 0.2s var(--ease-out-quint);
+}
+
+.footer-social:hover {
+  color: var(--text-primary);
+  border-color: var(--border-hover);
+  background: var(--glass-3);
+}
+
+.footer-nav-link {
+  font-size: 0.875rem;
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.18s var(--ease-out-quint);
+}
+
+.footer-nav-link:hover { color: var(--text-primary); }
+
+/* Hero 社群連結 —— 與 footer 導覽同型的純文字連結 */
+.hero-social-link {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--text-tertiary);
+  text-decoration: none;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition: color 0.2s var(--ease-out-quint);
+}
+
+.hero-social-link:hover { color: var(--text-primary); }
+
+/* ─── 捲動讀數 / 回到頁首 ─────────────────────────────────────
+   右下角的 mono 遙測讀數,同時是回到頁首的按鈕(見 ScrollProgress)。
+   外觀維持儀表語彙,只補上真實控制項該有的 hover / active / focus。 */
+.scroll-readout {
+  position: fixed;
+  right: 18px;
+  bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 10px;
+  border-radius: var(--radius-xs);
+  background: var(--nav-bg);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: -0.01em;
+  color: var(--text-tertiary);
+  z-index: 300;
+  cursor: pointer;
+  transition: border-color 0.2s var(--ease-out-quint), color 0.2s var(--ease-out-quint);
+}
+
+.scroll-readout:hover {
+  border-color: var(--border-hover);
+  color: var(--text-secondary);
+}
+
+.scroll-readout:active { transform: translateY(1px); }
+
 /* ─── 終端路徑標籤(取代 uppercase 寬字距 label)──────────────── */
 .path-label {
   display: inline-flex;
@@ -751,29 +855,9 @@
 }
 
 /* ─── Animations ──────────────────────────────────────────────── */
-@keyframes fade-up {
-  from { opacity: 0; transform: translateY(28px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
 @keyframes fade-in {
   from { opacity: 0; }
   to   { opacity: 1; }
-}
-
-@keyframes shimmer {
-  0%   { background-position: -200% center; }
-  100% { background-position: 200% center; }
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50%       { transform: translateY(-12px); }
-}
-
-@keyframes rotate-slow {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
 }
 
 @keyframes glow-pulse {
@@ -781,9 +865,7 @@
   50%       { opacity: 1; }
 }
 
-.animate-fade-up { animation: fade-up 0.7s cubic-bezier(0.4, 0, 0.2, 1) both; }
-.animate-fade-in { animation: fade-in 0.5s ease both; }
-.animate-float   { animation: float 6s ease-in-out infinite; }
+.animate-fade-in { animation: fade-in 0.5s var(--ease-out-quint) both; }
 
 /* ─── Noise Overlay (subtle grain) ───────────────────────────── */
 .noise-overlay::after {
@@ -1411,7 +1493,7 @@
   align-items: center;
   gap: 6px;
   padding: 8px 16px;
-  border-radius: 980px;
+  border-radius: var(--radius-xs);
   border: 1px solid var(--border);
   background: var(--glass-1);
   color: var(--text-secondary);
@@ -1504,7 +1586,7 @@
   align-items: center;
   gap: 6px;
   padding: 10px 22px;
-  border-radius: 980px;
+  border-radius: var(--radius-xs);
   border: 1px solid var(--border);
   background: var(--glass-2);
   color: var(--text-secondary);
@@ -1569,7 +1651,7 @@
   align-items: center;
   gap: 5px;
   padding: 4px 11px;
-  border-radius: 980px;
+  border-radius: var(--radius-xs);
   font-size: 0.6875rem;
   font-weight: 700;
   font-family: var(--font-body);
@@ -1647,7 +1729,7 @@
   font-family: var(--font-body);
   background: var(--chip-bg);
   padding: 4px 10px;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--chip-border);
   transition: all 0.2s ease;
 }
@@ -1723,7 +1805,7 @@
   color: var(--text-tertiary);
   background: var(--glass-2);
   border: 1px solid var(--border);
-  border-radius: 980px;
+  border-radius: var(--radius-xs);
   padding: 8px 16px 8px 12px;
   cursor: pointer;
   font-size: 0.875rem;
@@ -1768,7 +1850,7 @@
   align-items: center;
   gap: 5px;
   padding: 5px 12px;
-  border-radius: 980px;
+  border-radius: var(--radius-xs);
   font-size: 0.6875rem;
   font-weight: 700;
   font-family: var(--font-body);
@@ -1809,7 +1891,7 @@
   align-items: center;
   gap: 4px;
   padding: 5px 12px;
-  border-radius: 980px;
+  border-radius: var(--radius-xs);
   font-size: 0.8125rem;
   font-weight: 500;
   font-family: var(--font-body);
@@ -1870,17 +1952,32 @@
   gap: 6px;
 }
 
+/* 目前位置以終端機游標標示,而非左側色條——與 .project-term-caret /
+   .psr-toggle 同一套文法。caret 位置恆定保留,active 只切換透明度,
+   所以切換章節時文字不會左右位移。 */
 .blogpost-toc-link {
+  position: relative;
   display: block;
   font-family: var(--font-body);
   font-size: 0.8125rem;
   line-height: 1.5;
   color: var(--text-tertiary);
   text-decoration: none;
-  padding: 6px 10px;
-  border-radius: 8px;
-  border-left: 2px solid transparent;
-  transition: all 0.2s ease;
+  padding: 6px 10px 6px 24px;
+  border-radius: var(--radius-md);
+  transition: color 0.2s var(--ease-out-quint), background-color 0.2s var(--ease-out-quint);
+}
+
+.blogpost-toc-link::before {
+  content: '❯';
+  position: absolute;
+  left: 9px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  line-height: inherit;
+  color: var(--accent-signature);
+  opacity: 0;
+  transition: opacity 0.2s var(--ease-out-quint);
 }
 
 .blogpost-toc-link:hover {
@@ -1888,14 +1985,17 @@
   background: var(--table-hover);
 }
 
+.blogpost-toc-link:hover::before { opacity: 0.4; }
+
 .blogpost-toc-link.active {
   color: var(--accent-signature);
   background: var(--chip-bg);
-  border-left-color: var(--accent-signature);
 }
 
+.blogpost-toc-link.active::before { opacity: 1; }
+
 .blogpost-toc-link.level-3 {
-  padding-left: 20px;
+  padding-left: 34px;
   font-size: 0.78rem;
 }
 
@@ -2029,7 +2129,7 @@
   font-family: var(--font-mono);
   background: var(--code-inline-bg);
   padding: 0.22em 0.5em;
-  border-radius: 5px;
+  border-radius: var(--radius-xs);
   font-size: 0.875em;
   color: var(--accent-teal);
   border: 1px solid var(--code-inline-border);
@@ -2098,7 +2198,7 @@
   padding: 5px 14px;
   background: rgba(255, 255, 255, 0.10);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   font-size: 0.7rem;
   font-weight: 600;
   color: rgba(245, 245, 247, 0.65);
@@ -2211,13 +2311,15 @@
     gap: 8px;
   }
 
+  /* 行動版 TOC 橫排成一列晶片,caret 讓位給整框高亮 */
   .blogpost-toc-link {
-    border-left: none;
     border: 1px solid var(--border);
-    border-radius: 980px;
+    border-radius: var(--radius-xs);
     padding: 6px 14px;
     white-space: nowrap;
   }
+
+  .blogpost-toc-link::before { content: none; }
 
   .blogpost-toc-link.active {
     border-color: var(--accent-signature);
@@ -2237,6 +2339,46 @@
   .prose h2 { font-size: 1.5rem; }
   .prose h3 { font-size: 1.2rem; }
   .prose th, .prose td { padding: 12px 14px; }
+}
+
+/* ─── 觸控目標下限 ────────────────────────────────────────────
+   以 pointer: coarse 判斷,而不是視窗寬度——觸控筆電、平板接鍵盤都是
+   大螢幕配粗指標,用 max-width 會漏掉。手指的接觸面約 44px,這是
+   WCAG 2.5.5 的門檻,也是這站原本普遍差幾 px 就達標的地方
+   (btn-ghost 40、psr-toggle 41、footer 圓鈕 38、footer 導覽 21)。
+
+   只加 min-height 會讓文字貼齊上緣,所以同時用 inline-flex + align-items
+   把內容置中;水平方向以 min-width 補足純圖示的圓鈕。 */
+@media (pointer: coarse) {
+  .btn-solid,
+  .btn-primary,
+  .btn-outline,
+  .btn-ghost,
+  .btn-category,
+  .psr-toggle,
+  .scroll-readout {
+    min-height: 44px;
+  }
+
+  .footer-social {
+    width: 44px;
+    height: 44px;
+  }
+
+  /* 純文字連結沒有框,靠 padding 撐開可點區域;負 margin 抵銷視覺位移,
+     讓行距看起來與桌機一致(可點區域變大,但排版不變胖)。
+     兩者的鄰居都在另一軸上(footer 導覽垂直排、hero 社群水平排),
+     所以往垂直方向撐開不會讓相鄰目標互相重疊。 */
+  .footer-nav-link {
+    display: block;
+    padding: 12px 0;
+    margin: -12px 0;
+  }
+
+  .hero-social-link {
+    padding: 12px 0;
+    margin: -12px 0;
+  }
 }
 
 /* ─── Reduced Motion ──────────────────────────────────────────── */

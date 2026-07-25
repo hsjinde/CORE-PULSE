@@ -37,3 +37,14 @@ export function stopLenis(): void {
 export function startLenis(): void {
   instance?.start();
 }
+
+/** 捲回頁首。Home 由 Lenis 接管捲動,直接 window.scrollTo 會被它蓋回去,
+ *  所以有實例時必須走 Lenis;其餘路由退回原生。
+ *  immediate 供 prefers-reduced-motion 使用——直接跳,不做補間。 */
+export function scrollToTop(immediate = false): void {
+  if (instance) {
+    instance.scrollTo(0, immediate ? { immediate: true } : { duration: 0.9 });
+    return;
+  }
+  window.scrollTo({ top: 0, behavior: immediate ? 'auto' : 'smooth' });
+}

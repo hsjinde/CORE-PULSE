@@ -124,7 +124,7 @@ export default function Hero() {
         <motion.h1
           initial={{ opacity: 0, y: 36 }}
           animate={{ opacity: 1, y: 0  }}
-          transition={{ delay: 0.25, duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
+          transition={{ delay: 0.25, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="text-display mb-6"
           style={{ textWrap: 'balance' }}
         >
@@ -223,21 +223,7 @@ export default function Hero() {
               href={href}
               target={href.startsWith('http') ? '_blank' : undefined}
               rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 7,
-                color: 'var(--text-tertiary)',
-                textDecoration: 'none',
-                fontFamily: 'var(--font-body)',
-                fontSize: '0.875rem',
-                fontWeight: 500,
-                letterSpacing: '-0.01em',
-                transition: 'color 0.2s ease',
-                cursor: 'pointer',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--text-primary)')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-tertiary)')}
+              className="hero-social-link"
             >
               <Icon size={14} />
               {label}

@@ -146,10 +146,23 @@ headings (Hero) safely use mono directly.
 lowercase English section id rendered as `~/skills`, `~/projects`, `~/notes`, `~/security`,
 `~/ci-cd`, `~/research`, `~/stats`. Replaces the uppercase-tracked eyebrow pattern.
 
+**Caret convention**: `❯` marks *the current position*, and only that — `.project-term-caret`,
+`.psr-toggle`, and the BlogPost TOC's active entry. The TOC previously used a 2px
+`border-left` accent stripe; side-stripes are banned, and the caret says the same thing in the
+site's own grammar. The caret's slot is reserved at all times (`padding-left: 24px`,
+`::before` at `opacity: 0`) and only its opacity animates, so changing sections never shifts
+the text sideways. On mobile the TOC reflows into a chip row where the whole frame highlights,
+so the caret is suppressed there (`content: none`).
+
 ## Radius
 
-`--radius-xs` 4px → `--radius-2xl` 14px. No pill shapes on new components (existing Blog filter
-tabs keep their pill as a legacy exception).
+`--radius-xs` 4px → `--radius-2xl` 14px. **No pill shapes anywhere** — the Blog filter-tab legacy
+exception is retired. The seven `border-radius: 980px` sites in the Blog / BlogPost family (filter
+tabs, empty-state reset, category badges, back button, tags, mobile TOC chips) are now
+`var(--radius-xs)`, so `/blog/:id` reads as the same instrument panel as the rest of the site.
+
+Every radius in `index.css` is a token. The only literals left are three `2px` hairline details
+(scrollbar thumb and friends) that sit *below* `--radius-xs` and are deliberately not tokens.
 
 ## Cards
 
@@ -167,7 +180,20 @@ capped at `--blur-xl` (14px), down from the original 40–60px.
   Hover inverts to transparent + white border.
 - `.btn-outline` / `.btn-ghost`: transparent, hairline border, mono font.
 - Semantic exception: a button representing a category (e.g. a Project's "Live Demo" link) uses
-  that category's accent color as its fill, white text, `brightness(1.12)` + tinted glow on hover.
+  that category's accent color as its fill with `--accent-signature-on` text (**not** hardcoded
+  white — the two ramps invert in lockstep, so that token is ≥5.7:1 in both themes). Hover is
+  `brightness(1.12)` plus a 1px lift, and nothing else.
+
+  This bullet used to promise a "tinted glow" on hover. It never rendered: the value was
+  `` `0 8px 24px ${accentColor}50` ``, and once `accentColor` became a `var()` that string is
+  invalid at computed-value time. The dead line is removed rather than repaired — Design
+  Principle 2 (儀器的誠實) rules out using blur to fake depth, so a 24px colored glow was never
+  the right target.
+
+**`var()` + hex-alpha is the recurring trap in this codebase.** `` `${accentColor}30` `` does not
+degrade to a faint tint; `border-color` becomes invalid at computed-value time and falls back to
+`currentColor` — which on these buttons *is* the accent, so the border rendered at **full
+opacity**, louder than designed, not quieter. Always `color-mix(in srgb, …)`.
 
 ## Motion
 
@@ -175,6 +201,51 @@ Easing: `cubic-bezier(0.22, 1, 0.36, 1)` (ease-out-quint) site-wide, replacing t
 `cubic-bezier(0.34, 1.1, 0.64, 1)`. Card hover no longer lifts (`translateY`); depth comes from
 border/background contrast only. `prefers-reduced-motion: reduce` disables all animation
 durations globally.
+
+"Site-wide" is now literally true. Three entrance animations were still on Material's
+`[0.4, 0, 0.2, 1]` — the Hero `<h1>`, the Navbar drop-in, and the Projects card reveal, i.e. the
+first three motions a visitor ever sees. They are `[0.22, 1, 0.36, 1]` now. The unused
+`.animate-fade-up` / `.animate-float` helpers (and the `fade-up`, `float`, `shimmer`,
+`rotate-slow` keyframes behind them, all zero-reference) were deleted rather than corrected;
+`.animate-fade-in` is the only helper still in use and it takes `var(--ease-out-quint)`.
+
+Prefer transitioning named properties over `all`, which quietly animates layout properties too.
+
+## Touch targets
+
+Sized under `@media (pointer: coarse)`, **not** a width breakpoint — a touchscreen laptop and a
+tablet with a keyboard are both wide screens with a coarse pointer, and a `max-width` query
+misses them. Conversely a mouse user who narrows their window should not get inflated controls.
+
+`.btn-solid` / `.btn-primary` / `.btn-outline` / `.btn-ghost` / `.btn-category` / `.psr-toggle` /
+`.scroll-readout` get `min-height: 44px`; `.footer-social` becomes 44×44. Bare text links
+(`.footer-nav-link`, `.hero-social-link`) have no box to grow, so they take `padding: 12px 0`
+with a matching negative margin — the hit area grows, the layout does not. That trick is only
+safe because each one's neighbours sit on the *other* axis (footer nav stacks vertically, hero
+socials run horizontally), so expanding vertically can't overlap the next target.
+
+Still below 44px, deliberately: the dense service/skill readout links inside BentoGrid
+(`mail ↗`, `note-maintain ↗`, …) at 18–21px. Padding out ~10 list rows would add real height to
+a page that is already 12 screens tall on a phone; that trade needs a layout answer, not a
+padding one. Tracked as a follow-up, not silently accepted.
+
+## Back to top
+
+Home is ~9,800px — twelve screens — at 375px, and had no way back up. Rather than stack a
+dedicated back-to-top button on top of existing chrome, the ScrollProgress readout in the
+bottom-right corner *became* the control: it was already anchored in the thumb zone, already
+faded in on scroll, and was already reporting a real number. It was `aria-hidden` with
+`pointer-events: none` — a decorative instrument. Now it is a `<button>`. That direction is the
+one this site should always take: Principle 2 (儀器的誠實) is satisfied by making the gauge real,
+not by adding a second gauge.
+
+Two things it must keep doing: at the top of the page it drops out of the tab order and the
+accessibility tree together (`tabIndex={-1}` + `aria-hidden`), so no one can focus a control they
+cannot see; and it scrolls via `scrollToTop()` in [lenisController](src/lib/lenisController.ts),
+never `window.scrollTo` — Home's scroll is owned by Lenis, which would immediately undo a raw
+window scroll. `prefers-reduced-motion` passes `immediate: true` and skips the tween.
+[tests/components/scroll-readout.test.tsx](tests/components/scroll-readout.test.tsx) locks all of
+that in.
 
 Theme switching transitions `background-color` and `color` on `body` over 240ms — deliberately
 *not* a whole-page fade, which makes every element flicker at once and reads worse than an

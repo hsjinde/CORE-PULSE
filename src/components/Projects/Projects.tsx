@@ -147,7 +147,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       ref={ref}
       initial={{ opacity: 0, y: 44 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.7, delay: index * 0.1, ease: [0.4, 0, 0.2, 1] }}
+      transition={{ duration: 0.7, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
       style={{ marginBottom: 20 }}
     >
       <div
@@ -232,7 +232,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                     style={{
                       padding: '9px 20px',
                       fontSize: '0.875rem',
-                      borderColor: `${project.accentColor}30`,
+                      borderColor: `color-mix(in srgb, ${project.accentColor} 20%, transparent)`,
                       color: project.accentColor,
                       cursor: 'pointer',
                     }}
@@ -251,7 +251,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                     style={{
                       padding: '9px 20px',
                       fontSize: '0.875rem',
-                      borderColor: `${project.accentColor}30`,
+                      borderColor: `color-mix(in srgb, ${project.accentColor} 20%, transparent)`,
                       color: project.accentColor,
                       cursor: 'pointer',
                     }}
@@ -265,34 +265,8 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                     href={project.demoUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: 7,
-                      padding: '9px 20px',
-                      background: project.accentColor,
-                      /* 彩底上的文字。深色主題的訊號色是亮的(配黑字 ≥6.7:1),
-                         淺色主題整組壓深(配白字 ≥6.0:1)—— 兩邊剛好反向,
-                         所以直接沿用 signature 的對比色,不必各自寫死。 */
-                      color: 'var(--accent-signature-on)',
-                      borderRadius: 'var(--radius-xs)',
-                      fontSize: '0.875rem',
-                      fontFamily: 'var(--font-mono)',
-                      fontWeight: 600,
-                      textDecoration: 'none',
-                      cursor: 'pointer',
-                      transition: 'all 0.25s ease',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.filter = 'brightness(1.12)'
-                      e.currentTarget.style.boxShadow = `0 8px 24px ${project.accentColor}50`
-                      e.currentTarget.style.transform = 'translateY(-1px)'
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.filter = 'none'
-                      e.currentTarget.style.boxShadow = 'none'
-                      e.currentTarget.style.transform = 'translateY(0)'
-                    }}
+                    className="btn-category"
+                    style={{ background: project.accentColor }}
                   >
                     <ExternalLink size={14} />
                     {project.demoLabel || 'Live Demo'}
@@ -406,7 +380,7 @@ export default function Projects() {
               fontSize: '0.875rem',
               fontWeight: 500,
               letterSpacing: '-0.01em',
-              padding: '10px 20px',
+              padding: '12px 20px',
               borderRadius: 'var(--radius-xs)',
               background: 'var(--bg-tertiary)',
               border: '1px solid var(--border)',
