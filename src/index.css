@@ -233,6 +233,20 @@
      那是「佔位藝術」的語意,而這是版面的地面光,兩者不該連動。
      必須配合滿版 100vw 使用,見 Footer.tsx 註解。 */
   --footer-glow: rgba(255, 255, 255, 0.06);
+
+  /* ── 黃銅 —— footer 專屬的暖色 ──────────────────────────────────
+     取自參考作品 circuit-ledger-h15,它的畫布同樣是 #050505,所以這個
+     搭配是在同一個底上驗證過的。用途只有一個:給 footer 一個自己的
+     顏色,把版面的收尾和上面六個 section 區隔開。
+
+     它刻意不進訊號色表 —— 訊號色是語意(blue=行動、green=正常…),
+     黃銅是裝飾,和 --accent-signature 同一類。所以它只能出現在沒有
+     語意的位置:~/ 前綴、email 填色、build 日期、分隔線。lcp 與 api
+     狀態維持 green/orange/red,那是真的在報狀態,不可以被染色。 */
+  --accent-brass:       #f7e2c0;
+  --accent-brass-hover: #ffeed4;
+  --brass-on:           #050505;  /* 黃銅填色上的文字 */
+  --brass-dim:          rgba(247, 226, 192, 0.30);  /* 分隔線起點 */
 }
 
 /* ─── 淺色模式 — C·High-contrast 純白高反差 ──────────────────────
@@ -350,6 +364,14 @@
   /* Footer 環境光在淺色歸零 —— 同上,它是變暗層,白紙上是實打實的灰帶。
      Footer 的分隔本來就由 border-top 髮絲線承擔,不需要地面光。 */
   --footer-glow: transparent;
+
+  /* 黃銅在白紙上要壓深 —— #f7e2c0 對 #ffffff 只有 1.2:1,直接搬過來
+     等於隱形。照訊號色那套規則處理:同 hue、壓明度,#7a5a1a 量到 6.4:1,
+     和其他 --accent-* 的淺色版同一個門檻。 */
+  --accent-brass:       #7a5a1a;  /* 6.4:1 on #ffffff */
+  --accent-brass-hover: #5c440f;
+  --brass-on:           #ffffff;
+  --brass-dim:          rgba(122, 90, 26, 0.34);
 }
 
 /* ─── Base Reset ──────────────────────────────────────────────── */
@@ -738,26 +760,76 @@
 .btn-category:hover { filter: brightness(1.12); transform: translateY(-1px); }
 .btn-category:active { transform: translateY(0); }
 
-/* ─── Footer 社群圓鈕 / 導覽連結 ─────────────────────────────── */
-.footer-social {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  border: 1px solid var(--border);
-  display: flex;
+/* ─── Footer 黃銅細節 / 導覽連結 ─────────────────────────────── */
+
+/* footer 的 path-label 前綴改染黃銅 —— 只在 footer 內。上面六個 section
+   的 ~/ 維持 --text-tertiary,兩者的差異本身就是「這裡是收尾」的訊號。 */
+footer .path-label::before { color: var(--accent-brass); opacity: 1; }
+
+/* email 主行動 —— btn-primary 的黃銅版。白填改黃銅填,其餘一致。 */
+.btn-brass {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-tertiary);
-  background: var(--glass-1);
+  gap: 8px;
+  padding: 13px 22px;
+  background: var(--accent-brass);
+  color: var(--brass-on);
+  border: 1px solid var(--accent-brass);
+  border-radius: var(--radius-xs);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-decoration: none;
   cursor: pointer;
-  transition: color 0.2s var(--ease-out-quint), border-color 0.2s var(--ease-out-quint),
-              background-color 0.2s var(--ease-out-quint);
+  transition: background 0.25s var(--ease-out-quint), color 0.25s var(--ease-out-quint),
+              border-color 0.25s var(--ease-out-quint), transform 0.12s ease;
 }
 
-.footer-social:hover {
-  color: var(--text-primary);
-  border-color: var(--border-hover);
-  background: var(--glass-3);
+/* hover 反相 —— 和 .btn-primary 同一套語法(填色退掉,只留框線) */
+.btn-brass:hover {
+  background: transparent;
+  color: var(--accent-brass);
+  border-color: var(--accent-brass);
+}
+
+.btn-brass:active {
+  background: var(--accent-brass-hover);
+  color: var(--brass-on);
+  border-color: var(--accent-brass-hover);
+  transform: scale(0.97);
+}
+
+/* 聯絡方式的 key-value 列 —— 取代原本 38px 的圓鈕。
+   圓鈕是 border-radius: 50%,直接牴觸 DESIGN.md 的「No pill shapes anywhere」
+   與 14px 圓角上限;而且純圖示看不到帳號,這裡把 handle 直接攤開。
+   padding 12px 讓整列在觸控下就有 44px,不需要 pointer: coarse 另外補。 */
+.footer-kv {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--nav-border);
+  font-family: var(--font-mono);
+  text-decoration: none;
+  transition: border-color 0.2s var(--ease-out-quint);
+}
+
+.footer-kv .k { font-size: 0.8125rem; color: var(--text-secondary); transition: color 0.2s var(--ease-out-quint); }
+.footer-kv .v { font-size: 0.75rem;   color: var(--text-tertiary);  transition: color 0.2s var(--ease-out-quint); }
+
+.footer-kv:hover { border-bottom-color: var(--border-hover); }
+.footer-kv:hover .k,
+.footer-kv:hover .v { color: var(--text-primary); }
+
+/* 版權列上方的分隔 —— 從黃銅淡出到透明。不是滿版髮絲線:那條已經由
+   footer 自己的 border-top 擔任,這裡再來一條等重的會變成兩條平行線。 */
+.footer-rule {
+  height: 1px;
+  margin-bottom: 22px;
+  background: linear-gradient(90deg, var(--brass-dim), transparent);
 }
 
 .footer-nav-link {
@@ -1302,11 +1374,13 @@
 }
 
 /* ─── Footer Grid ────────────────────────────────────────────── */
+/* 三欄不等寬 —— 1fr 1fr 1fr 會讓只有六個短字的 nav 欄留一大片空白,
+   而 brand 的說明文字被壓成窄柱。依內容量配寬度。 */
 .footer-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1.4fr 1fr 1.2fr;
   gap: 48px;
-  margin-bottom: 56px;
+  margin-bottom: 44px;
 }
 
 /* ─── Section Dividers (gradient fade) ───────────────────────── */
@@ -2345,7 +2419,7 @@
    以 pointer: coarse 判斷,而不是視窗寬度——觸控筆電、平板接鍵盤都是
    大螢幕配粗指標,用 max-width 會漏掉。手指的接觸面約 44px,這是
    WCAG 2.5.5 的門檻,也是這站原本普遍差幾 px 就達標的地方
-   (btn-ghost 40、psr-toggle 41、footer 圓鈕 38、footer 導覽 21)。
+   (btn-ghost 40、psr-toggle 41、footer 導覽 21)。
 
    只加 min-height 會讓文字貼齊上緣,所以同時用 inline-flex + align-items
    把內容置中;水平方向以 min-width 補足純圖示的圓鈕。 */
@@ -2360,10 +2434,7 @@
     min-height: 44px;
   }
 
-  .footer-social {
-    width: 44px;
-    height: 44px;
-  }
+  .btn-brass { min-height: 44px; }
 
   /* 純文字連結沒有框,靠 padding 撐開可點區域;負 margin 抵銷視覺位移,
      讓行距看起來與桌機一致(可點區域變大,但排版不變胖)。

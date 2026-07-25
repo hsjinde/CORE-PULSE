@@ -124,6 +124,29 @@ CSS against a `var()` and silently drops the declaration.
 Rule: a category keeps the same color everywhere it appears (e.g. Blog's "個人學習" is always
 orange). Never assign color for pure visual variety on non-categorical elements.
 
+### Brass — the Footer's warm accent
+
+`--accent-brass` (`#f7e2c0` dark / `#7a5a1a` light, 6.4:1 on white) is the second purely
+decorative hue after `--accent-signature`, and it belongs to the Footer alone. It is lifted from
+the `circuit-ledger-h15` reference portfolio, whose canvas is also `#050505` — so the pairing was
+sampled against this exact ground, not guessed. The light value is derived the same way the signal
+ramp is: same hue, value compressed until it clears 6:1 on `#ffffff`.
+
+It is deliberately **not** in the signal table. Signal colors mean something (blue = action,
+green = healthy); brass means "this is where the page ends." That distinction dictates where it may
+appear — only on positions carrying no state:
+
+| Allowed | Forbidden |
+|---|---|
+| `footer .path-label::before` (the `~/` prefix) | `lcp` readout — green/orange **is** the verdict |
+| `.btn-brass` fill (the single email CTA) | `edge api` status — green/red/orange is the state |
+| `build` date in the readout row | Anything outside `<footer>` |
+| `.footer-rule` gradient | |
+
+The `~/` prefix is scoped with `footer .path-label::before`, so the ten section labels above stay
+`--text-tertiary`. That contrast is the point: the color shift *is* the signal that the page has
+ended, which is why brass must not leak upward into the sections.
+
 ### Telemetry page (`/telemetry`) — isolated palette
 
 `--color-carbon-*` (chroma-0 near-black ramp), `--color-beacon-*` (green phosphor ramp aligned to
@@ -157,7 +180,10 @@ so the caret is suppressed there (`content: none`).
 ## Radius
 
 `--radius-xs` 4px → `--radius-2xl` 14px. **No pill shapes anywhere** — the Blog filter-tab legacy
-exception is retired. The seven `border-radius: 980px` sites in the Blog / BlogPost family (filter
+exception is retired, and so is the last `border-radius: 50%` control, the Footer's three 38px
+social circles. They were replaced by `.footer-kv` rows rather than squared off: icon-only circles
+also hid *which* account each one pointed at, so the fix was to show the handle, not to change the
+corner. The seven `border-radius: 980px` sites in the Blog / BlogPost family (filter
 tabs, empty-state reset, category badges, back button, tags, mobile TOC chips) are now
 `var(--radius-xs)`, so `/blog/:id` reads as the same instrument panel as the rest of the site.
 
@@ -217,8 +243,9 @@ Sized under `@media (pointer: coarse)`, **not** a width breakpoint — a touchsc
 tablet with a keyboard are both wide screens with a coarse pointer, and a `max-width` query
 misses them. Conversely a mouse user who narrows their window should not get inflated controls.
 
-`.btn-solid` / `.btn-primary` / `.btn-outline` / `.btn-ghost` / `.btn-category` / `.psr-toggle` /
-`.scroll-readout` get `min-height: 44px`; `.footer-social` becomes 44×44. Bare text links
+`.btn-solid` / `.btn-primary` / `.btn-outline` / `.btn-ghost` / `.btn-category` / `.btn-brass` /
+`.psr-toggle` / `.scroll-readout` get `min-height: 44px`. `.footer-kv` needs no coarse-pointer rule
+at all — its `padding: 12px 0` already measures 44px on every pointer type. Bare text links
 (`.footer-nav-link`, `.hero-social-link`) have no box to grow, so they take `padding: 12px 0`
 with a matching negative margin — the hit area grows, the layout does not. That trick is only
 safe because each one's neighbours sit on the *other* axis (footer nav stacks vertically, hero

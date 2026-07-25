@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { motion, useInView } from 'framer-motion'
-import { Code2, ExternalLink, Mail, Terminal, Clock, Activity } from 'lucide-react'
+import { Mail, Terminal, Clock, Activity } from 'lucide-react'
 import SignalField from '../Hero/SignalField'
 
 /* 三個讀數全部是真的(儀器的誠實):
@@ -44,17 +45,20 @@ function BuildInfo() {
   const apiText = { checking: 'checking api…', ok: 'edge api operational', down: 'api unreachable', dev: 'local dev' }[api]
   const apiColor = { checking: 'var(--text-tertiary)', ok: 'var(--accent-green)', down: 'var(--accent-red)', dev: 'var(--text-tertiary)' }[api]
 
+  /* 只有 build 染黃銅。lcp 與 api 維持 green/orange/red —— 那兩個是真的
+     在報狀態,顏色帶語意,不能為了視覺統一換成裝飾色(見 index.css 的
+     --accent-brass 註解)。build 日期沒有好壞可言,才輪得到裝飾。 */
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap', fontSize: '0.75rem', color: 'var(--text-tertiary)', fontFamily: 'var(--font-body)' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap', fontSize: '0.75rem', color: 'var(--text-tertiary)', fontFamily: 'var(--font-mono)', fontVariantNumeric: 'tabular-nums' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
         <Clock size={11} />
-        <span>Built {__BUILD_TIME__.slice(0, 10)}</span>
+        <span>build <span style={{ color: 'var(--accent-brass)', fontWeight: 500 }}>{__BUILD_TIME__.slice(0, 10)}</span></span>
       </div>
       {lcpSeconds !== null && (
         <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
           <Activity size={11} style={{ color: lcpGood ? 'var(--accent-green)' : 'var(--accent-orange)' }} />
           <span style={{ color: lcpGood ? 'var(--accent-green)' : 'var(--accent-orange)' }}>
-            LCP {lcpSeconds.toFixed(1)}s
+            lcp {lcpSeconds.toFixed(1)}s
           </span>
         </div>
       )}
@@ -69,14 +73,32 @@ function BuildInfo() {
   )
 }
 
+const GITHUB   = 'https://github.com/hsjinde'
+const LINKEDIN = 'https://www.linkedin.com/in/%E6%99%89%E5%BE%B7-%E6%9E%97-99421a237/'
+const EMAIL    = 'ethan19980803@gmail.com'
+
+/* 聯絡方式攤平成 key-value —— 原本是三顆純圖示圓鈕,看不出帳號是什麼。
+   value 直接寫 handle,滑鼠不用停在圖示上猜。 */
+const CONTACTS = [
+  { k: 'github',   v: 'hsjinde ↗',  href: GITHUB,           external: true  },
+  { k: 'linkedin', v: '晉德 林 ↗',  href: LINKEDIN,          external: true  },
+  { k: 'email',    v: EMAIL,        href: `mailto:${EMAIL}`, external: false },
+]
+
+/* footer 的 nav 是全站最後一次 sitemap,補齊到與實際區塊一致。
+   原本缺 about / work,而 contact 指向 #contact —— 也就是 footer 自己,
+   等於連到使用者已經在的位置。 */
+const NAV = [
+  { href: '#hero',     label: 'home'     },
+  { href: '#about',    label: 'about'    },
+  { href: '#skills',   label: 'skills'   },
+  { href: '#work',     label: 'work'     },
+  { href: '#projects', label: 'projects' },
+]
+
 export default function Footer() {
   const ref    = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '-40px' })
-  const socialLinks = [
-    { icon: Code2,        href: 'https://github.com/hsjinde',        label: 'GitHub'   },
-    { icon: ExternalLink, href: 'https://www.linkedin.com/in/%E6%99%89%E5%BE%B7-%E6%9E%97-99421a237/', label: 'LinkedIn' },
-    { icon: Mail,         href: 'mailto:ethan19980803@gmail.com',     label: 'Email'    },
-  ]
 
   return (
     <footer
@@ -135,112 +157,55 @@ export default function Footer() {
                 </span>
               </div>
 
-              <p className="text-body" style={{ fontSize: '0.875rem', marginBottom: 22 }}>
+              <p className="text-body" style={{ fontSize: '0.875rem', marginBottom: 26 }}>
                 Security Software Engineer &amp; Self-Hosted Infra Builder.<br />
                 Everything on this site runs on systems I built myself.
               </p>
 
-              {/* Social icons */}
-              <div style={{ display: 'flex', gap: 10 }}>
-                {socialLinks.map(({ icon: Icon, href, label }) => (
-                  <a
-                    key={label}
-                    href={href}
-                    aria-label={label}
-                    target={href.startsWith('http') ? '_blank' : undefined}
-                    rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                    className="footer-social"
-                  >
-                    <Icon size={15} />
-                  </a>
-                ))}
-              </div>
+              {/* 唯一的主行動。原本這裡是三顆圓鈕、下面第三欄又有一顆白底
+                  email 鈕加兩顆 ghost 鈕 —— email 在同一個 footer 出現四次。 */}
+              <a href={`mailto:${EMAIL}`} className="btn-brass">
+                <Mail size={15} />
+                send me an email
+              </a>
             </div>
 
             {/* Col 2: Navigation */}
             <div>
               <p className="path-label" style={{ marginBottom: 20 }}>nav</p>
               <nav style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                {[
-                  { href: '#hero',     label: 'home'     },
-                  { href: '#skills',   label: 'skills'   },
-                  { href: '#projects', label: 'projects' },
-                  { href: '#contact',  label: 'contact'  },
-                ].map(({ href, label }) => (
-                  <a
-                    key={label}
-                    href={href}
-                    className="footer-nav-link"
-                  >
+                {NAV.map(({ href, label }) => (
+                  <a key={label} href={href} className="footer-nav-link">
                     {label}
                   </a>
                 ))}
+                <Link to="/ask" className="footer-nav-link">ask ↗</Link>
               </nav>
             </div>
 
-            {/* Col 3: Contact */}
+            {/* Col 3: Connect */}
             <div>
-              <p className="path-label" style={{ marginBottom: 20 }}>contact</p>
-              <p className="text-body" style={{ fontSize: '0.875rem', marginBottom: 12 }}>
-                有合作機會或技術討論？歡迎直接來信聯絡！
-              </p>
-              {/* 純文字 email:給不用系統郵件客戶端的人直接複製 */}
-              <p
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.8125rem',
-                  color: 'var(--text-secondary)',
-                  marginBottom: 18,
-                  userSelect: 'all',
-                }}
-              >
-                ethan19980803@gmail.com
-              </p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              <p className="path-label" style={{ marginBottom: 12 }}>connect</p>
+              {CONTACTS.map(({ k, v, href, external }) => (
                 <a
-                  href="mailto:ethan19980803@gmail.com"
-                  className="btn-primary"
-                  style={{
-                    justifyContent: 'center',
-                    padding: '12px 16px',
-                    fontSize: '0.9rem',
-                    textDecoration: 'none'
-                  }}
+                  key={k}
+                  href={href}
+                  className="footer-kv"
+                  aria-label={k}
+                  {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                 >
-                  <Mail size={16} />
-                  Send me an Email
+                  <span className="k">{k}</span>
+                  {/* user-select: all —— 不用郵件客戶端的人可以整串選起來複製 */}
+                  <span className="v" style={k === 'email' ? { userSelect: 'all' } : undefined}>{v}</span>
                 </a>
-                <div style={{ display: 'flex', gap: 10, marginTop: 4 }}>
-                  <a
-                    href="https://www.linkedin.com/in/%E6%99%89%E5%BE%B7-%E6%9E%97-99421a237/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-ghost"
-                    style={{ flex: 1, justifyContent: 'center', padding: '10px', textDecoration: 'none' }}
-                  >
-                    <ExternalLink size={15} />
-                    LinkedIn
-                  </a>
-                  <a
-                    href="https://github.com/hsjinde"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-ghost"
-                    style={{ flex: 1, justifyContent: 'center', padding: '10px', textDecoration: 'none' }}
-                  >
-                    <Code2 size={15} />
-                    GitHub
-                  </a>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
 
           {/* ── Bottom bar ── */}
+          <div className="footer-rule" />
           <div
             style={{
-              paddingTop: 24,
-              borderTop: '1px solid var(--nav-border)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
@@ -249,7 +214,7 @@ export default function Footer() {
             }}
           >
             <p style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)', fontFamily: 'var(--font-body)' }}>
-              © 2026 Core Pulse · Built with React &amp; Cloudflare
+              © {new Date().getFullYear()} core_pulse · react + cloudflare pages
             </p>
             <BuildInfo />
           </div>
