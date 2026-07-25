@@ -605,14 +605,6 @@
   }
 }
 
-/* ─── Navbar Glass ────────────────────────────────────────────── */
-.glass-nav {
-  background: var(--nav-bg);
-  backdrop-filter: var(--blur-xl) saturate(200%);
-  -webkit-backdrop-filter: var(--blur-xl) saturate(200%);
-  border-bottom: 1px solid var(--nav-border);
-}
-
 /* ─── Status Dot ──────────────────────────────────────────────── */
 .status-dot {
   width: 7px;
