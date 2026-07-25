@@ -108,7 +108,14 @@ export default function SignalField({ intensity = 0.85 }: SignalFieldProps) {
 
     const fit = () => {
       const rect = canvas.getBoundingClientRect()
-      dpr = Math.min(window.devicePixelRatio || 1, 2)
+      /* 動態模式固定 DPR 1。實測(Chromium 1440×900,捲動中的幀率):
+         DPR 1 → 60 fps、0% 掉幀;DPR 2 → 35–43 fps、40–67% 掉幀;
+         同一台停用 canvas 是 60 fps —— 也就是這層的成本幾乎全在像素填充量,
+         不在線條或點的數量(DPR 2 是 4 倍填充)。
+         這是 opacity 0.045–0.145 的髮絲紋理,降解析度後由瀏覽器放大平滑,
+         目視差異極小;拿 4 倍填充換那點銳利度不划算。
+         reduced-motion 只畫一張靜態幀、沒有逐幀成本,維持原本的銳利度。 */
+      dpr = reduced ? Math.min(window.devicePixelRatio || 1, 2) : 1
       w = rect.width
       h = rect.height
       canvas.width = Math.max(1, Math.floor(w * dpr))
