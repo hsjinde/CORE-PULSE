@@ -7,6 +7,7 @@ import { useTheme } from '@/hooks/useTheme'
 const navLinks: { href: string; label: string; external?: boolean; route?: boolean }[] = [
   { href: '#skills',   label: 'Skills'   },
   { href: '#projects', label: 'Projects' },
+  { href: '/blog',     label: 'Notes',   route: true },
   { href: '#contact',  label: 'Contact'  },
   { href: '/ask',      label: 'Ask', route: true },
 ]
