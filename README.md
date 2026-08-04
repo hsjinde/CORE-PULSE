@@ -119,9 +119,10 @@ core-pulse/
 │   ├── index.css                # 全域樣式 + Design Tokens
 │   ├── App.tsx                  # 根組件（路由 + Lenis）
 │   └── main.tsx                 # 入口點
+├── docs/posts/*.md              # 文章原始檔（publish-post.mjs 的輸入）
 ├── tests/                       # Vitest 單元測試
 ├── e2e/                         # Playwright E2E
-├── scripts/                     # gen-wiki.cjs + 維運腳本（*.mjs）
+├── scripts/                     # gen-wiki.cjs + publish-post.mjs + 維運腳本（*.mjs）
 ├── wrangler.toml                # Pages / D1 綁定與環境變數
 ├── vite.config.ts               # Vite（Tailwind v4 + @ 路徑別名）
 └── tsconfig.app.json            # TypeScript 設定
@@ -140,6 +141,66 @@ webServer），而非 Vite dev server。
 `/api/chat` 為 SSE 端點：修剪對話歷史、以雜湊 IP + `RATE_LIMIT_SALT` 做每日限流、淨化輸入、
 用 Wiki 內容組出第一人稱人格系統提示，最後串接 OpenAI 相容端點串流 token。Wiki 文件 frontmatter
 標記非 `public` 者會被排除於提示之外。
+
+---
+
+## 怎麼發一篇文章
+
+Admin CMS 已移除，`functions/api/posts.ts` 只有 `onRequestGet`（公開唯讀），
+所以發文走 `scripts/publish-post.mjs` 這支 CLI，直接 upsert 到 D1。
+**文章即時生效，不需要重新部署**——前端是跟 API 拿資料的。
+
+> `docs/posts/` **不是**線上文章的完整鏡像。目前只放了一篇（AI 吉祥物那篇）作為格式範例，
+> 其餘 7 篇只存在 D1 裡，沒有對應的 markdown 原始檔。要改那些文章，得先從 D1 匯出。
+
+### 1. 在 `docs/posts/` 建立 markdown
+
+```markdown
+---
+id: my-post-slug          # 必填，小寫英數與連字號，就是 /blog/:id 的網址
+title: 文章標題            # 必填
+date: 2026-08-04          # 必填，YYYY-MM-DD（列表以 date DESC 排序）
+readTime: 8 min           # 必填
+tags: [SRE, Cloudflare]   # 必填，寫入 D1 時序列化成 JSON 字串
+excerpt: >                # 必填，列表卡片的摘要
+  一句話講清楚這篇在幹嘛。
+postType: Work            # 必填，Learning | Tools | Work | Daily | Project
+coverImage: https://img.19980803.xyz/xxx.png   # 選填，圖片先上傳到 R2
+---
+
+正文 markdown 從這裡開始。
+```
+
+### 2. 先跑 dry-run
+
+```bash
+node scripts/publish-post.mjs docs/posts/my-post-slug.md --dry-run
+```
+
+會驗證必填欄位、印出**目標資料庫名稱與 database_id**、以及即將執行的 SQL。
+dry-run 完全不讀 API token、不連 Cloudflare。
+
+### 3. 確認無誤後實際寫入
+
+```bash
+node scripts/publish-post.mjs docs/posts/my-post-slug.md
+```
+
+token 從環境變數 `CLOUDFLARE_API_TOKEN` 讀，找不到才退回專案根目錄的 `.env`。
+（在 git worktree 裡執行時沒有 `.env`，請改用環境變數。）
+`--local` 可改寫本機 D1。同一個 `id` 重跑就是覆蓋，可以安全地反覆發布。
+
+### 改標題／改內容／刪文
+
+- 改：編輯 markdown 後重跑同一支指令（`ON CONFLICT(id) DO UPDATE`）。
+- 刪：目前沒有 CLI，用針對性的 SQL——
+
+  ```bash
+  node .claude/skills/cloudflare-use/scripts/d1-query.cjs "DELETE FROM posts WHERE id = 'my-post-slug';"
+  ```
+
+> ⚠️ **絕對不要對 production 執行 `schema.sql`**，它第一行是 `DROP TABLE IF EXISTS posts`，
+> 會清空所有文章。那個檔案只用於本機 bootstrap。
 
 ---
 

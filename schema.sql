@@ -1,3 +1,7 @@
+-- ⚠️ LOCAL BOOTSTRAP ONLY — 絕對不要對 production D1 執行這個檔案。
+-- 第一行的 DROP TABLE 會清空線上所有文章。
+-- production 的文章維護請用 scripts/publish-post.mjs（upsert）或針對性的
+-- DELETE FROM posts WHERE id = '...'，見 README「發一篇文章」章節。
 DROP TABLE IF EXISTS posts;
 CREATE TABLE posts (
   id TEXT PRIMARY KEY,
@@ -11,19 +15,9 @@ CREATE TABLE posts (
   coverImage TEXT
 );
 
--- Insert a default hello world post so the dashboard isn't empty
-INSERT INTO posts (id, title, content, date, readTime, tags, excerpt, postType, coverImage)
-VALUES (
-  'hello-d1', 
-  'Cloudflare D1 資料庫上線測試', 
-  '這篇文章是從 Cloudflare 邊緣資料庫讀取出來的。太神啦！', 
-  '2026-04-28', 
-  '5 min', 
-  '["Database", "Cloudflare"]', 
-  '測試資料庫是否成功連接。', 
-  'Learning', 
-  ''
-);
+-- 這裡刻意不放任何 seed 資料。
+-- 舊版的 'hello-d1' fixture 曾經被誤帶到 production，變成訪客看得到的殘留物；
+-- 需要 local 假資料時請自行 INSERT，不要寫回這個檔案。
 
 -- ── LLM Wiki Mascot: chat rate limiting ────────────────────────
 CREATE TABLE IF NOT EXISTS chat_rate_limits (
