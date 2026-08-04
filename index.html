@@ -28,21 +28,14 @@
     <!-- Theme bootstrap — 必須同步執行且早於任何樣式，否則會先畫深色再跳淺色(FOUC)。
          單一事實來源:localStorage['theme'] 有值就聽它,沒有就跟隨系統。
          index.css 的 token 只認 [data-theme],不另設 @media fallback —— JS 關閉時
-         停在深色(等同改版前的行為),是安全的降級。 -->
-    <script>
-      (function () {
-        try {
-          var s = localStorage.getItem('theme');
-          var t = s === 'light' || s === 'dark'
-            ? s
-            : (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-          document.documentElement.dataset.theme = t;
-          document.documentElement.style.colorScheme = t;
-        } catch (e) {
-          document.documentElement.dataset.theme = 'dark';
-        }
-      })();
-    </script>
+         停在深色(等同改版前的行為),是安全的降級。
+
+         實作放在 /theme-init.js 而不是這裡的 inline <script>:public/_headers 的
+         CSP 是 script-src 'self',沒有 'unsafe-inline',inline 版本在 Pages 上
+         從來沒執行過(淺色模式因此整組是死的)。外部檔走 'self',不需要 hash —— hash
+         對空白改動敏感,壞掉時同樣是無聲失效。
+         注意:不可加 defer / type="module",那會延到 CSS 之後才跑,FOUC 又回來。 -->
+    <script src="/theme-init.js"></script>
 
     <!-- Performance hints -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

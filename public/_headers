@@ -17,6 +17,12 @@
   # ── Content Security Policy ──
   # - default-src 'self'          : only load resources from own origin
   # - script-src 'self'           : block inline scripts and external JS (XSS)
+  #                                 這一條沒有 'unsafe-inline',所以任何 bootstrap 邏輯
+  #                                 都必須是外部檔(見 index.html 的 /theme-init.js)。
+  #                                 'unsafe-eval' 原本是 commit 54e2949 為 lottie-web 加的,
+  #                                 lottie-web 已從 dependencies 移除;建置產物實測沒有任何
+  #                                 eval( / new Function( / WebAssembly.* 呼叫(highlight.js
+  #                                 只是把這些字當語法高亮的關鍵字字串),故移除。
   # - style-src 'self' 'unsafe-inline' https://fonts.googleapis.com : allow Google Fonts CSS
   # - font-src 'self' https://fonts.gstatic.com : allow Google Fonts files
   # - img-src 'self' https: data: : allow HTTPS images (blog cover images)
@@ -24,7 +30,7 @@
   # - frame-ancestors 'none'      : double-blocks clickjacking (with X-Frame-Options)
   # - base-uri 'self'             : prevents base tag hijacking
   # - form-action 'self'          : form submissions only to self
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';
 
 /api/*
   # API routes: allow CORS for credentialed requests but tighten framing

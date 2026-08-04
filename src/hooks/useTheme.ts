@@ -4,8 +4,13 @@ export type Theme = 'light' | 'dark'
 
 const STORAGE_KEY = 'theme'
 
-/** 讀目前掛在 <html> 上的主題。index.html 的 bootstrap script 保證它一定有值,
- *  所以這裡不需要再算一次系統偏好 —— 那會和 script 的判斷邏輯重複,兩邊漂移就會出 bug。 */
+/** 讀目前掛在 <html> 上的主題。/theme-init.js(index.html 裡的 blocking script)保證
+ *  它在 React 掛載前一定有值,所以這裡不需要再算一次系統偏好 —— 那會和 bootstrap 的
+ *  判斷邏輯重複,兩邊漂移就會出 bug。
+ *
+ *  這個保證成立的前提是 bootstrap 真的跑得到:它是 same-origin 的外部檔,而 _headers
+ *  的 CSP 是 script-src 'self' —— 允許。之前寫成 inline <script> 時被 CSP 擋掉,
+ *  dataset.theme 永遠是 undefined,淺色模式整組因此在線上是死的。 */
 function readTheme(): Theme {
   if (typeof document === 'undefined') return 'dark'
   return document.documentElement.dataset.theme === 'light' ? 'light' : 'dark'
