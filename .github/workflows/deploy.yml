@@ -30,6 +30,13 @@ jobs:
       - name: TypeScript type check
         run: npx tsc --noEmit
 
+      - name: Lint
+        run: npm run lint
+
+      # npm test 的 script 內已含 node scripts/gen-wiki.cjs,不需要額外的 gen-wiki step
+      - name: Unit tests
+        run: npm test
+
       - name: Build
         run: npm run build
         env:
@@ -41,6 +48,52 @@ jobs:
           name: dist
           path: dist/
           retention-days: 1
+
+  e2e:
+    name: E2E (Playwright)
+    runs-on: ubuntu-latest
+    needs: lint-test-build
+    # e2e 要起 wrangler pages dev,比其他檢查重也比較新,先只在 push 到 main 時跑。
+    # 刻意不掛進 deploy 的 needs —— 這個 job 還在觀察期,不讓它有權擋住上線。
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      # wrangler pages dev 會打包 functions/,而 chat-wiki.ts import './_wiki-gen'
+      # ——這個檔案是 git-ignored 的產生物,不先生成 Functions bundle 會建不起來。
+      - name: Generate wiki for Functions
+        run: node scripts/gen-wiki.cjs
+
+      # 需要真實 LLM 金鑰的 ask 測試會自行 skip(見 e2e/ask.spec.ts 的 E2E_LLM 旗標)
+      - name: Run Playwright tests
+        run: npx playwright test
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
 
   deploy:
     name: Deploy to Cloudflare Pages

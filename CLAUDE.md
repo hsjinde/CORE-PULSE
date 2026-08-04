@@ -25,6 +25,11 @@ npx tsc --noEmit     # standalone type check (what CI runs before build)
   (or `-t "<name>"` to filter by test name). Unit tests use jsdom + `tests/setup.ts`.
 - **Run a single e2e test:** `npx playwright test e2e/ask.spec.ts`. E2e requires a
   built `dist/` — run `npm run build` first, since the webServer serves `dist` via wrangler.
+- The three streaming tests in `e2e/ask.spec.ts` hit the real LLM and are **skipped unless
+  `E2E_LLM=1`** — set up `.dev.vars` (`LLM_API_KEY`) first, then `E2E_LLM=1 npx playwright test`.
+- `e2e/theme.spec.ts` guards the theme bootstrap: `<html>` must carry `data-theme` after
+  first paint. It only has teeth under wrangler (real `public/_headers` CSP) — that is the
+  regression gate for the CSP bug fixed in 8d93cf6, so don't move it to a vite-preview server.
 - There is no separate lint-fix script; use `npx eslint . --fix`.
 
 ## Critical build step: gen-wiki
@@ -105,9 +110,16 @@ endpoint) — not part of the app build. For inspecting D1 / R2, use the `cloudf
 
 ## Deploy
 
-GitHub Actions ([.github/workflows/deploy.yml](.github/workflows/deploy.yml)) on push to
-`main`: type-check → build → deploy `dist/` to Cloudflare Pages via `wrangler@3`. PRs run
-lint/test/build only. Domains: `core-pulse.pages.dev` and `19980803.xyz` (apex).
+GitHub Actions ([.github/workflows/deploy.yml](.github/workflows/deploy.yml)) runs on push
+to `main` **and** on PRs targeting `main`. The `lint-test-build` job runs
+`npx tsc --noEmit` → `npm run lint` → `npm test` → `npm run build`, and uploads `dist/`
+as an artifact — that is the whole check set for PRs.
+
+On push to `main` only, two more jobs run off that artifact: `e2e` (Playwright against
+`wrangler pages dev dist` on :8788) and `deploy` (`wrangler@3 pages deploy dist/`).
+`deploy` needs only `lint-test-build`, **not** `e2e` — the e2e job is new and deliberately
+has no power to block a release yet; promote it into `deploy`'s `needs` once it has proven
+stable. Domains: `core-pulse.pages.dev` and `19980803.xyz` (apex).
 
 ## Conventions
 

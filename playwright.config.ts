@@ -18,5 +18,7 @@ export default defineConfig({
     command: 'npx wrangler@3 pages dev dist --port 8788',
     url: 'http://localhost:8788',
     reuseExistingServer: !process.env.CI,
+    // 預設 60s 在 CI 上不夠 —— npx 得先把 wrangler@3 抓下來才會開始起 server
+    timeout: 180_000,
   },
 })
