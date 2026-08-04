@@ -150,6 +150,9 @@ Admin CMS 已移除，`functions/api/posts.ts` 只有 `onRequestGet`（公開唯
 所以發文走 `scripts/publish-post.mjs` 這支 CLI，直接 upsert 到 D1。
 **文章即時生效，不需要重新部署**——前端是跟 API 拿資料的。
 
+> `docs/posts/` **不是**線上文章的完整鏡像。目前只放了一篇（AI 吉祥物那篇）作為格式範例，
+> 其餘 7 篇只存在 D1 裡，沒有對應的 markdown 原始檔。要改那些文章，得先從 D1 匯出。
+
 ### 1. 在 `docs/posts/` 建立 markdown
 
 ```markdown

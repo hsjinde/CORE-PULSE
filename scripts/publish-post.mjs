@@ -161,8 +161,10 @@ if (!allTypes.includes(fm.postType)) {
 }
 if (EXTRA_POST_TYPES.includes(fm.postType)) {
   console.warn(
-    `WARN: postType "${fm.postType}" 不在 src/services/api.ts 的 PostType union 裡` +
-      `（production 既有資料已在用，先放行）。`
+    `WARN: postType "${fm.postType}" 不在 src/services/api.ts 的 PostType union 裡。` +
+      `production 既有資料已在用（postfix-manager-mail-server-system）所以先放行，` +
+      `但前台沒有對應的中文標籤，/blog 列表會 fallback 顯示成「個人學習」。` +
+      `想要正確標籤請改用 Learning / Tools / Work / Daily。`
   );
 }
 
