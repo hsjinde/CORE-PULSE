@@ -10,7 +10,7 @@ import Footer from '@/components/Footer/Footer'
 import { getPostById } from '@/services/api'
 import type { Post } from '@/services/api'
 import { extractText, slugify, extractLanguage } from '@/lib/markdown'
-import { postTypeConfig } from '@/components/Blog/postTypeConfig'
+import { resolvePostTypeConfig } from '@/components/Blog/postTypeConfig'
 
 // ─── Copy Code Block ─────────────────────────────────────────
 function PreBlock({ children }: { children?: React.ReactNode }) {
@@ -155,7 +155,7 @@ export default function BlogPost() {
     )
   }
 
-  const cfg = postTypeConfig[post.postType] || postTypeConfig['Learning']
+  const cfg = resolvePostTypeConfig(post.postType)
   const Icon = cfg.Icon
 
   return (

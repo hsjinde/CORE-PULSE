@@ -4,13 +4,13 @@ import { BookOpen, Clock, Tag, ArrowUpRight, Search, X, FileText } from 'lucide-
 import { useNavigate } from 'react-router-dom'
 import { getPosts } from '@/services/api'
 import type { Post } from '@/services/api'
-import { postTypeConfig, filterTabs, type FilterType } from './postTypeConfig'
+import { resolvePostTypeConfig, filterTabs, type FilterType } from './postTypeConfig'
 
 function PostCard({ post, index }: { post: Post; index: number }) {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '-40px' })
   const navigate = useNavigate()
-  const cfg = postTypeConfig[post.postType] || postTypeConfig['Learning']
+  const cfg = resolvePostTypeConfig(post.postType)
   const Icon = cfg.Icon
 
   return (

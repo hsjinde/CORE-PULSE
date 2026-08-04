@@ -164,7 +164,7 @@ readTime: 8 min           # 必填
 tags: [SRE, Cloudflare]   # 必填，寫入 D1 時序列化成 JSON 字串
 excerpt: >                # 必填，列表卡片的摘要
   一句話講清楚這篇在幹嘛。
-postType: Work            # 必填，Learning | Tools | Work | Daily | Project
+postType: Work            # 必填，Learning | Tools | Work | Daily（前台只認得這四種）
 coverImage: https://img.19980803.xyz/xxx.png   # 選填，圖片先上傳到 R2
 ---
 

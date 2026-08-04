@@ -115,7 +115,7 @@ npx wrangler@3 d1 execute core-pulse-blog --command="SELECT id, title, postType 
 
 Or, for a one-step workflow from markdown to D1, use `scripts/d1-insert-post.cjs`:
 ```powershell
-node .agent/skills/cloudflare-use/scripts/d1-insert-post.cjs --md="<markdown-file>" --postType="Project" --execute
+node .agent/skills/cloudflare-use/scripts/d1-insert-post.cjs --md="<markdown-file>" --postType="Work" --execute
 ```
 
 #### Verifying Non-ASCII Content

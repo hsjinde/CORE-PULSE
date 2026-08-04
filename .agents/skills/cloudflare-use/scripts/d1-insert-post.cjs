@@ -8,7 +8,7 @@
  * Usage:
  *   node d1-insert-post.js --md="<markdown-file>" [--id="<post-id>"] [--title="<title>"] \
  *     [--date="YYYY-MM-DD"] [--readTime="N min"] [--tags='["tag1","tag2"]'] \
- *     [--excerpt="<excerpt>"] [--postType="Learning|Tools|Work|Daily|Project"] \
+ *     [--excerpt="<excerpt>"] [--postType="Learning|Tools|Work|Daily"] \
  *     [--coverImage="<url>"] [--execute] [--db=core-pulse-blog]
  *
  * If --id is omitted, it's derived from the markdown filename (without extension).
@@ -46,14 +46,14 @@ Options:
   --readTime="N min"        Read time (default: "10 min")
   --tags='["a","b"]'        Tags as JSON array string (default: "[]")
   --excerpt="<excerpt>"     Excerpt (default: first paragraph, truncated to 150 chars)
-  --postType="<type>"       One of: Learning, Tools, Work, Daily, Project (default: Learning)
+  --postType="<type>"       One of: Learning, Tools, Work, Daily (default: Learning) — must match the PostType union in src/services/api.ts
   --coverImage="<url>"      Cover image URL (default: empty)
   --execute                 Execute the SQL immediately after generating
   --db="<database>"         D1 database name (default: core-pulse-blog)
   --out="<path>"            Output SQL file path (default: temp file or ./insert-<id>.sql)
 
 Examples:
-  node d1-insert-post.js --md="post.md" --postType="Project" --execute
+  node d1-insert-post.js --md="post.md" --postType="Work" --execute
   node d1-insert-post.js --md="post.md" --id="my-post" --title="My Post" --tags='["tech","dev"]'
 `);
   process.exit(0);

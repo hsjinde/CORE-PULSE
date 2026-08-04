@@ -20,7 +20,7 @@
  *   readTime: 8 min           # 必填
  *   tags: [SRE, Cloudflare]   # 必填，寫入 D1 時序列化成 JSON 字串
  *   excerpt: 一句話摘要        # 必填
- *   postType: Work            # 必填，Learning | Tools | Work | Daily | Project
+ *   postType: Work            # 必填，Learning | Tools | Work | Daily
  *   coverImage: https://...   # 選填
  *   ---
  *   （以下為文章正文 markdown）
@@ -38,9 +38,9 @@ import { execSync } from 'child_process';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(__dirname, '..');
 
-// Post interface 宣告的 union，加上 production 既有資料實際用到的 'Project'
-const DECLARED_POST_TYPES = ['Learning', 'Tools', 'Work', 'Daily'];
-const EXTRA_POST_TYPES = ['Project'];
+// 必須與 src/services/api.ts 的 PostType union 完全一致：
+// 前台只認得這四種，寫進其他值會在 /blog 標成「未分類」。
+const POST_TYPES = ['Learning', 'Tools', 'Work', 'Daily'];
 const REQUIRED_FIELDS = ['id', 'title', 'date', 'readTime', 'tags', 'excerpt', 'postType'];
 
 function fail(msg) {
@@ -155,17 +155,8 @@ if (!Array.isArray(fm.tags) || fm.tags.some((t) => typeof t !== 'string' || !t.t
   fail('tags 必須是非空字串的陣列，例如 tags: [SRE, Cloudflare]');
 }
 
-const allTypes = [...DECLARED_POST_TYPES, ...EXTRA_POST_TYPES];
-if (!allTypes.includes(fm.postType)) {
-  fail(`postType 必須是 ${allTypes.join(' | ')}，收到：${fm.postType}`);
-}
-if (EXTRA_POST_TYPES.includes(fm.postType)) {
-  console.warn(
-    `WARN: postType "${fm.postType}" 不在 src/services/api.ts 的 PostType union 裡。` +
-      `production 既有資料已在用（postfix-manager-mail-server-system）所以先放行，` +
-      `但前台沒有對應的中文標籤，/blog 列表會 fallback 顯示成「個人學習」。` +
-      `想要正確標籤請改用 Learning / Tools / Work / Daily。`
-  );
+if (!POST_TYPES.includes(fm.postType)) {
+  fail(`postType 必須是 ${POST_TYPES.join(' | ')}，收到：${fm.postType}`);
 }
 
 // ---------- 目標資料庫 ----------
