@@ -68,6 +68,26 @@ persona + guardrails + wiki content), enforces a token budget, then streams toke
 OpenAI-compatible endpoint (`chat-llm-openai.ts`) as `event: delta/done/error` SSE frames.
 Wiki docs with frontmatter `sensitivity` other than `public` are filtered out of the prompt.
 
+### Publishing a blog post
+The Admin CMS was removed (commit e3330e6) — `functions/api/posts.ts` only exports
+`onRequestGet`, so there is no write API. Posts are published with
+`scripts/publish-post.mjs`, which reads a markdown file with frontmatter
+(`id/title/date/readTime/tags/excerpt/postType/coverImage`) from `docs/posts/` and
+upserts it into D1 (`tags` serialized to a JSON string):
+
+```bash
+node scripts/publish-post.mjs docs/posts/<slug>.md --dry-run   # validate + print SQL, no network
+node scripts/publish-post.mjs docs/posts/<slug>.md             # upsert into production D1
+```
+
+Token comes from `CLOUDFLARE_API_TOKEN` (env var first, then repo-root `.env` —
+git worktrees have no `.env`, use the env var there). Posts go live immediately; no
+redeploy needed. See README「怎麼發一篇文章」.
+
+**`schema.sql` is local bootstrap only — never run it against production**, its first
+line is `DROP TABLE IF EXISTS posts`. Deletions use targeted
+`DELETE FROM posts WHERE id = '...'` via the `cloudflare-use` skill's `d1-query.cjs`.
+
 ### CORS
 All API functions gate CORS against a hardcoded `ALLOWED_ORIGINS` allowlist
 (prod domains + `http://localhost:5173`). If adding a new origin, update it in **each**
