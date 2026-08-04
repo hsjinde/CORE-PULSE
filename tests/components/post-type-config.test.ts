@@ -37,8 +37,9 @@ describe('postTypeConfig', () => {
     expect(filterTabs.some(t => t.label === unknownPostTypeConfig.label)).toBe(false);
   });
 
-  // 發文 CLI 是唯一的寫入路徑，它放行的型別必須等於前台認得的型別，
-  // 否則又會出現「D1 有、前台沒有」的漂移。
+  // publish-post.mjs 是主要的發文路徑（cloudflare-use skill 的 d1-insert-post.cjs
+  // 與 sync-notes.cjs 也能寫入），它放行的型別必須等於前台認得的型別，
+  // 否則又會出現「D1 有、前台沒有」的漂移。順序也一起釘住，因為 filterTabs 依賴它。
   it('publish-post.mjs 放行的 postType 與前台對照表一致', () => {
     const src = readFileSync(path.resolve(__dirname, '../../scripts/publish-post.mjs'), 'utf8');
     const match = src.match(/const POST_TYPES = \[([^\]]+)\]/);

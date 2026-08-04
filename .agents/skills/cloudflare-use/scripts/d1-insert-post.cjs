@@ -127,8 +127,13 @@ if (!excerpt) {
   if (excerpt.length > 200) excerpt = excerpt.substring(0, 200) + '...';
 }
 
-// Post type
+// Post type — must stay in sync with the PostType union in src/services/api.ts;
+// anything else shows up on /blog as the neutral 「未分類」 badge.
+const POST_TYPES = ['Learning', 'Tools', 'Work', 'Daily'];
 const postType = opts.postType || 'Learning';
+if (!POST_TYPES.includes(postType)) {
+  fatal(`--postType must be one of: ${POST_TYPES.join(', ')} (got: ${postType})`);
+}
 
 // Cover image
 const coverImage = opts.coverImage || '';
