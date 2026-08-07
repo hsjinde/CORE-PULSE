@@ -9,17 +9,51 @@
     <title>Ethan | Security Software Engineer</title>
     <meta name="description" content="Ethan（林晉德）- 資安軟體工程師。專注 CVE 弱點研究與防毒軟體開發，工作之外自架郵件系統、LLM 代理與 Cloudflare 邊緣架構。IEEE Access 論文作者。" />
     <meta name="keywords" content="Ethan, hsjinde, Security, CVE, RNN, SPARQL, AI, Cloudflare, Docker, Self-Hosted, React" />
+    <link rel="canonical" href="https://19980803.xyz/" />
 
-    <!-- Open Graph -->
+    <!-- Open Graph / Twitter Card
+         這一整組是「首頁的預設值」,同時也是 functions/_middleware.ts 的覆寫目標:
+         /blog/:id 由 middleware 用 HTMLRewriter 把下面每一個 content 換成該篇文章的值。
+         middleware 只改屬性、不新增標籤,所以想讓爬蟲看到某個欄位,它就必須先出現在這裡。 -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="CORE PULSE" />
+    <meta property="og:locale" content="zh_TW" />
     <meta property="og:title" content="Ethan | Security Software Engineer" />
     <meta property="og:description" content="Security software engineer. CVE research by day, self-hosted infrastructure by night." />
-    <meta property="og:url" content="https://19980803.xyz" />
+    <meta property="og:url" content="https://19980803.xyz/" />
+    <meta property="og:image" content="https://19980803.xyz/og-default.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="CORE PULSE — Ethan, Security Software Engineer" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Ethan | Security Software Engineer" />
     <meta name="twitter:description" content="CVE research by day, self-hosted infrastructure by night." />
+    <meta name="twitter:image" content="https://19980803.xyz/og-default.png" />
+
+    <!-- JSON-LD:Person。
+         type 不是 JavaScript MIME,瀏覽器把它當 data block 而非 script 來處理,
+         所以不會走 CSP script-src 的檢查(這點是在 wrangler pages dev 上帶著
+         public/_headers 的真實 CSP 實測過的,不是照規格推論)。
+         文章頁的 BlogPosting 由 middleware 另外 append,兩個並存是合法的。 -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Ethan Lin",
+        "alternateName": "林晉德",
+        "url": "https://19980803.xyz/",
+        "image": "https://19980803.xyz/og-default.png",
+        "jobTitle": "Security Software Engineer",
+        "description": "Security software engineer. CVE research by day, self-hosted infrastructure by night.",
+        "knowsAbout": ["CVE Research", "Site Reliability Engineering", "LLM Agent Infrastructure", "Cloudflare Workers", "Self-Hosted Infrastructure"],
+        "sameAs": [
+          "https://github.com/hsjinde",
+          "https://www.linkedin.com/in/%E6%99%89%E5%BE%B7-%E6%9E%97-99421a237/"
+        ]
+      }
+    </script>
 
     <!-- Security -->
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />

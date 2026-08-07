@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# API 是給前端用的 JSON,沒有給搜尋引擎索引的價值
+Disallow: /api/
+
+# sitemap 由 functions/_middleware.ts 動態產生(文章清單直接讀 D1),
+# 因為發文走 scripts/publish-post.mjs 直接 upsert,不會重新部署 —— build 時
+# 烘出來的靜態 sitemap 會在下一次發文當下就過期。
+Sitemap: https://19980803.xyz/sitemap.xml
