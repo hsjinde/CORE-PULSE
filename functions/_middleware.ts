@@ -178,7 +178,14 @@ function rewriteForPost(response: Response, post: SeoPost): Response {
     rewriter.on('meta[property="og:image:width"]', drop).on('meta[property="og:image:height"]', drop);
   }
 
-  return rewriter.transform(response);
+  // ETag 來自 index.html 這個檔案本身,跟被塞進去的文章 meta 無關 —— 之後在 D1 改了
+  // 標題,回訪的瀏覽器會拿到 304 配舊 <title>,因為 index.html 沒動過。改內容就不該
+  // 再宣稱同一個 validator。整份 Response 先複製一次是因為 next() 回來的 headers
+  // 是唯讀的;用 `new Response(body, response)` 複製可以完整保留 _headers 的 CSP。
+  const mutable = new Response(response.body, response);
+  mutable.headers.delete('ETag');
+
+  return rewriter.transform(mutable);
 }
 
 // ── middleware 入口 ─────────────────────────────────────────────────
