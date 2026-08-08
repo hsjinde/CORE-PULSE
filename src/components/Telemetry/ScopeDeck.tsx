@@ -62,7 +62,7 @@ export function ScopeDeck({ sample }: { sample: SignalSample }) {
 							{(sample.phase * 100).toFixed(0)}%
 						</span>
 					</div>
-					<AsciiMeter value={sample.phase} />
+					<AsciiMeter value={sample.phase} label="phase lock" />
 				</div>
 			</div>
 

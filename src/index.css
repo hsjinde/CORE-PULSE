@@ -2120,13 +2120,21 @@ footer .path-label::before { color: var(--accent-brass); opacity: 1; }
 
 .prose p { margin-bottom: 1.6em; }
 
+/* 內文連結必須有底線。--accent-signature 對上內文的 --text-secondary 只有
+   2.26:1(深色)/ 1.93:1(淺色),遠低於 WCAG 1.4.1 要求的 3:1 ——
+   顏色不能是唯一的區辨線索(PRODUCT.md「狀態色不得是唯一資訊載體」的同一條)。
+   底線收成 1px + offset,維持 Terminal Editorial 的細線紀律,不是 UA 的粗底線。
+   標題錨點(.prose h2 a / h3 a)特異性更高,仍然保持無底線。 */
 .prose a {
   color: var(--accent-signature);
-  text-decoration: none;
-  transition: opacity 0.2s;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: color-mix(in srgb, var(--accent-signature) 45%, transparent);
+  transition: opacity 0.2s, text-decoration-color 0.2s;
 }
 
-.prose a:hover { opacity: 0.78; text-decoration: underline; }
+.prose a:hover { opacity: 0.78; text-decoration-color: var(--accent-signature); }
 
 .prose ul, .prose ol { margin-bottom: 1.6em; padding-left: 1.6em; }
 .prose li { margin-bottom: 0.55em; }

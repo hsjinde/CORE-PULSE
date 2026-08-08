@@ -61,7 +61,11 @@ export default function TerminalCard() {
         <span className="terminal-dots" aria-hidden="true"><i /><i /><i /></span>
         <span className="terminal-title">ethan@core-pulse: ~</span>
       </div>
-      <div className="terminal-body" aria-label="互動式技能終端機">
+      {/* role 是必要的:aria-label 不能掛在沒有角色的 div 上(ARIA 規範禁止,
+          axe 的 aria-prohibited-attr 會擋)。用 group 而不是 img/log ——
+          裡面是真的技能資訊,不能像 img 那樣把子節點藏掉;也不該像 log 那樣
+          每打一個字就朗讀一次。 */}
+      <div className="terminal-body" role="group" aria-label="互動式技能終端機">
         {lines.map((line, i) => (
           <div key={i} className={line.kind === 'cmd' ? 'terminal-line-cmd' : 'terminal-line-out'}>
             {line.text}

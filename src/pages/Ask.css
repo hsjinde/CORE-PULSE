@@ -134,7 +134,9 @@
   font-family: var(--font-body);
   font-size: 16px; /* 防 iOS 聚焦自動縮放 */
   line-height: 1.5;
-  outline: none;
+  /* 這裡原本是 outline: none —— 那會把 index.css 的全站 :focus-visible 焦點環
+     整個關掉,鍵盤使用者只剩下 border-color 從 --border 換成 --border-hover
+     這種幾乎看不見的差別。焦點環是 PRODUCT.md 的硬性契約,不能個別關掉。 */
 }
 .ask-textarea:focus { border-color: var(--border-hover); }
 /* 桌機上聊天字級略收（16px 是手機防縮放需求） */
@@ -164,7 +166,8 @@
 /* ─── focus-visible 白色焦點環（全站一致） ──────── */
 .ask-chip:focus-visible,
 .ask-icon-btn:focus-visible,
-.ask-send:focus-visible {
+.ask-send:focus-visible,
+.ask-textarea:focus-visible {
   outline: 2px solid var(--accent-signature);
   outline-offset: 2px;
 }
