@@ -49,4 +49,6 @@ film grain / scanline 質感。**色彩 = 訊號,不是裝飾**:全站唯一的�
 - 內文對比 ≥ 4.5:1(灰階系統下逐 token 驗證);大字/標籤 ≥ 3:1。
 - 狀態色不得是唯一資訊載體(同時給文字/圖形)。
 - 所有動畫提供 `prefers-reduced-motion: reduce` 替代;grain/scanline 疊層停用動態。
-- 鍵盤焦點:白色 2px `:focus-visible` outline,全站一致。
+- 鍵盤焦點:2px solid `:focus-visible` outline(色值取 `--accent-signature`,
+  深色主題是白、淺色主題是黑),全站一致,個別元件不得用 `outline: none` 關掉。
+  由 `e2e/a11y-contract.spec.ts` 逐一驗證前 8 個可聚焦元素。

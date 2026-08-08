@@ -53,9 +53,11 @@ jobs:
     name: E2E (Playwright)
     runs-on: ubuntu-latest
     needs: lint-test-build
-    # e2e 要起 wrangler pages dev,比其他檢查重也比較新,先只在 push 到 main 時跑。
-    # 刻意不掛進 deploy 的 needs —— 這個 job 還在觀察期,不讓它有權擋住上線。
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    # PR 上也跑。無障礙掃描(e2e/a11y*.spec.ts)是防「對比度 / 焦點環回歸」的閘門,
+    # 只在合併之後才跑等於攔不到 —— 淺色模式那次事故正是無聲地進了 main。
+    #
+    # 仍然刻意不掛進 deploy 的 needs:PR 上紅了是給人看的訊號,還不讓它有權擋住上線。
+    # 等這批在 PR 上跑穩了(沒有偶發失敗),再把它加進 deploy 的 needs。
     steps:
       - name: Checkout
         uses: actions/checkout@v4

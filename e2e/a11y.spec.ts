@@ -15,6 +15,14 @@ import AxeBuilder from '@axe-core/playwright'
  *
  * 掃描標準:WCAG 2.0/2.1 的 A + AA。對比度規則(color-contrast)就落在 wcag2aa,
  * 正是 PRODUCT.md 那兩條數值契約的機器可驗版本。
+ * 涵蓋面:5 路由 × light/dark × desktop/mobile = 20 條。
+ *
+ * 已知的涵蓋邊界(不是豁免,是這個工具量不到的地方):
+ * - axe 只看當下 DOM 的實際渲染節點,所以 hover / disabled / 尚未捲進畫面的
+ *   區塊沒有被量到。
+ * - PRODUCT.md 說的「灰階系統下逐 token 驗證」是 token 兩兩對比,不在這裡。
+ * - /telemetry 會把自己釘成深色孤島,所以它的 light 那幾條掃的是同一份配色;
+ *   保留是為了守住「將來若拿掉孤島」的回歸。
  */
 
 /** 掃描標準。刻意不含 best-practice / experimental —— 那些不是 PRODUCT.md 的契約,
@@ -123,25 +131,38 @@ const ROUTES = [
 
 const THEMES = ['dark', 'light'] as const
 
+/** 桌機以外也要掃:斷點換了之後字級、行長、疊層透明度都會變,對比度是可能跟著變的。
+ *  playwright.config.ts 只有一個 Desktop Chrome project,所以在這裡自己換 viewport,
+ *  而不是為了 a11y 多開一個 project 去拖累其他所有 e2e。 */
+const VIEWPORTS = [
+  { name: 'desktop', size: { width: 1280, height: 800 } },
+  { name: 'mobile', size: { width: 375, height: 812 } },
+] as const
+
 for (const theme of THEMES) {
-  for (const route of ROUTES) {
-    test(`a11y: ${route.name} (${route.path}) — ${theme}`, async ({ page }) => {
-      test.setTimeout(60_000) // axe 掃首頁這種節點量的頁面,單頁就要好幾秒
-      await stubPostsApi(page)
-      await gotoWithTheme(page, route.path, theme)
+  for (const viewport of VIEWPORTS) {
+    for (const route of ROUTES) {
+      test(`a11y: ${route.name} (${route.path}) — ${theme} / ${viewport.name}`, async ({
+        page,
+      }) => {
+        test.setTimeout(60_000) // axe 掃首頁這種節點量的頁面,單頁就要好幾秒
+        await page.setViewportSize(viewport.size)
+        await stubPostsApi(page)
+        await gotoWithTheme(page, route.path, theme)
 
-      // 內容真的畫出來、進場動畫(framer-motion)落定後再掃
-      await expect(page.locator(route.ready).first()).toBeVisible()
-      await page.waitForTimeout(800)
+        // 內容真的畫出來、進場動畫(framer-motion)落定後再掃
+        await expect(page.locator(route.ready).first()).toBeVisible()
+        await page.waitForTimeout(800)
 
-      const builder = new AxeBuilder({ page }).withTags([...WCAG_TAGS])
-      if (DISABLED_RULES.length > 0) builder.disableRules(DISABLED_RULES)
-      const results = await builder.analyze()
+        const builder = new AxeBuilder({ page }).withTags([...WCAG_TAGS])
+        if (DISABLED_RULES.length > 0) builder.disableRules(DISABLED_RULES)
+        const results = await builder.analyze()
 
-      expect(
-        results.violations,
-        `${route.path} (${theme}) 有 ${results.violations.length} 條 WCAG A/AA 違規:\n${formatViolations(results.violations)}`,
-      ).toEqual([])
-    })
+        expect(
+          results.violations,
+          `${route.path} (${theme} / ${viewport.name}) 有 ${results.violations.length} 條 WCAG A/AA 違規:\n${formatViolations(results.violations)}`,
+        ).toEqual([])
+      })
+    }
   }
 }
