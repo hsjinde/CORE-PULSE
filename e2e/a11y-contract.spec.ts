@@ -181,8 +181,7 @@ test('reduced-motion: 全站 CSS 動畫與轉場都被壓成 0', async ({ page }
 
   /* 只看 CSSAnimation / CSSTransition。framer-motion 的 JS 動畫走 script 動畫,
      index.css 檔尾那個 `animation-duration: .01ms !important` 的全域 reduce 區塊
-     壓不到它們 —— 那是另一個層次的待辦(需要 <MotionConfig reducedMotion="user">),
-     不在這條 CSS 契約的守備範圍內,不要把它悄悄混進來當通過條件。 */
+     壓不到它們 —— 那半邊由下面那條 framer-motion 的測試守,不要混進來。 */
   const running = await page.evaluate(() =>
     document
       .getAnimations()
@@ -203,4 +202,66 @@ test('reduced-motion: 全站 CSS 動畫與轉場都被壓成 0', async ({ page }
     `reduce 之下仍在跑的 CSS 動畫/轉場:\n` +
       running.map((r) => `  ${r.kind} ${r.name} → ${r.duration}ms`).join('\n'),
   ).toEqual([])
+})
+
+/**
+ * framer-motion 的位移進場在 reduce 之下必須不執行(App.tsx 的
+ * `<MotionConfig reducedMotion="user">`)。
+ *
+ * 為什麼要獨立一條:framer 是 JS 驅動的,它不吃 index.css 那個全域
+ * `animation-duration: .01ms !important`,也大多不走 WAAPI —— y 位移是每一幀
+ * 直接寫進 inline style.transform 的,`document.getAnimations()` 上看不到,
+ * 上面那條 CSS 契約完全攔不到它。
+ *
+ * 取樣方式刻意用 opacity 當同步點,而不是「等固定毫秒數再量一次」:
+ * reducedMotion="user" 的語意是「跳過 transform / layout,保留 opacity」,
+ * 所以 opacity 落在 (0.05, 0.95) 之間的那些幀,正好就是「進場動畫正在跑」的
+ * 客觀證據。在那些幀上量 translateY —— reduce 之下必須恆為 0(framer 直接套
+ * 目標值),正常模式下則會看到完整的 32px 位移。這樣就不依賴 CI 機器的快慢。
+ */
+async function maxTranslateYDuringFadeIn(page: Page, mode: 'reduce' | null) {
+  await page.emulateMedia({ reducedMotion: mode })
+  await gotoAndSettle(page, '/', 'h1')
+
+  // BentoCard:initial={{ opacity: 0, y: 32 }},捲進畫面才觸發(見 BentoGrid.tsx)
+  const card = page.locator('.glass-card').first()
+  await expect(card).toBeAttached()
+  await card.scrollIntoViewIfNeeded()
+
+  return page.evaluate(async () => {
+    const el = document.querySelector('.glass-card') as HTMLElement
+    let maxY = 0
+    let frames = 0
+    const start = performance.now()
+    while (performance.now() - start < 2000) {
+      const cs = getComputedStyle(el)
+      const o = parseFloat(cs.opacity)
+      if (o > 0.05 && o < 0.95) {
+        frames++
+        const m = new DOMMatrixReadOnly(cs.transform === 'none' ? '' : cs.transform)
+        maxY = Math.max(maxY, Math.abs(m.m42))
+      }
+      if (o >= 0.999) break
+      await new Promise((r) => requestAnimationFrame(r))
+    }
+    return { maxY, frames }
+  })
+}
+
+test('reduced-motion: framer-motion 的位移進場在 reduce 之下不執行', async ({ page }) => {
+  // 正向對照先跑:正常模式下確實看得到位移,否則下面那半條斷言等於在量空氣
+  const normal = await maxTranslateYDuringFadeIn(page, null)
+  expect(normal.frames, '正常模式下沒取到任何淡入中的幀,取樣點壞了').toBeGreaterThan(0)
+  expect(
+    normal.maxY,
+    `正常模式下 .glass-card 沒有位移(量到 ${normal.maxY}px),這條測試會失去意義`,
+  ).toBeGreaterThan(5)
+
+  const reduced = await maxTranslateYDuringFadeIn(page, 'reduce')
+  expect(reduced.frames, 'reduce 之下沒取到任何淡入中的幀 —— opacity 也被停掉了?').toBeGreaterThan(0)
+  expect(
+    reduced.maxY,
+    `reduce 之下 .glass-card 仍有 ${reduced.maxY}px 的位移進場;` +
+      'App.tsx 的 <MotionConfig reducedMotion="user"> 掉了或被覆寫',
+  ).toBeLessThan(0.5)
 })
