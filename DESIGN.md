@@ -64,7 +64,7 @@ portfolio's `.frame` pattern. Its 1px side hairlines were removed so the full-bl
 background can span the entire viewport width without a visible boundary. Section order:
 
 1. **Hero** — name/role intro, availability badge, CTAs.
-2. **Featured** (`FeaturedSlider`) — auto-advancing cross-fade highlights, 3 placeholder slides.
+2. **Metric strip** (`MetricStrip`) — four derived counts on one flat panel. See below.
 3. **About** (`About`) — bio statement + real portrait photo (`about-portrait-img`).
 4. **Skills & Infrastructure** (`BentoGrid`) — the detailed Bento grid; 2026-07 revamp leads
    with the self-hosted services card (SERVICES list) and open-source agent tools.
@@ -72,10 +72,35 @@ background can span the entire viewport width without a visible boundary. Sectio
 6. **Projects** — existing project cards, now with a `.project-thumb` placeholder banner
    (mono glyph on a tinted gradient) above the title, echoing the reference's thumbnail-led card
    shape without needing real screenshots yet.
-7. **Footer**.
+7. **Blog** — latest posts.
+8. **Footer**.
 
-`FeaturedSlider` uses CSS-only placeholder art (radial gradients + a large faint mono glyph)
-rather than stock photography or broken `<img>` tags. (`About`'s portrait is now a real photo.)
+`FeaturedSlider` still exists as a component with CSS-only placeholder art, but `Home.tsx` does
+not render it; this list is what `Home.tsx` actually mounts. (`About`'s portrait is a real photo.)
+
+### The metric strip's honesty contract
+
+A hairline-divided metric row is textbook instrument-panel grammar, which is why the pattern
+transfers — but the portfolio convention it comes from fills it with unverifiable vanity counts
+("40+ projects", "18+ happy clients"). That fails Principle 2 (儀器的誠實) the same way a fake
+gauge would. The rule here: **every cell must survive being pointed at and asked "where's that
+number from?"**
+
+The first two cells derive from `SERVICES.length` / `AGENT_SKILLS.length` in
+[src/data/infra.ts](src/data/infra.ts) — the same arrays `BentoGrid` renders its lists from, which
+is why they were lifted out of `BentoGrid.tsx` into a shared module. Editing the list moves the
+number; the two can't drift apart.
+[tests/components/metric-strip.test.tsx](tests/components/metric-strip.test.tsx) locks that in.
+The remaining two are externally checkable facts (the IEEE Access paper has a DOI; the CVE count
+matches the security card), not runtime values.
+
+It shares no ground with the Footer readouts: the Footer reports *the site's state right now*
+(LCP, build time, `/api/health`), the strip reports *accumulated output*.
+
+Layout notes: `.metric-section` uses a 40px top pad rather than `section-padding` — it reads as
+the Hero's closing line, not a chapter of its own. The 4-up grid folds to 2×2 under 640px, and
+the dividers are per-cell `border-left` / `border-top` with `:nth-child` resets so the outer
+edge is always drawn by the `.tx-card` border alone, never doubled.
 
 ## Color
 

@@ -1350,6 +1350,55 @@ footer .path-label::before { color: var(--accent-brass); opacity: 1; }
   color: var(--text-primary);
 }
 
+/* ─── Metric strip（Hero 底下的指標橫條）─────────────────────── */
+/* 上緣留白刻意小於 section-padding —— 這條橫條在讀者眼裡是 Hero 的結語,
+   不是獨立章節,所以貼著 Hero 收尾、跟底下的 About 之間才拉開距離。 */
+.metric-section {
+  position: relative;
+  padding: 40px 0 0;
+}
+
+.metric-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  overflow: hidden;               /* 讓格線在圓角處被裁乾淨 */
+}
+
+.metric-cell {
+  padding: 26px 20px;
+  text-align: center;
+  border-left: 1px solid var(--border);
+}
+
+.metric-cell:first-child { border-left: none; }
+
+.metric-value {
+  font-family: var(--font-mono);
+  font-size: clamp(1.75rem, 3.6vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+.metric-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--text-tertiary);
+  text-wrap: balance;
+}
+
+/* 2×2:直線只留在右半欄,橫線只留在下半列 —— 外框由 .tx-card 自己的 border 收邊 */
+@media (max-width: 640px) {
+  .metric-strip { grid-template-columns: repeat(2, 1fr); }
+  .metric-cell  { padding: 22px 14px; border-left: 1px solid var(--border); }
+  .metric-cell:nth-child(2n + 1) { border-left: none; }
+  .metric-cell:nth-child(n + 3)  { border-top: 1px solid var(--border); }
+}
+
 /* ─── Responsive — About / Slider / Timeline ─────────────────── */
 @media (max-width: 900px) {
   .about-grid { grid-template-columns: 1fr; gap: 36px; }
