@@ -7,7 +7,7 @@ import About from '@/components/About/About'
 import BentoGrid from '@/components/Bento/BentoGrid'
 import WorkTimeline from '@/components/WorkTimeline/WorkTimeline'
 import Projects from '@/components/Projects/Projects'
-import Blog from '@/components/Blog/Blog'
+import WorkLog from '@/components/WorkLog/WorkLog'
 import Footer from '@/components/Footer/Footer'
 
 export default function Home() {
@@ -52,7 +52,7 @@ export default function Home() {
           <BentoGrid />
           <WorkTimeline />
           <Projects />
-          <Blog />
+          <WorkLog />
         </main>
         <Footer />
       </div>

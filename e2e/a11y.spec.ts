@@ -15,7 +15,7 @@ import AxeBuilder from '@axe-core/playwright'
  *
  * 掃描標準:WCAG 2.0/2.1 的 A + AA。對比度規則(color-contrast)就落在 wcag2aa,
  * 正是 PRODUCT.md 那兩條數值契約的機器可驗版本。
- * 涵蓋面:5 路由 × light/dark × desktop/mobile = 20 條。
+ * 涵蓋面:3 路由 × light/dark × desktop/mobile = 12 條。
  *
  * 已知的涵蓋邊界(不是豁免,是這個工具量不到的地方):
  * - axe 只看當下 DOM 的實際渲染節點,所以 hover / disabled / 尚未捲進畫面的
@@ -39,47 +39,6 @@ const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']
  * 目前是空的:第一次掃描出來的問題全部走「修掉」而不是「先關掉」。
  */
 const DISABLED_RULES: string[] = []
-
-/** e2e 跑的是本機 wrangler,D1 裡連 posts 表都沒有(見 e2e/seo.spec.ts 的同一段說明)。
- *  不 stub 的話 /blog 是空清單、/blog/:id 直接是 "Post not found",掃到的是錯誤畫面而
- *  不是真正要驗的文章排版(markdown 內文、程式碼區塊、目錄、標籤)。所以這裡只攔 API
- *  JSON,頁面本身仍然由 wrangler 帶著真實 CSP 送出。 */
-const FIXTURE_POST = {
-  id: 'a11y-fixture',
-  title: 'A11y 掃描用的固定文章',
-  date: '2026-01-15',
-  readTime: '5 min',
-  tags: ['SRE', 'Accessibility'],
-  excerpt: '這篇是 e2e 無障礙掃描專用的固定資料,不會出現在正式站上。',
-  postType: 'Learning',
-  content: [
-    '## 第一個段落標題',
-    '',
-    '一段內文,用來讓 color-contrast 規則有東西可以量。內含一個 [連結](https://19980803.xyz) 與 **粗體**。',
-    '',
-    '### 次級標題',
-    '',
-    '- 清單項目一',
-    '- 清單項目二',
-    '',
-    '```ts',
-    'const ok: boolean = true',
-    '```',
-    '',
-    '| 欄位 | 值 |',
-    '| --- | --- |',
-    '| latency | 42ms |',
-  ].join('\n'),
-}
-
-async function stubPostsApi(page: Page) {
-  await page.route('**/api/posts', (route) =>
-    route.fulfill({ json: [FIXTURE_POST] }),
-  )
-  await page.route('**/api/posts/*', (route) =>
-    route.fulfill({ json: FIXTURE_POST }),
-  )
-}
 
 /** 主題是由 /theme-init.js 在首屏同步決定的,單一事實來源是 localStorage['theme']。
  *  所以「測淺色」的正確做法是在導頁前先種 localStorage,而不是事後用 JS 改 data-theme
@@ -119,12 +78,10 @@ function formatViolations(
 }
 
 /** ready 是「這頁的內容真的畫出來了」的證據。
- *  刻意不用 waitForLoadState('networkidle') —— 首頁 / 文章頁上有長時間不收斂的請求,
+ *  刻意不用 waitForLoadState('networkidle') —— 首頁上有長時間不收斂的請求,
  *  等它等到測試逾時,掃描根本跑不到。等一個看得見的節點才是有意義的收斂條件。 */
 const ROUTES = [
   { name: '首頁', path: '/', ready: 'h1' },
-  { name: '文章列表', path: '/blog', ready: `text=${FIXTURE_POST.title}` },
-  { name: '文章內頁', path: `/blog/${FIXTURE_POST.id}`, ready: 'article' },
   { name: 'Telemetry', path: '/telemetry', ready: 'main, [role="meter"]' },
   { name: 'Ask', path: '/ask', ready: 'textarea, input[type="text"]' },
 ] as const
@@ -147,7 +104,6 @@ for (const theme of THEMES) {
       }) => {
         test.setTimeout(60_000) // axe 掃首頁這種節點量的頁面,單頁就要好幾秒
         await page.setViewportSize(viewport.size)
-        await stubPostsApi(page)
         await gotoWithTheme(page, route.path, theme)
 
         // 內容真的畫出來、進場動畫(framer-motion)落定後再掃

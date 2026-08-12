@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  靜態 sitemap。以前這份是 functions/_middleware.ts 動態產生的,因為文章清單存在 D1、
+  發文不重新部署,build 時烘出來的會立刻過期。blog 移除後站上只剩固定路由,
+  路由表就在 src/App.tsx —— 新增 <Route> 時記得同步這裡。
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://19980803.xyz/</loc>
+  </url>
+  <url>
+    <loc>https://19980803.xyz/telemetry</loc>
+  </url>
+  <url>
+    <loc>https://19980803.xyz/ask</loc>
+  </url>
+</urlset>

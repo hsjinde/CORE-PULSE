@@ -12,7 +12,7 @@
 <br />
 
 > **Security Software Engineer / Self-Hosted Infra Builder** 的個人品牌網站。
-> Terminal Editorial 視覺系統 × Cloudflare 邊緣 Serverless × D1 即時文章 × 全頁 LLM 問答。
+> Terminal Editorial 視覺系統 × Cloudflare 邊緣 Serverless × 全頁 LLM 問答。
 
 設計本身就是作品：這個站要示範作者的工程品味——精準、可靠、對細節有紀律。
 策略脈絡見 [PRODUCT.md](PRODUCT.md)，視覺系統的權威定義見 [DESIGN.md](DESIGN.md)。
@@ -28,8 +28,6 @@
 | 路由 | 頁面 | 說明 |
 |------|------|------|
 | `/` | [Home.tsx](src/pages/Home.tsx) | 首頁單頁捲動，靜態 import（其餘皆 lazy 切 chunk） |
-| `/blog` | [BlogList.tsx](src/pages/BlogList.tsx) | 文章列表，含分類篩選 |
-| `/blog/:id` | [BlogPost.tsx](src/pages/BlogPost.tsx) | 文章內頁，markdown 渲染 + 目錄（TOC） |
 | `/telemetry` | [Telemetry.tsx](src/pages/Telemetry.tsx) | SRE 波形觀測台，WebGL 干涉場 + HUD 儀表 |
 | `/ask` | [Ask.tsx](src/pages/Ask.tsx) | 全頁 LLM 問答，以第一人稱回答關於作者的問題 |
 
@@ -42,7 +40,7 @@
 | **Skills & Infrastructure**（Bento） | 互動終端機卡、自架服務清單、IEEE Access 研究、資安、CI/CD、開源 Claude Code Skills、Core Stack |
 | **Career Timeline** | 垂直排列的真實工作經歷 |
 | **Projects** | 五張專案卡（RNN × SPARQL、Self-Hosted Mail Stack、my-note-web、Osaka-web、CORE PULSE 本站） |
-| **Notes** | 文章列表（正式環境由 D1 即時提供） |
+| **工作紀錄** | 逐月的出貨帳本，資料是版控在 repo 裡的 [worklog.ts](src/content/worklog.ts) |
 | **Footer** | mailto 主行動鈕、站內導覽、key-value 聯絡清單，加上三個真實讀數（build / lcp / edge api） |
 
 > Footer 沒有聯絡表單——沒有寫入 API 也就沒有表單。聯絡方式是 `mailto:` 連結加上
@@ -74,7 +72,7 @@
 | framer-motion | 12 | 進場與捲動動畫 |
 | lenis | 1.3 | 首頁平滑捲動（由 `lib/lenisController.ts` 統一持有實例） |
 | three | 0.185 | `/telemetry` 的 WebGL coswarp 干涉場 shader |
-| react-markdown + remark-gfm + rehype-highlight | — | 文章與聊天訊息渲染、程式碼高亮 |
+| react-markdown + remark-gfm + rehype-highlight | — | `/ask` 聊天訊息渲染、程式碼高亮 |
 | lucide-react | 1.9 | 圖示 |
 | clsx + tailwind-merge | — | `lib/utils.ts` 的 `cn()` |
 
@@ -85,10 +83,6 @@
 
 | 檔案 | 路由 | 用途 |
 |------|------|------|
-| `_middleware.ts` | `/*` | 爬蟲用的 server-side meta 注入 + 動態 `/sitemap.xml` |
-| `_seo.ts` | — | 上者的純邏輯部分（被 `tests/functions/seo.test.ts` 單元測試） |
-| `api/posts.ts` | `GET /api/posts` | 文章列表（**只有** `onRequestGet`，沒有寫入 API） |
-| `api/posts/[id].ts` | `GET /api/posts/:id` | 單篇讀取 |
 | `api/chat.ts` | `POST /api/chat` | LLM 問答 SSE 端點 |
 | `api/chat-*.ts` | — | 限流 / 輸入淨化 / 提示組裝 / OpenAI 相容串接 / Wiki 載入 |
 | `api/health.ts` | `GET /api/health` | 極簡健康檢查，Footer 狀態燈的來源 |
@@ -98,8 +92,7 @@
 | 服務 | 用途 |
 |------|------|
 | Cloudflare Pages | 靜態部署 + Functions + 全球 CDN |
-| Cloudflare D1 | 文章資料庫 `core-pulse-blog`（binding `core_pulse_blog`，見 [wrangler.toml](wrangler.toml)） |
-| `img.19980803.xyz` | 文章封面圖外部圖床（本 repo 只引用 URL，沒有 R2 binding） |
+| Cloudflare D1 | `core-pulse-blog`（binding `core_pulse_blog`，見 [wrangler.toml](wrangler.toml)）。blog 移除後只剩 `/ask` 的每日限流表，資料庫名稱是歷史沿用 |
 | GitHub Actions | CI/CD（見下方流程） |
 | OpenAI 相容 LLM 端點 | `/ask` 的模型後端，位址由 `LLM_BASE_URL` 決定 |
 
@@ -116,7 +109,7 @@
 ```bash
 npm install          # 安裝依賴
 
-npm run dev          # gen-wiki + Vite 開發伺服器（:5173，文章走 localStorage）
+npm run dev          # gen-wiki + Vite 開發伺服器（:5173，前端無後端相依）
 npm run build        # gen-wiki + tsc -b + vite build → dist/
 npm run lint         # ESLint 檢查
 npm test             # gen-wiki + Vitest 單元測試（tests/）
@@ -157,41 +150,37 @@ Playwright server，請先執行 `node scripts/gen-wiki.cjs`。
 ```
 core-pulse/
 ├── functions/
-│   ├── _middleware.ts           # 全站 middleware：爬蟲 meta 注入 + /sitemap.xml
-│   ├── _seo.ts                  # 上者的純邏輯（可單元測試）
 │   └── api/                     # Pages Functions（檔案路徑即路由）
-│       ├── posts.ts             # GET 文章列表（唯讀）
-│       ├── posts/[id].ts        # GET 單篇
 │       ├── chat.ts              # POST /api/chat（SSE 串流）
 │       ├── chat-*.ts            # 限流 / 淨化 / 提示 / LLM / Wiki
 │       ├── health.ts            # GET /api/health
 │       └── _wiki-gen.ts         # 自動產生，勿手改（git 忽略）
 ├── src/
 │   ├── components/
-│   │   ├── Navbar/ Hero/ About/ Bento/ WorkTimeline/ Projects/ Blog/ Footer/
+│   │   ├── Navbar/ Hero/ About/ Bento/ WorkTimeline/ Projects/ WorkLog/ Footer/
 │   │   ├── Telemetry/           # ScopeDeck / SyslogFeed / Readout / Reticle …
 │   │   ├── Mascot/              # MessageBubble + types（浮動吉祥物已移除，/ask 仍在用）
 │   │   ├── ScrollProgress/      # 右下角捲動讀數，同時是 back-to-top 按鈕
 │   │   └── ui/waves-shader.tsx  # three.js 干涉場（/telemetry 背景）
-│   ├── pages/                   # Home / BlogList / BlogPost / Telemetry / Ask
-│   ├── services/
-│   │   ├── api.ts               # 文章資料層（dev: localStorage / prod: /api/posts）
-│   │   └── chatClient.ts        # 聊天 SSE 用戶端
+│   ├── pages/                   # Home / Telemetry / Ask
+│   ├── services/chatClient.ts   # 聊天 SSE 用戶端
 │   ├── hooks/                   # useMascotChat / useTheme / useSignalClock / useLogFeed …
-│   ├── content/wiki/*.md        # /ask 的知識庫（gen-wiki 來源）
-│   ├── lib/                     # utils(cn) / lenisController / markdown / notes
+│   ├── content/
+│   │   ├── wiki/*.md            # /ask 的知識庫（gen-wiki 來源）
+│   │   └── worklog.ts           # 首頁「工作紀錄」的唯一資料來源
+│   ├── lib/                     # utils(cn) / lenisController / notes
 │   ├── index.css                # 全域樣式 + Design Tokens（兩套主題）
 │   ├── App.tsx                  # 路由 + ScrollProgress
 │   └── main.tsx                 # 入口點
 ├── public/
 │   ├── _headers                 # 安全標頭與 CSP
 │   ├── theme-init.js            # 主題 bootstrap（CSP script-src 'self'，不能 inline）
+│   ├── sitemap.xml              # 靜態 sitemap，路由變動時手動同步
 │   └── og-default.png           # 由 scripts/gen-og-image.mjs 產生並 commit
-├── docs/posts/*.md              # 文章原始檔（publish-post.mjs 的輸入）
 ├── docs/plans/                  # 設計計畫與 rationale
 ├── tests/                       # Vitest 單元測試
-├── e2e/                         # Playwright（ask / seo / telemetry / theme）
-├── scripts/                     # gen-wiki.cjs + publish-post.mjs + 維運腳本
+├── e2e/                         # Playwright（a11y / ask / seo / telemetry / theme）
+├── scripts/                     # gen-wiki.cjs + 維運腳本
 ├── wrangler.toml                # Pages / D1 綁定與環境變數
 └── vite.config.ts               # Vite（Tailwind v4 + @ 別名 + __BUILD_TIME__）
 ```
@@ -200,12 +189,15 @@ core-pulse/
 
 ## 架構重點
 
-### 資料層 dev/prod 雙模式
+### 首頁「工作紀錄」的內容從哪來
 
-[src/services/api.ts](src/services/api.ts) 依 `import.meta.env.PROD` 分流：開發時文章讀
-`localStorage`（附帶一篇預設種子文章與人造延遲，免後端即可開發）；生產時打 `/api/posts*`
-由 D1 提供。要驗證真實的 Functions 行為，得用 wrangler dev server（也就是 E2E 的 webServer），
-而不是 Vite dev server。
+資料是 [src/content/worklog.ts](src/content/worklog.ts)，**手工**摘錄自 Obsidian vault 的
+`工作專案/YYYY-MM 工作紀錄.md`。刻意不寫同步腳本，兩個理由都寫在那個檔案的檔頭：vault 在
+repo 外面、CI 讀不到；而且原始月誌含有不該公開的東西（VPS 位址、尚未收斂的安全待辦、
+磁碟水位），「哪些能上站」是判斷題不是字串處理題。
+
+新增一個月就在陣列**最前面**補一筆。`tests/content/worklog.test.ts` 會擋掉排序錯誤、
+未知的訊號通道，以及明顯的敏感字樣（IP 位址、本機路徑）。
 
 ### `/ask` 的 LLM 代理
 
@@ -220,14 +212,15 @@ OpenAI 相容端點，以 `event: delta / done / error` 的 SSE frame 串回前�
 
 ### SEO / 社群卡片
 
-爬蟲不執行 JS，SPA 給不出每篇文章的 meta。[functions/_middleware.ts](functions/_middleware.ts)
-跑在所有請求之前，拿到 SPA fallback 的 `index.html` 之後，在 `/blog/:id` 用 **HTMLRewriter**
-從 D1 覆寫 `<title>`、`og:*`、`twitter:*`、`canonical`，並 append 一段 `BlogPosting` JSON-LD；
-`/sitemap.xml` 也由它動態產生（文章直接進 D1 不重新部署，建置期產生的 sitemap 會立刻過期）。
+站上只剩固定路由，所以 meta 全部寫死在 [index.html](index.html)（含一段 `Person` JSON-LD），
+`/sitemap.xml` 是版控在 [public/sitemap.xml](public/sitemap.xml) 的靜態檔。
 
-三條不可退讓的規則寫在該檔頂端：只 `setAttribute` 既有標籤、回傳 `rewriter.transform(response)`
-而非手工 `new Response`（否則丟掉 `_headers` 的 CSP）、任何失敗路徑都無聲降級成原本的 HTML
-（`_routes.json` 是 `/*`，未捕捉的例外等於全站 500）。
+> 這裡以前有一支 `functions/_middleware.ts`，用 HTMLRewriter 在 edge 從 D1 逐篇覆寫 meta。
+> blog 移除後它只剩下輸出一份固定 XML 的工作，但代價是**每一個靜態檔請求都要繞一次
+> Function**，而且 `_routes.json` 是 `/*`——未捕捉的例外等於全站 500。所以一起拆掉了。
+> 之後若又需要動態 meta，rationale 與那三條不可退讓的規則在 git history 裡。
+
+**新增路由時記得同步 `public/sitemap.xml`**，`e2e/seo.spec.ts` 會逐條檢查。
 
 ### 安全標頭
 
@@ -238,70 +231,50 @@ OpenAI 相容端點，以 `event: delta / done / error` 的 SSE frame 串回前�
 ### CORS
 
 所有 API function 以硬編碼的 `ALLOWED_ORIGINS` 白名單把關（正式域名 + `http://localhost:5173`）。
-新增來源時要在**每一個**定義 `corsHeaders` 的檔案裡都改（`chat-shared`、`posts` 各有一份）。
+新增來源時要在**每一個**定義 `corsHeaders` 的檔案裡都改。
 
 ---
 
-## 怎麼發一篇文章
+## 怎麼補一個月的工作紀錄
 
-Admin CMS 已移除，`functions/api/posts.ts` 只有 `onRequestGet`（公開唯讀），
-所以發文走 `scripts/publish-post.mjs` 這支 CLI，直接 upsert 到 D1。
-**文章即時生效，不需要重新部署**——前端是跟 API 拿資料的。
+首頁的「工作紀錄」是版控在 repo 裡的靜態資料，沒有後台、沒有寫入 API，**改完要 push 才會上線**。
 
-> `docs/posts/` **不是**線上文章的完整鏡像。目前只放了一篇（AI 聊天系統那篇）作為格式範例，
-> 其餘文章只存在 D1 裡，沒有對應的 markdown 原始檔。要改那些文章，得先從 D1 匯出。
+### 1. 先在 vault 寫當月月誌
 
-### 1. 在 `docs/posts/` 建立 markdown
+來源是 `D:\my-note\工作專案\YYYY-MM 工作紀錄.md`。那份是完整流水帳，愛寫多細寫多細。
 
-```markdown
----
-id: my-post-slug          # 必填，小寫英數與連字號，就是 /blog/:id 的網址
-title: 文章標題            # 必填
-date: 2026-08-04          # 必填，YYYY-MM-DD（列表以 date DESC 排序）
-readTime: 8 min           # 必填
-tags: [SRE, Cloudflare]   # 必填，寫入 D1 時序列化成 JSON 字串
-excerpt: >                # 必填，列表卡片的摘要
-  一句話講清楚這篇在幹嘛。
-postType: Work            # 必填，Learning | Tools | Work | Daily（前台只認得這四種）
-coverImage: https://img.19980803.xyz/xxx.png   # 選填
----
+### 2. 手工摘錄進 `src/content/worklog.ts`
 
-正文 markdown 從這裡開始。
+在 `WORKLOG` 陣列**最前面**插一筆（陣列順序就是頁面順序，新的在上）：
+
+```ts
+{
+  id: '2026-09',                 // YYYY-MM，同時當 React key
+  period: '09.01 – 09.30',
+  headline: '這個月的主軸，一句話。',
+  items: [
+    {
+      project: 'core-pulse',     // repo / 網域的名字，不要用中文長句
+      channel: 'web',            // infra | web | ai | content —— 決定訊號色
+      summary: '一行講完做了什麼、結果是什麼。',
+    },
+  ],
+}
 ```
 
-`postType` 由 CLI 白名單驗證；萬一 D1 裡出現 union 以外的值，前台會顯示中性的「未分類」
-而不是靜默 fallback 成某個真實分類（見 [postTypeConfig.ts](src/components/Blog/postTypeConfig.ts)）。
+挑得出「做完了什麼、為什麼值得寫」的那幾條就好，**不要照抄月誌**。
 
-### 2. 先跑 dry-run
+> ⚠️ 這一段會公開在首頁上。原始月誌裡的 VPS 位址、尚未修好的安全待辦、磁碟水位、
+> 內部主機名一律不要帶進來——只寫已經收斂的結果。`tests/content/worklog.test.ts`
+> 會擋掉 IP 位址與本機路徑這類明顯的東西，但它不是萬能的，判斷仍然是人的責任。
+
+### 3. 驗證後 push
 
 ```bash
-node scripts/publish-post.mjs docs/posts/my-post-slug.md --dry-run
+npx vitest run tests/content/worklog.test.ts
 ```
 
-會驗證必填欄位、印出**目標資料庫名稱與 database_id**、以及即將執行的 SQL。
-dry-run 完全不讀 API token、不連 Cloudflare。
-
-### 3. 確認無誤後實際寫入
-
-```bash
-node scripts/publish-post.mjs docs/posts/my-post-slug.md
-```
-
-token 從環境變數 `CLOUDFLARE_API_TOKEN` 讀，找不到才退回專案根目錄的 `.env`。
-（在 git worktree 裡執行時沒有 `.env`，請改用環境變數。）
-`--local` 可改寫本機 D1。同一個 `id` 重跑就是覆蓋，可以安全地反覆發布。
-
-### 改標題／改內容／刪文
-
-- 改：編輯 markdown 後重跑同一支指令（`ON CONFLICT(id) DO UPDATE`）。
-- 刪：目前沒有 CLI，用針對性的 SQL——
-
-  ```bash
-  node .claude/skills/cloudflare-use/scripts/d1-query.cjs "DELETE FROM posts WHERE id = 'my-post-slug';"
-  ```
-
-> ⚠️ **絕對不要對 production 執行 `schema.sql`**，它第一行是 `DROP TABLE IF EXISTS posts`，
-> 會清空所有文章。那個檔案只用於本機 bootstrap。
+`npm run dev` 看一眼版面，然後照常 commit + push，CI 會自己部署。
 
 ---
 

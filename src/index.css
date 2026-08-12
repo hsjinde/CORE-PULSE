@@ -222,7 +222,7 @@
      深色 = 1(原樣)。淺色必須是 0,理由見淺色區塊的註解。 */
   --texture-strength: 1;
 
-  /* 各卡片頂緣的柔和掃光(比 --card-sweep 淡,用在 Bento/Blog/Projects 區塊分隔) */
+  /* 各卡片頂緣的柔和掃光(比 --card-sweep 淡,用在 Bento/WorkLog/Projects 區塊分隔) */
   --sweep-soft: rgba(255, 255, 255, 0.09);
 
   /* FeaturedSlider 的 CSS-only 佔位藝術 */
@@ -1469,824 +1469,153 @@ footer .path-label::before { color: var(--accent-brass); opacity: 1; }
   .hero-social-row { gap: 16px; flex-wrap: wrap; }
 }
 
-/* ─── Blog Search & Filter ────────────────────────────────────── */
-
-/* ── Search + Filter wrapper ── */
-.blog-search-bar {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-bottom: 32px;
-}
-
-/* ── Search input wrapper ── */
-.blog-search-input-wrap {
-  position: relative;
-  display: flex;
-  align-items: center;
-  background: var(--glass-2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  transition: border-color 0.25s ease, box-shadow 0.25s ease;
-  overflow: hidden;
-}
-
-.blog-search-input-wrap:focus-within {
-  border-color: var(--text-primary);
-  box-shadow: 0 0 0 3px var(--focus-halo);
-}
-
-.blog-search-icon {
-  flex-shrink: 0;
-  margin-left: 18px;
-  color: var(--text-tertiary);
-  pointer-events: none;
-  transition: color 0.2s ease;
-}
-
-.blog-search-input-wrap:focus-within .blog-search-icon {
-  color: var(--accent-signature);
-}
-
-.blog-search-input {
-  flex: 1;
-  background: transparent;
-  border: none;
-  outline: none;
-  padding: 16px 14px;
-  font-family: var(--font-body);
-  font-size: 0.9375rem;
-  color: var(--text-primary);
-  line-height: 1;
-}
-
-.blog-search-input::placeholder {
-  color: var(--text-tertiary);
-}
-
-.blog-search-clear {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  margin-right: 12px;
-  flex-shrink: 0;
-  background: var(--glass-3);
-  border: 1px solid var(--border);
-  border-radius: 50%;
-  color: var(--text-tertiary);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.blog-search-clear:hover {
-  background: color-mix(in srgb, var(--accent-red) 15%, transparent);
-  border-color: color-mix(in srgb, var(--accent-red) 35%, transparent);
-  color: var(--accent-red);
-}
-
-/* ── Filter tabs row ── */
-.blog-filter-tabs {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.blog-filter-tab {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
-  border-radius: var(--radius-xs);
-  border: 1px solid var(--border);
-  background: var(--glass-1);
-  color: var(--text-secondary);
-  font-family: var(--font-body);
-  font-size: 0.8125rem;
-  font-weight: 500;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.2s ease;
-}
-
-.blog-filter-tab:hover {
-  background: var(--glass-3);
-  border-color: var(--border-hover);
-  color: var(--text-primary);
-  transform: translateY(-1px);
-}
-
-.blog-filter-tab.active {
-  /* colour is set inline for per-type accent colour */
-  font-weight: 600;
-}
-
-/* default active (All) */
-.blog-filter-tab.active:not([style]) {
-  color: var(--accent-signature-on);
-  border-color: var(--accent-signature);
-  background: var(--accent-signature);
-}
-
-/* ── Result count hint ── */
-.blog-search-hint {
-  font-family: var(--font-body);
-  font-size: 0.8125rem;
-  color: var(--text-tertiary);
-  margin-bottom: 24px;
-}
-
-.blog-search-hint strong {
-  color: var(--text-primary);
-  font-weight: 600;
-}
-
-.blog-search-hint em {
-  font-style: normal;
-  color: var(--accent-signature);
-}
-
-/* ── Empty state ── */
-.blog-empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 80px 24px;
-  text-align: center;
-}
-
-.blog-empty-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 72px;
-  height: 72px;
-  border-radius: var(--radius-lg);
-  background: var(--glass-2);
-  border: 1px solid var(--border);
-  color: var(--text-tertiary);
-  margin-bottom: 8px;
-}
-
-.blog-empty-title {
-  font-family: var(--font-heading);
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.blog-empty-desc {
-  font-family: var(--font-body);
-  font-size: 0.9rem;
-  color: var(--text-tertiary);
-  max-width: 280px;
-}
-
-.blog-empty-reset {
-  margin-top: 4px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 10px 22px;
-  border-radius: var(--radius-xs);
-  border: 1px solid var(--border);
-  background: var(--glass-2);
-  color: var(--text-secondary);
-  font-family: var(--font-body);
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
-
-.blog-empty-reset:hover {
-  background: var(--glass-3);
-  border-color: var(--border-hover);
-  color: var(--text-primary);
-  transform: translateY(-2px);
-}
-
-/* ── Responsive ── */
-@media (max-width: 640px) {
-  .blog-search-input {
-    font-size: 0.875rem;
-    padding: 14px 12px;
-  }
-
-  .blog-filter-tab {
-    padding: 7px 13px;
-    font-size: 0.75rem;
-  }
-}
-
-/* ─── Blog List Cards — flat, hairline border ────────────────── */
-.blog-card {
-  position: relative;
-  background: var(--glass-2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 32px;
-  cursor: pointer;
-  transition: background 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-              border-color 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-  overflow: hidden;
-}
-
-.blog-card:hover {
-  background: var(--glass-3);
-  border-color: var(--border-hover);
-}
-
-.blog-card-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 18px;
-}
-
-.blog-card-body {
-  flex: 1;
-}
-
-.blog-category-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 4px 11px;
-  border-radius: var(--radius-xs);
-  font-size: 0.6875rem;
-  font-weight: 700;
-  font-family: var(--font-body);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  background: transparent;
-  border: 1px solid;
-  flex-shrink: 0;
-}
-
-.blog-card-meta-row {
+/* ─── Work Log — 逐月出貨帳本(git log 語彙,不是卡片牆)─────────
+   分隔全靠髮絲線與留白,沒有卡片底、沒有 hover 位移。列與列之間只有一條
+   1px 分隔線,hover 時左緣多一條訊號色細線 —— 這是這個區塊唯一的回饋。 */
+.worklog-legend {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 14px;
-  margin-bottom: 16px;
-}
-
-.blog-card-meta {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 0.78rem;
-  color: var(--text-tertiary);
-  font-family: var(--font-body);
-}
-
-.blog-card-title {
-  font-family: var(--font-heading);
-  font-size: 1.25rem;
-  font-weight: 700;
-  line-height: 1.3;
-  letter-spacing: -0.015em;
-  color: var(--text-primary);
-  margin-bottom: 12px;
-  transition: color 0.25s ease;
-}
-
-.blog-card:hover .blog-card-title {
-  color: var(--accent-signature);
-}
-
-.blog-card-excerpt {
-  font-family: var(--font-body);
-  font-size: 0.95rem;
-  font-weight: 400;
-  line-height: 1.75;
-  color: var(--text-secondary);
-  margin-bottom: 22px;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.blog-card-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.blog-card-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.blog-card-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  color: var(--text-tertiary);
-  font-size: 0.75rem;
-  font-family: var(--font-body);
-  background: var(--chip-bg);
-  padding: 4px 10px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--chip-border);
-  transition: all 0.2s ease;
-}
-
-.blog-card:hover .blog-card-tag {
-  background: var(--chip-bg-hover);
-  color: var(--text-secondary);
-}
-
-.blog-card-arrow {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: var(--chip-bg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-tertiary);
-  border: 1px solid var(--border);
-  flex-shrink: 0;
-  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.blog-card:hover .blog-card-arrow {
-  background: var(--accent-signature);
-  border-color: var(--accent-signature);
-  color: var(--accent-signature-on);
-  transform: translate(2px, -2px);
-  box-shadow: var(--shadow-signature);
-}
-
-/* Blog responsive adjustments */
-@media (max-width: 768px) {
-  .blog-card {
-    padding: 24px;
-    border-radius: var(--radius-md);
-  }
-
-  .blog-card-title {
-    font-size: 1.125rem;
-  }
-
-  .blog-card-excerpt {
-    font-size: 0.9rem;
-  }
-
-  .blog-card-arrow {
-    width: 34px;
-    height: 34px;
-  }
-}
-
-/* ─── Blog Post Page ──────────────────────────────────────────── */
-.blogpost-layout {
-  display: grid;
-  grid-template-columns: 1fr 260px;
-  gap: 64px;
-  align-items: start;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 140px 24px 120px;
-  width: 100%;
-}
-
-.blogpost-main-content {
-  min-width: 0;
-}
-
-.blogpost-back-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--text-tertiary);
-  background: var(--glass-2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-xs);
-  padding: 8px 16px 8px 12px;
-  cursor: pointer;
-  font-size: 0.875rem;
-  font-family: var(--font-body);
-  font-weight: 500;
-  transition: all 0.25s ease;
-  margin-bottom: 40px;
-}
-
-.blogpost-back-btn:hover {
-  color: var(--text-primary);
-  background: var(--glass-3);
-  border-color: var(--border-hover);
-  transform: translateX(-3px);
-}
-
-.blogpost-progress-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 2px;
-  background: var(--accent-signature);
-  z-index: 9999;
-  transform-origin: left;
-  box-shadow: 0 0 8px var(--accent-signature-glow);
-}
-
-.blogpost-header {
+  gap: 8px 20px;
   margin-bottom: 56px;
-}
-
-.blogpost-meta-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 14px;
-  margin-bottom: 24px;
-}
-
-.blogpost-category-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 5px 12px;
-  border-radius: var(--radius-xs);
-  font-size: 0.6875rem;
-  font-weight: 700;
-  font-family: var(--font-body);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  border: 1px solid;
-  background: transparent;
-}
-
-.blogpost-meta {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.875rem;
-  color: var(--text-tertiary);
-  font-family: var(--font-body);
-}
-
-.blogpost-title {
-  font-family: var(--font-heading);
-  font-size: clamp(2.25rem, 5vw, 3.5rem);
-  font-weight: 800;
-  line-height: 1.08;
-  letter-spacing: -0.025em;
-  color: var(--text-primary);
-  margin-bottom: 24px;
-}
-
-.blogpost-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 40px;
-}
-
-.blogpost-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 5px 12px;
-  border-radius: var(--radius-xs);
-  font-size: 0.8125rem;
-  font-weight: 500;
-  font-family: var(--font-body);
-  color: var(--text-secondary);
-  background: var(--chip-bg);
-  border: 1px solid var(--border);
-  transition: all 0.2s ease;
-}
-
-.blogpost-tag:hover {
-  background: var(--chip-bg-hover);
-  color: var(--text-primary);
-  border-color: var(--border-hover);
-}
-
-.blogpost-cover {
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  box-shadow: var(--shadow-lg);
-  margin-bottom: 64px;
-  position: relative;
-  aspect-ratio: 21 / 9;
-  border: 1px solid var(--border);
-}
-
-.blogpost-cover img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* Table of Contents */
-.blogpost-toc {
-  position: sticky;
-  top: 120px;
-  padding: 24px;
-  background: var(--glass-2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-}
-
-.blogpost-toc-title {
-  font-family: var(--font-heading);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text-tertiary);
-  margin-bottom: 16px;
-}
-
-.blogpost-toc-list {
-  list-style: none;
   padding: 0;
-  margin: 0;
+  list-style: none;
+}
+
+.worklog-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+}
+
+/* 通道識別點。方形而不是圓形 —— 儀器感的直角紀律,也和 status-dot 的
+   「即時狀態」語意區隔開。 */
+.worklog-dot {
+  width: 6px;
+  height: 6px;
+  flex: none;
+  border-radius: 1px;
+}
+
+.worklog-months {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 72px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-/* 目前位置以終端機游標標示,而非左側色條——與 .project-term-caret /
-   .psr-toggle 同一套文法。caret 位置恆定保留,active 只切換透明度,
-   所以切換章節時文字不會左右位移。 */
-.blogpost-toc-link {
-  position: relative;
-  display: block;
-  font-family: var(--font-body);
-  font-size: 0.8125rem;
-  line-height: 1.5;
-  color: var(--text-tertiary);
-  text-decoration: none;
-  padding: 6px 10px 6px 24px;
-  border-radius: var(--radius-md);
-  transition: color 0.2s var(--ease-out-quint), background-color 0.2s var(--ease-out-quint);
+.worklog-month-head {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 14px;
 }
 
-.blogpost-toc-link::before {
-  content: '❯';
-  position: absolute;
-  left: 9px;
+.worklog-month-id {
+  flex: none;
+  margin: 0;
   font-family: var(--font-mono);
-  font-size: 0.7rem;
-  line-height: inherit;
-  color: var(--accent-signature);
-  opacity: 0;
-  transition: opacity 0.2s var(--ease-out-quint);
-}
-
-.blogpost-toc-link:hover {
-  color: var(--text-primary);
-  background: var(--table-hover);
-}
-
-.blogpost-toc-link:hover::before { opacity: 0.4; }
-
-.blogpost-toc-link.active {
-  color: var(--accent-signature);
-  background: var(--chip-bg);
-}
-
-.blogpost-toc-link.active::before { opacity: 1; }
-
-.blogpost-toc-link.level-3 {
-  padding-left: 34px;
-  font-size: 0.78rem;
-}
-
-/* Enhanced Prose for Blog Posts */
-.prose {
-  font-family: var(--font-body);
-  color: var(--text-secondary);
-  line-height: 1.85;
-  font-size: 1.0625rem;
-  max-width: 72ch;
-}
-
-.prose > *:first-child { margin-top: 0; }
-
-.prose h1, .prose h2, .prose h3, .prose h4 {
-  font-family: var(--font-heading);
-  color: var(--text-primary);
+  font-size: clamp(1.125rem, 2.2vw, 1.375rem);
   font-weight: 700;
-  margin-top: 2.6em;
-  margin-bottom: 0.8em;
-  letter-spacing: -0.02em;
-  scroll-margin-top: 100px;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
 }
 
-.prose h2 {
-  font-size: 1.875rem;
+/* 貫穿的髮絲線 —— 印刷版面裡分隔章節的那條規線 */
+.worklog-month-rule {
+  flex: 1 1 auto;
+  height: 1px;
+  min-width: 24px;
+  background: var(--border);
+}
+
+.worklog-month-meta {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.worklog-month-headline {
+  max-width: 68ch;
+  margin: 0 0 28px;
+  font-family: var(--font-body);
+  font-size: clamp(0.9375rem, 1.4vw, 1rem);
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.worklog-entries {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--border);
+}
+
+.worklog-entry {
+  display: grid;
+  grid-template-columns: 156px minmax(0, 1fr);
+  gap: 24px;
+  padding: 16px 0 16px 14px;
   border-bottom: 1px solid var(--border);
-  padding-bottom: 0.45em;
-  padding-left: 16px;
   position: relative;
 }
 
-.prose h2::before {
+/* hover 的左緣訊號線。用 ::before 而不是 border-left,列本身才不會位移。 */
+.worklog-entry::before {
   content: '';
   position: absolute;
   left: 0;
-  top: 0.16em;
-  bottom: calc(0.45em + 6px);
-  width: 4px;
-  border-radius: 2px;
-  background: var(--accent-signature);
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--border-hover);
+  opacity: 0;
+  transition: opacity 0.25s var(--ease-out-quint);
 }
 
-.prose h3 { font-size: 1.4rem; }
+.worklog-entry:hover::before { opacity: 1; }
 
-.prose h2 a, .prose h3 a {
-  color: inherit;
-  text-decoration: none;
-}
-
-.prose h2 a:hover::after, .prose h3 a:hover::after {
-  content: ' #';
-  color: var(--text-tertiary);
-  opacity: 0.7;
-}
-
-.prose p { margin-bottom: 1.6em; }
-
-/* 內文連結必須有底線。--accent-signature 對上內文的 --text-secondary 只有
-   2.26:1(深色)/ 1.93:1(淺色),遠低於 WCAG 1.4.1 要求的 3:1 ——
-   顏色不能是唯一的區辨線索(PRODUCT.md「狀態色不得是唯一資訊載體」的同一條)。
-   底線收成 1px + offset,維持 Terminal Editorial 的細線紀律,不是 UA 的粗底線。
-   標題錨點(.prose h2 a / h3 a)特異性更高,仍然保持無底線。 */
-.prose a {
-  color: var(--accent-signature);
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
-  text-decoration-color: color-mix(in srgb, var(--accent-signature) 45%, transparent);
-  transition: opacity 0.2s, text-decoration-color 0.2s;
-}
-
-.prose a:hover { opacity: 0.78; text-decoration-color: var(--accent-signature); }
-
-.prose ul, .prose ol { margin-bottom: 1.6em; padding-left: 1.6em; }
-.prose li { margin-bottom: 0.55em; }
-.prose li::marker { color: var(--accent-signature); }
-
-.prose strong { color: var(--text-primary); font-weight: 600; }
-
-.prose blockquote {
-  border: 1px solid var(--border);
-  padding: 1.25rem 1.5rem;
-  color: var(--text-secondary);
-  margin: 0 0 1.6em 0;
-  background: var(--quote-bg);
-  border-radius: var(--radius-sm);
-  font-style: normal;
-}
-
-.prose blockquote p:last-child { margin-bottom: 0; }
-
-.prose hr {
-  border: none;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--border), transparent);
-  margin: 3em 0;
-}
-
-.prose img {
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border);
-  max-width: 100%;
-  height: auto;
-}
-
-.prose table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 1.6em;
-  font-size: 0.95rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  overflow: hidden;
-}
-
-.prose th {
-  background: var(--table-head-bg);
-  color: var(--text-primary);
-  font-weight: 600;
-  text-align: left;
-  padding: 14px 18px;
-  border-bottom: 1px solid var(--border);
-  font-family: var(--font-heading);
-}
-
-.prose td {
-  padding: 14px 18px;
-  border-bottom: 1px solid var(--border);
-  color: var(--text-secondary);
-}
-
-.prose tr:last-child td { border-bottom: none; }
-.prose tr:nth-child(even) { background: var(--table-zebra); }
-.prose tr:hover { background: var(--table-hover); }
-
-/* Inline code */
-.prose code {
-  font-family: var(--font-mono);
-  background: var(--code-inline-bg);
-  padding: 0.22em 0.5em;
-  border-radius: var(--radius-xs);
-  font-size: 0.875em;
-  color: var(--accent-teal);
-  border: 1px solid var(--code-inline-border);
-}
-
-/* Code block enhancements */
-/* 永遠深色的孤島 —— 淺色模式下不翻色,紙上嵌一塊終端機。
-   這樣做有兩個理由:rehype-highlight 沒有載對應的 hljs 淺色主題,翻色會讓
-   語法著色失控;而且深色 code block 本來就是 Terminal Editorial 的語彙。
-   因為不跟著主題走,底下所有前景色都必須寫死亮色,不能用 --text-* token
-   (--text-primary 在淺色是 #000,壓在這塊近黑底上會直接消失)。 */
-.prose pre {
-  background: rgba(10, 10, 14, 0.92) !important;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: var(--radius-md);
-  padding: 0;
-  overflow: hidden;
-  font-size: 0.9em;
-  margin: 1.6em 0;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
-  /* `.prose pre code` 是 color:inherit,靠這行拿到亮色;沒有它淺色模式全黑吃黑 */
-  color: #e9e9ec;
-}
-
-.prose-code-header {
-  display: flex;
+.worklog-entry-project {
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px 14px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.03);
+  gap: 8px;
+  align-self: start;
+  padding-top: 2px;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  word-break: break-word;
 }
 
-.prose-code-dots {
-  display: flex;
-  gap: 6px;
-}
-
-.prose-code-dots i {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-}
-
-.prose-code-dots i:nth-child(1) { background: rgba(255, 95, 86, 0.65); }
-.prose-code-dots i:nth-child(2) { background: rgba(255, 189, 46, 0.65); }
-.prose-code-dots i:nth-child(3) { background: rgba(39, 201, 63, 0.65); }
-
-.prose-code-lang {
-  flex: 1;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(233, 233, 236, 0.58); /* 孤島內固定亮色,不走 token */
+.worklog-entry-summary {
+  margin: 0;
   font-family: var(--font-body);
+  font-size: 0.9375rem;
+  line-height: 1.72;
+  color: var(--text-secondary);
+  max-width: 76ch;
 }
 
-.prose-code-wrapper {
-  position: relative;
-  overflow-x: auto;
-  padding: 1.35rem;
-}
+@media (max-width: 768px) {
+  .worklog-months { gap: 56px; }
 
-.prose-copy-btn {
-  padding: 5px 14px;
-  background: rgba(255, 255, 255, 0.10);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: var(--radius-sm);
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: rgba(245, 245, 247, 0.65);
-  cursor: pointer;
-  transition: all 0.15s ease;
-  font-family: var(--font-body);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
+  /* 窄螢幕下 156px 的專案欄會把摘要壓成一行三四個字,改成上下堆疊 */
+  .worklog-entry {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+    padding: 14px 0 14px 12px;
+  }
 
-.prose-copy-btn:hover {
-  background: rgba(255, 255, 255, 0.18);
-  color: #f4f4f5; /* 孤島內固定亮色,不走 token */
-  border-color: rgba(255, 255, 255, 0.25);
+  .worklog-month-head { gap: 12px; }
+  .worklog-month-meta { font-size: 0.6875rem; }
 }
 
 /* ─── Terminal Card ───────────────────────────────────────────── */
@@ -2354,65 +1683,6 @@ footer .path-label::before { color: var(--accent-brass); opacity: 1; }
 
 @keyframes cursor-blink {
   50% { opacity: 0; }
-}
-
-.prose pre code {
-  background: transparent;
-  padding: 0;
-  color: inherit;
-  border: none;
-  font-size: 0.95em;
-  line-height: 1.7;
-}
-
-/* Blog Post Responsive */
-@media (max-width: 1024px) {
-  .blogpost-layout {
-    grid-template-columns: 1fr;
-    gap: 48px;
-    padding: 120px 24px 100px;
-  }
-
-  .blogpost-toc {
-    position: relative;
-    top: auto;
-    order: -1;
-  }
-
-  .blogpost-toc-list {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  /* 行動版 TOC 橫排成一列晶片,caret 讓位給整框高亮 */
-  .blogpost-toc-link {
-    border: 1px solid var(--border);
-    border-radius: var(--radius-xs);
-    padding: 6px 14px;
-    white-space: nowrap;
-  }
-
-  .blogpost-toc-link::before { content: none; }
-
-  .blogpost-toc-link.active {
-    border-color: var(--accent-signature);
-    background: var(--chip-bg-hover);
-  }
-
-  .blogpost-toc-link.level-3 {
-    padding-left: 14px;
-  }
-}
-
-@media (max-width: 768px) {
-  .blogpost-layout { padding: 100px 16px 80px; }
-  .blogpost-title { font-size: clamp(1.875rem, 7vw, 2.5rem); }
-  .blogpost-cover { aspect-ratio: 16 / 9; }
-  .prose { font-size: 1rem; }
-  .prose h2 { font-size: 1.5rem; }
-  .prose h3 { font-size: 1.2rem; }
-  .prose th, .prose td { padding: 12px 14px; }
 }
 
 /* ─── 觸控目標下限 ────────────────────────────────────────────

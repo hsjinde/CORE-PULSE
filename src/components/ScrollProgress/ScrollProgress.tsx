@@ -15,7 +15,7 @@ import { subscribeLenisProgress, scrollToTop } from '@/lib/lenisController'
    角落顯示 mono 百分比(scroll 後淡入),整體是「儀器導覽」的語彙。
    進度來源:
    - Home 有 Lenis 攔截原生捲動,改訂閱 Lenis 的 progress(0–1);
-   - Blog / Telemetry 等無 Lenis 的路由,退回原生 scroll 計算。
+   - Telemetry / Ask 等無 Lenis 的路由,退回原生 scroll 計算。
    輸入驅動,非自主動畫;reduced-motion 下移除 spring 阻尼但仍精準對應。 */
 export default function ScrollProgress() {
   const reduced = useReducedMotion()
