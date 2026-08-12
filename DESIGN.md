@@ -81,10 +81,15 @@ not render it; this list is what `Home.tsx` actually mounts. (`About`'s portrait
 ### The metric strip's honesty contract
 
 A hairline-divided metric row is textbook instrument-panel grammar, which is why the pattern
-transfers — but the portfolio convention it comes from fills it with unverifiable vanity counts
-("40+ projects", "18+ happy clients"). That fails Principle 2 (儀器的誠實) the same way a fake
-gauge would. The rule here: **every cell must survive being pointed at and asked "where's that
-number from?"**
+transfers — but PRODUCT.md lists 「hero-metric 模板」under **Anti-references**, and the reason is
+what those templates put in the cells: unverifiable vanity counts ("40+ projects", "18+ happy
+clients"). The strip is only allowed to exist because it inverts that. The rule: **every cell must
+survive being pointed at and asked "where's that number from?"**
+
+(PRODUCT.md's Principle 2 「儀器的誠實」is about *visual* honesty — flat, hairline, no blur or
+glow faking depth. The extension to data honesty is this file's own, established in *Back to top*:
+a gauge is fixed by making it real, not by adding a second gauge. Same instinct, applied to the
+number instead of the control.)
 
 The first two cells derive from `SERVICES.length` / `AGENT_SKILLS.length` in
 [src/data/infra.ts](src/data/infra.ts) — the same arrays `BentoGrid` renders its lists from, which
