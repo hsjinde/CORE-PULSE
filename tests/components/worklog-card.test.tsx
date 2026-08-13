@@ -56,3 +56,41 @@ describe('MonthColumn', () => {
     expect(colorOf('做了一件維運的事')).not.toBe(colorOf('做了一件網站的事'))
   })
 })
+
+/* 資料是隨手往下寫的,每個月的項目順序都不一樣。排過之後同一個專案在每一欄的
+   相對位置才一致,橫著掃才對得起來。 */
+describe('MonthColumn 的卡片排序', () => {
+  const UNSORTED: WorkLogMonth = {
+    id: '2026-08',
+    period: '08.01 – 08.12',
+    headline: '這個月的主軸',
+    items: [
+      { project: 'vps', summary: 'vps 第一筆' },
+      { project: 'core-pulse', summary: 'core-pulse 第一筆' },
+      { project: 'toeic-flow', summary: 'toeic-flow 第一筆' },
+      { project: 'core-pulse', summary: 'core-pulse 第二筆' },
+    ],
+  }
+
+  it('照 PROJECT_ORDER 排,不照資料裡的順序', () => {
+    const { container } = render(<ul><MonthColumn month={UNSORTED} /></ul>)
+    const rendered = [...container.querySelectorAll('.worklog-card-project')].map(
+      (el) => el.textContent,
+    )
+    // PROJECT_ORDER 是 core-pulse → toeic-flow → … → vps
+    expect(rendered).toEqual(['core-pulse', 'core-pulse', 'toeic-flow', 'vps'])
+  })
+
+  it('同一個專案內維持資料裡的原順序（穩定排序）', () => {
+    const { container } = render(<ul><MonthColumn month={UNSORTED} /></ul>)
+    const summaries = [...container.querySelectorAll('.worklog-card-summary')].map(
+      (el) => el.textContent,
+    )
+    expect(summaries.slice(0, 2)).toEqual(['core-pulse 第一筆', 'core-pulse 第二筆'])
+  })
+
+  it('排序不會改動原始資料', () => {
+    render(<ul><MonthColumn month={UNSORTED} /></ul>)
+    expect(UNSORTED.items[0].project).toBe('vps')
+  })
+})

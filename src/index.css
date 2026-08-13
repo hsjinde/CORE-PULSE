@@ -1503,19 +1503,77 @@ footer .path-label::before { color: var(--accent-brass); opacity: 1; }
 .worklog-legend {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px 20px;
-  margin-bottom: 56px;
+  gap: 8px 16px;
+  margin-bottom: 0;
   padding: 0;
   list-style: none;
 }
 
+/* 圖例項目同時是篩選鈕 —— 是 <button>,所以要先把瀏覽器的按鈕外觀清掉。
+   選中的狀態不靠顏色(顏色已經被專案識別佔走了),靠文字轉亮 + 下方一條線。 */
 .worklog-legend-item {
   display: inline-flex;
   align-items: center;
   gap: 7px;
+  /* 垂直 padding 撐到 30px 高 —— WCAG 2.2 的 2.5.8 最低是 24×24,
+     3px padding 量出來只有 25px,太貼線 */
+  padding: 7px 0;
+  background: none;
+  border: none;
+  border-bottom: 1px solid transparent;
   font-family: var(--font-mono);
   font-size: 0.75rem;
   color: var(--text-tertiary);
+  cursor: pointer;
+  transition: color 0.2s var(--ease-out-quint), border-color 0.2s var(--ease-out-quint);
+}
+
+.worklog-legend-item:hover { color: var(--text-secondary); }
+
+.worklog-legend-item[aria-pressed='true'] {
+  color: var(--text-primary);
+  border-bottom-color: var(--border-hover);
+}
+
+/* 篩選狀態列。沒有篩選時是空的 <p> —— 保留它而不是拿掉,是為了 aria-live
+   在切換時能播報;元素本身被移除的話播報就不會發生。 */
+.worklog-filter-status {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  min-height: 1.25rem;
+  margin: 14px 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.worklog-filter-clear {
+  padding: 0;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: inherit;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  transition: color 0.2s var(--ease-out-quint), border-color 0.2s var(--ease-out-quint);
+}
+
+.worklog-filter-clear:hover {
+  color: var(--text-primary);
+  border-bottom-color: var(--border-hover);
+}
+
+/* 篩到空看板時的說明。只會在該專案的紀錄全落在 archive 裡時出現。 */
+.worklog-empty {
+  margin: 28px 0 0;
+  padding: 20px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
 }
 
 /* 通道識別點。方形而不是圓形 —— 儀器感的直角紀律,也和 status-dot 的
@@ -1530,7 +1588,8 @@ footer .path-label::before { color: var(--accent-brass); opacity: 1; }
 .worklog-board {
   display: grid;
   grid-template-columns: repeat(var(--worklog-columns, 3), minmax(0, 1fr));
-  margin: 0;
+  /* 上方留白由這裡給 —— 圖例與篩選狀態列之間要貼著,狀態列與看板才拉開 */
+  margin: 28px 0 0;
   padding: 0;
   list-style: none;
 }

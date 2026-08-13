@@ -88,6 +88,16 @@ The board shows the newest `BOARD_MONTHS` (3) months as columns; older months fa
 collapsible archive below (`ArchiveList.tsx`). The section id stays `#worklog` and the CSS
 prefix stays `.worklog-*` — only the display name changed.
 
+`PROJECT_META`'s key order is also the display order — `PROJECT_ORDER` drives both the legend and
+`orderItems()`, which sorts every column's cards so the same project sits in the same relative
+position across months. Reordering those keys changes display order only; each project's
+`--project-N` is written out explicitly, so colors do not shift with rank.
+
+The legend doubles as a single-select filter (click a project, click again to clear). Filtering
+narrows what is shown inside the existing 3-month window rather than pulling archived months
+onto the board — so a project whose entries all sit in the archive filters down to an empty
+board, and `WorkLog.tsx` renders an explanation (`.worklog-empty`) instead of blank space.
+
 Card color = **project identity**, not work type: `PROJECT_META` in `worklog.ts` maps each
 project to a `--project-N` slot from the 8-slot ramp in `src/index.css`. Adding a project means
 adding a `PROJECT_META` entry too — `worklog.test.ts` fails otherwise. The color is a stripe and

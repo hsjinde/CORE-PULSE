@@ -39,11 +39,35 @@ export const PROJECT_META: Record<string, { color: string }> = {
   'agent-skills': { color: 'var(--project-7)' }, // violet
 }
 
+/**
+ * 專案的固定顯示順序 —— 圖例的排列與每一欄內卡片的排序都走這個。
+ *
+ * 直接取 PROJECT_META 的宣告順序,不另外維護一份清單。重排那個物件的 key 只會改
+ * 顯示順序,不會動到顏色 —— 每個專案的 `--project-N` 是寫死的,這是刻意的:
+ * 顏色跟著專案本身,不跟著它排第幾。
+ */
+export const PROJECT_ORDER = Object.keys(PROJECT_META)
+
 export interface WorkLogItem {
   /** 專案識別字,用 repo / 網域的名字,不要用中文長句。必須是 PROJECT_META 的 key。 */
   project: string
   /** 一行講完「做了什麼、結果是什麼」。不放待辦、不放未修好的東西。 */
   summary: string
+}
+
+/**
+ * 把一個月的項目排成顯示順序:先照 PROJECT_ORDER,同一個專案內維持資料裡的原順序。
+ *
+ * 為什麼要排:資料是隨手往下寫的,所以八月是 core-pulse 開頭、七月是 agent-skills
+ * 開頭 —— 同一個專案在每一欄的相對位置都不一樣,橫著掃就對不起來。排過之後
+ * 「這個月 vps 做了什麼」在每一欄都在同一個相對位置。
+ *
+ * `Array.prototype.sort` 是穩定排序,所以同專案內的原順序不會被打亂。
+ */
+export function orderItems(items: WorkLogItem[]): WorkLogItem[] {
+  return [...items].sort(
+    (a, b) => PROJECT_ORDER.indexOf(a.project) - PROJECT_ORDER.indexOf(b.project),
+  )
 }
 
 export interface WorkLogMonth {

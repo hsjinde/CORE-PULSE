@@ -1,4 +1,4 @@
-import type { WorkLogMonth } from '@/content/worklog'
+import { orderItems, type WorkLogMonth } from '@/content/worklog'
 import { EntryCard } from './MonthColumn'
 
 /**
@@ -32,8 +32,8 @@ export default function ArchiveList({ months }: { months: WorkLogMonth[] }) {
                 </summary>
 
                 <ul className="worklog-cards worklog-archive-cards">
-                  {month.items.map((item, i) => (
-                    <EntryCard key={`${month.id}-${i}`} item={item} index={i} />
+                  {orderItems(month.items).map((item, i) => (
+                    <EntryCard key={`${month.id}-${item.project}-${i}`} item={item} index={i} />
                   ))}
                 </ul>
               </details>

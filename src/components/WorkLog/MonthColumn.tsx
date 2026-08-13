@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react'
 import { motion } from 'framer-motion'
-import { PROJECT_META, type WorkLogItem, type WorkLogMonth } from '@/content/worklog'
+import { PROJECT_META, orderItems, type WorkLogItem, type WorkLogMonth } from '@/content/worklog'
 
 /* 進場動線統一走 DESIGN.md 的標準值。framer 的 reducedMotion="user"(掛在 App.tsx)
    會自己把 y 位移吃掉,這裡不需要另外判斷。 */
@@ -55,8 +55,8 @@ export default function MonthColumn({ month }: { month: WorkLogMonth }) {
       <p className="worklog-month-headline">{month.headline}</p>
 
       <ul className="worklog-cards">
-        {month.items.map((item, i) => (
-          <EntryCard key={`${month.id}-${i}`} item={item} index={i} />
+        {orderItems(month.items).map((item, i) => (
+          <EntryCard key={`${month.id}-${item.project}-${i}`} item={item} index={i} />
         ))}
       </ul>
     </li>
