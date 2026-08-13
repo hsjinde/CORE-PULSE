@@ -134,6 +134,9 @@ CI 的 axe 契約就是因為色點永遠配著文字；改版不能弄丟這件
 
 CLAUDE.md 以標題名稱引用 README 那一節，兩邊必須同時改。
 
+導言段要重寫成描述看板（現行文案講的是「逐月記下」的清單）。文案用平實口語敘述，
+不要用「——某某金句。」那種格言式收尾。
+
 ## 測試
 
 ### 既有測試必須維持綠燈
@@ -149,8 +152,9 @@ CLAUDE.md 以標題名稱引用 README 那一節，兩邊必須同時改。
 2. 月份 ≤ 3 個時，archive 完全不渲染
 3. 每張卡片同時有專案名與通道**文字**標籤（顏色不是唯一資訊載體的迴歸鎖）
 
-1 與 2 需要注入假資料，所以測試對象是 `MonthColumn` / `ArchiveList` 的組合邏輯 ——
-`WorkLog.tsx` 直接讀 `WORKLOG` 模組常數，測試用 `vi.mock('@/content/worklog')` 覆蓋。
+三條都 render `<WorkLog />`。1 與 2 需要注入假月份資料，而 `WorkLog.tsx` 直接讀
+`WORKLOG` 模組常數，所以用 `vi.mock('@/content/worklog')` 搭配 `importActual` 只覆蓋
+`WORKLOG`、保留真實的 `CHANNEL_META`（否則通道色與標籤會一起消失，第 3 條就失去意義）。
 
 ### e2e
 
