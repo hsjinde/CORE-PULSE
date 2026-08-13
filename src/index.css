@@ -1616,6 +1616,87 @@ footer .path-label::before { color: var(--accent-brass); opacity: 1; }
   .worklog-month-meta { font-size: 0.6875rem; }
 }
 
+/* ─── Work Log — archive(看板放不下的舊月份)─────────────────── */
+.worklog-archive {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+.worklog-archive-title {
+  margin: 0 0 12px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.worklog-archive-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.worklog-archive-item {
+  border-bottom: 1px solid var(--border);
+}
+
+.worklog-archive-summary {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 12px 4px;
+  cursor: pointer;
+  list-style: none; /* 拿掉預設三角,改用下面的 ::before */
+}
+
+.worklog-archive-summary::-webkit-details-marker { display: none; }
+
+.worklog-archive-summary::before {
+  content: '+';
+  flex: none;
+  width: 1ch;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--text-tertiary);
+}
+
+.worklog-archive-item[open] > .worklog-archive-summary::before { content: '–'; }
+
+.worklog-archive-summary:hover .worklog-archive-id { color: var(--text-primary); }
+
+.worklog-archive-id {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+  transition: color 0.25s var(--ease-out-quint);
+}
+
+.worklog-archive-count {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.worklog-archive-headline {
+  min-width: 0;
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--text-tertiary);
+}
+
+.worklog-archive-cards {
+  padding: 4px 0 20px 2ch;
+}
+
 /* ─── Terminal Card ───────────────────────────────────────────── */
 .terminal-card-header {
   display: flex;
