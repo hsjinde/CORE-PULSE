@@ -10,7 +10,7 @@ const { mockMakeMonth } = vi.hoisted(() => {
     id,
     period: '01.01 – 01.31',
     headline: `${id} 的主軸`,
-    items: [{ project: 'core-pulse', channel: 'web', summary: `${id} 做的事` }],
+    items: [{ project: 'core-pulse', summary: `${id} 做的事` }],
   })
   return { mockMakeMonth }
 })

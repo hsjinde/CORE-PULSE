@@ -13,13 +13,13 @@ const { mockMakeMonth } = vi.hoisted(() => {
     id,
     period: '01.01 – 01.31',
     headline: `${id} 的主軸`,
-    items: [{ project: 'core-pulse', channel: 'web', summary: `${id} 做的事` }],
+    items: [{ project: 'core-pulse', summary: `${id} 做的事` }],
   })
   return { mockMakeMonth }
 })
 
 // 看板容量是 3 —— 用 5 個月才驗得到「只有前 3 個上看板」。
-// 只覆蓋 WORKLOG,CHANNEL_META 用真的。
+// 只覆蓋 WORKLOG,PROJECT_META 用真的(否則專案色會一起消失)。
 vi.mock('@/content/worklog', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/content/worklog')>()
   return {

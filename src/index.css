@@ -134,6 +134,22 @@
   /* pink —— Projects 其中一案的既有識別色,不在原本六色語意表內 */
   --accent-pink:      #ff375f;
 
+  /* Project identity ramp —— 專案進度看板專用,語意與 Signal palette 不同。
+     這組色**不是訊號**,是身分標記:同一個專案永遠同一色,色相本身不帶含意。
+     來源是 dataviz skill 的驗證色盤,在卡片底色 #050505 上五項檢查全過
+     (亮度帶、彩度、相鄰 CVD ΔE 8.4、normal-vision ΔE 19.3、對比 ≥3:1)。
+     **slot 順序不可調動** —— 排序本身就是 CVD 安全的機制。
+     只當左緣色條與色點,不當文字色(淺色欄有三個 slot 低於 3:1)。
+     slot 8 是紅色,目前保留未用;真的用到時要為 DESIGN.md 的紅色保留開例外。 */
+  --project-1: #3987e5;  /* blue */
+  --project-2: #d95926;  /* orange */
+  --project-3: #199e70;  /* aqua */
+  --project-4: #c98500;  /* yellow */
+  --project-5: #d55181;  /* magenta */
+  --project-6: #008300;  /* green */
+  --project-7: #9085e9;  /* violet */
+  --project-8: #e66767;  /* red —— 未指派 */
+
   /* Signature accent — white. The only decorative hue in the system. */
   --accent-signature:       #ffffff;
   --accent-signature-hover: #d4d4d4;
@@ -292,6 +308,18 @@
   --accent-red:        #b3261e;  /* 6.5:1 */
   --accent-teal:       #0b6478;  /* 6.8:1 */
   --accent-pink:       #b3123f;  /* 6.8:1 */
+
+  /* Project identity ramp —— 同一組色相為紙面重新取階(見深色那組的說明)。
+     aqua / yellow / magenta 在 #ffffff 上分別是 2.82、2.17、2.69:1,低於 3:1 ——
+     色條在紙面會偏淡。可接受的理由是顏色不承擔資訊:專案名永遠寫在旁邊。 */
+  --project-1: #2a78d6;  /* blue */
+  --project-2: #eb6834;  /* orange */
+  --project-3: #1baf7a;  /* aqua */
+  --project-4: #eda100;  /* yellow */
+  --project-5: #e87ba4;  /* magenta */
+  --project-6: #008300;  /* green */
+  --project-7: #4a3aa7;  /* violet */
+  --project-8: #e34948;  /* red —— 未指派 */
 
   --accent-signature:       #000000;
   --accent-signature-hover: #333333;
@@ -1545,15 +1573,14 @@ footer .path-label::before { color: var(--accent-brass); opacity: 1; }
   padding: 12px 14px;
   background: var(--bg-primary);
   border: 1px solid var(--border);
-  /* --channel 由 EntryCard 的 inline style 給;沒給的話退回髮絲線色而不是消失 */
-  border-left: 2px solid var(--channel, var(--border));
+  /* --project-color 由 EntryCard 的 inline style 給;沒給的話退回髮絲線色而不是消失 */
+  border-left: 2px solid var(--project-color, var(--border));
   border-radius: var(--radius-xs);
   transition: border-color 0.25s var(--ease-out-quint);
 }
 
-/* 卡片內的色點沿用同一個 --channel,元件那邊不再逐一掛 inline 色
-   (專案名的 color: var(--channel) 併到下面 .worklog-card-project 那個 block 裡) */
-.worklog-card .worklog-dot { background: var(--channel); }
+/* 卡片內的色點沿用同一個 --project-color,元件那邊不再逐一掛 inline 色 */
+.worklog-card .worklog-dot { background: var(--project-color); }
 
 /* hover 只換邊框色。不位移、不放大、不發光。 */
 .worklog-card:hover {
@@ -1569,24 +1596,16 @@ footer .path-label::before { color: var(--accent-brass); opacity: 1; }
   margin-bottom: 7px;
 }
 
+/* 專案名走一般文字色,**不是**專案色 —— 識別色 ramp 的淺色欄有三個 slot 在白底
+   低於 3:1,當文字色會直接違反 WCAG AA。顏色的工作交給左緣色條與色點。 */
 .worklog-card-project {
-  /* 色值由 --channel 給,由 EntryCard 的 inline style 傳入 */
-  color: var(--channel);
+  color: var(--text-primary);
   font-family: var(--font-mono);
   font-size: 0.8125rem;
   font-weight: 500;
   letter-spacing: -0.01em;
   min-width: 0;
   word-break: break-word;
-}
-
-/* 通道的文字標籤 —— 顏色不是唯一資訊載體的那一半,不要拿掉 */
-.worklog-card-channel {
-  margin-left: auto;
-  flex: none;
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  color: var(--text-tertiary);
 }
 
 .worklog-card-summary {

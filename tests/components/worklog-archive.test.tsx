@@ -17,7 +17,7 @@ const MONTHS: WorkLogMonth[] = [
     id: '2026-05',
     period: '05.01 – 05.31',
     headline: '五月的主軸',
-    items: [{ project: 'vps', channel: 'infra', summary: '五月做的事' }],
+    items: [{ project: 'vps', summary: '五月做的事' }],
   },
 ]
 

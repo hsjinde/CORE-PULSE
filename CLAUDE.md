@@ -88,6 +88,13 @@ The board shows the newest `BOARD_MONTHS` (3) months as columns; older months fa
 collapsible archive below (`ArchiveList.tsx`). The section id stays `#worklog` and the CSS
 prefix stays `.worklog-*` — only the display name changed.
 
+Card color = **project identity**, not work type: `PROJECT_META` in `worklog.ts` maps each
+project to a `--project-N` slot from the 8-slot ramp in `src/index.css`. Adding a project means
+adding a `PROJECT_META` entry too — `worklog.test.ts` fails otherwise. The color is a stripe and
+a dot only, never text (three light-mode slots are under 3:1 on white), and the project name is
+always spelled out beside it, so hue never carries information alone. Rationale, the contrast
+numbers, and why the ramp stops at eight are in DESIGN.md「Project identity ramp」.
+
 ### Chat page `/ask` (LLM proxy)
 Full-page chat at [src/pages/Ask.tsx](src/pages/Ask.tsx), driven by
 `useMascotChat` + `chatClient.streamChat` (the floating mascot widget was removed, but

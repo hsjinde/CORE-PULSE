@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { WORKLOG, CHANNEL_META, type WorkLogMonth } from '@/content/worklog'
+import { WORKLOG, PROJECT_META, type WorkLogMonth } from '@/content/worklog'
 
 /**
  * 專案進度看板的「可公開」契約。
@@ -42,12 +42,11 @@ describe('專案進度看板資料結構', () => {
     expect(ids).toEqual(sorted)
   })
 
-  it('每一筆都有專案名與摘要,通道是已定義的四個之一', () => {
+  it('每一筆都有專案名與摘要', () => {
     for (const item of allItems) {
       const where = `${item.month} · ${item.project}`
       expect(item.project.trim(), `${where} 專案名是空的`).not.toBe('')
       expect(item.summary.trim(), `${where} 摘要是空的`).not.toBe('')
-      expect(CHANNEL_META[item.channel], `${where} 用了未定義的通道 ${item.channel}`).toBeDefined()
     }
   })
 
@@ -88,25 +87,31 @@ describe('可公開契約', () => {
   })
 })
 
-describe('訊號通道', () => {
-  it('每個通道都對應到一個 CSS 變數,不寫死色碼', () => {
-    for (const [key, meta] of Object.entries(CHANNEL_META)) {
-      expect(meta.label, `${key} 沒有標籤`).toBeTruthy()
-      expect(meta.color, `${key} 應該用 var(--accent-*) 而不是寫死色碼`).toMatch(
-        /^var\(--accent-[a-z]+\)$/,
+describe('專案識別色', () => {
+  it('每個專案都對應到一個 --project-* 變數,不寫死色碼', () => {
+    for (const [key, meta] of Object.entries(PROJECT_META)) {
+      expect(meta.color, `${key} 應該用 var(--project-N) 而不是寫死色碼`).toMatch(
+        /^var\(--project-[1-8]\)$/,
       )
     }
   })
 
-  it('用到的通道都在圖例裡（反過來也成立,沒有從沒用過的通道）', () => {
-    const used = new Set(allItems.map((i) => i.channel))
-    const declared = new Set(Object.keys(CHANNEL_META))
-    for (const channel of used) expect(declared.has(channel)).toBe(true)
-    for (const channel of declared) {
-      expect(used.has(channel as keyof typeof CHANNEL_META), `通道 ${channel} 沒有任何項目在用`).toBe(
-        true,
-      )
+  /* ramp 只有 8 格,而且 slot 順序是 CVD 安全性的機制,不能隨便加第 9 格。
+     這條擋的是「新增專案卻忘了配色」—— 少了它,新專案會靜默地變成沒有顏色。 */
+  it('用到的專案都配了色（反過來也成立,沒有配了色卻沒在用的專案）', () => {
+    const used = new Set(allItems.map((i) => i.project))
+    const declared = new Set(Object.keys(PROJECT_META))
+    for (const project of used) {
+      expect(declared.has(project), `專案 ${project} 沒有在 PROJECT_META 配色`).toBe(true)
     }
+    for (const project of declared) {
+      expect(used.has(project), `PROJECT_META 的 ${project} 沒有任何項目在用`).toBe(true)
+    }
+  })
+
+  it('同一個 slot 不會被兩個專案共用', () => {
+    const slots = Object.values(PROJECT_META).map((m) => m.color)
+    expect(new Set(slots).size, `識別色重複:${slots.join(', ')}`).toBe(slots.length)
   })
 })
 

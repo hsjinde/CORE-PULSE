@@ -256,8 +256,7 @@ OpenAI 相容端點，以 `event: delta / done / error` 的 SSE frame 串回前�
   headline: '這個月的主軸，一句話。',
   items: [
     {
-      project: 'core-pulse',     // repo / 網域的名字，不要用中文長句
-      channel: 'web',            // infra | web | ai | content —— 決定訊號色
+      project: 'core-pulse',     // 必須是 PROJECT_META 的 key，決定卡片的識別色
       summary: '一行講完做了什麼、結果是什麼。',
     },
   ],
@@ -265,6 +264,11 @@ OpenAI 相容端點，以 `event: delta / done / error` 的 SSE frame 串回前�
 ```
 
 挑得出「做完了什麼、為什麼值得寫」的那幾條就好，**不要照抄月誌**。
+
+**如果是全新的專案**，還要在同一個檔案的 `PROJECT_META` 補一筆，指到一個還沒被用掉的
+`--project-N`（ramp 定義在 `src/index.css`，共 8 格）。忘了配色的話
+`tests/content/worklog.test.ts` 會擋下來——不會靜默變成沒有顏色。ramp 用完時不要硬加
+第 9 格：slot 順序是色盲安全性的驗證結果，加色相會破壞它，那時該重新想的是分類方式。
 
 > ⚠️ 這一段會公開在首頁上。原始月誌裡的 VPS 位址、尚未修好的安全待辦、磁碟水位、
 > 內部主機名一律不要帶進來——只寫已經收斂的結果。`tests/content/worklog.test.ts`

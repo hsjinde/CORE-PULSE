@@ -124,6 +124,44 @@ CSS against a `var()` and silently drops the declaration.
 Rule: a category keeps the same color everywhere it appears (e.g. Blog's "個人學習" is always
 orange). Never assign color for pure visual variety on non-categorical elements.
 
+### Project identity ramp — the documented exception to "color is a signal"
+
+`--project-1` … `--project-8` belong to the `#worklog` project board alone. They are the one
+place in the system where **hue carries no meaning**: it is an identity tag, so that the same
+project is always the same color. `--project-4` does not mean "in progress" the way
+`--accent-orange` does; it means "toeic-flow".
+
+| Slot | Hue | Dark | Light | Assigned to |
+|---|---|---|---|---|
+| `--project-1` | blue | `#3987e5` | `#2a78d6` | core-pulse |
+| `--project-2` | orange | `#d95926` | `#eb6834` | toeic-flow |
+| `--project-3` | aqua | `#199e70` | `#1baf7a` | osaka-web |
+| `--project-4` | yellow | `#c98500` | `#eda100` | bubble-beam |
+| `--project-5` | magenta | `#d55181` | `#e87ba4` | my-note |
+| `--project-6` | green | `#008300` | `#008300` | vps |
+| `--project-7` | violet | `#9085e9` | `#4a3aa7` | agent-skills |
+| `--project-8` | red | `#e66767` | `#e34948` | *unassigned* |
+
+Three rules make the exception safe:
+
+1. **Color is redundant, never the carrier.** The project name is written next to the stripe on
+   every card. Nothing is identified by hue alone, so a viewer who cannot separate two hues
+   loses nothing.
+2. **Stripe and dot only — never text.** The light column's aqua / yellow / magenta sit at
+   2.82 / 2.17 / 2.69:1 on `#ffffff`. Using them as a text color would break AA outright.
+   `.worklog-card-project` is `--text-primary`.
+3. **Slot order is not cosmetic.** The ramp came from a validated categorical palette and the
+   ordering is what clears the colorblind-separation gate (worst adjacent CVD ΔE 8.4, worst
+   adjacent normal-vision ΔE 19.3, all ≥3:1 on the `#050505` card). Reordering or inserting a
+   hue invalidates it. There is no slot 9 — ten mutually distinguishable hues at one lightness
+   is not achievable, which is why the ramp stops at eight.
+
+The assignment lives in `PROJECT_META` (`src/content/worklog.ts`), not in CSS, so the stylesheet
+stays content-agnostic. `tests/content/worklog.test.ts` fails when a project has no slot.
+
+Slot 8 is red. If it is ever assigned, `--accent-red`'s "error / destructive" reservation needs an
+explicit carve-out written here first.
+
 ### Brass — the Footer's warm accent
 
 `--accent-brass` (`#f7e2c0` dark / `#7a5a1a` light, 6.4:1 on white) is the second purely
