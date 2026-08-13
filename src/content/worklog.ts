@@ -74,7 +74,7 @@ export const WORKLOG: WorkLogMonth[] = [
         project: 'core-pulse',
         channel: 'web',
         summary:
-          '拆掉自有 blog 系統(D1 posts、發文 CLI、SEO middleware 一併移除),筆記統一交給 my-note-web;首頁改掛這個工作紀錄區塊。',
+          '拆掉自有 blog 系統(D1 posts、發文 CLI、SEO middleware 一併移除),筆記統一交給 my-note-web;首頁改掛這個專案進度看板。',
       },
       {
         project: 'vps',
