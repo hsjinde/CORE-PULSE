@@ -1514,6 +1514,10 @@ footer .path-label::before { color: var(--accent-brass); opacity: 1; }
   padding: 0 20px;
 }
 
+/* 看板外緣切齊上方標題/導言/圖例,內部溝槽維持 padding */
+.worklog-column:first-child { padding-left: 0; }
+.worklog-column:last-child { padding-right: 0; }
+
 /* 第一欄不畫左線,規線只出現在欄與欄「之間」 */
 .worklog-column + .worklog-column {
   border-left: 1px solid var(--border);
@@ -1547,9 +1551,9 @@ footer .path-label::before { color: var(--accent-brass); opacity: 1; }
   transition: border-color 0.25s var(--ease-out-quint);
 }
 
-/* 卡片內的色點與專案名共用同一個 --channel,元件那邊不再逐一掛 inline 色 */
+/* 卡片內的色點沿用同一個 --channel,元件那邊不再逐一掛 inline 色
+   (專案名的 color: var(--channel) 併到下面 .worklog-card-project 那個 block 裡) */
 .worklog-card .worklog-dot { background: var(--channel); }
-.worklog-card-project { color: var(--channel); }
 
 /* hover 只換邊框色。不位移、不放大、不發光。 */
 .worklog-card:hover {
@@ -1566,8 +1570,9 @@ footer .path-label::before { color: var(--accent-brass); opacity: 1; }
 }
 
 .worklog-card-project {
+  /* 色值由 --channel 給,由 EntryCard 的 inline style 傳入 */
+  color: var(--channel);
   font-family: var(--font-mono);
-  /* 色值由上面的 .worklog-card-project { color: var(--channel) } 那條給 */
   font-size: 0.8125rem;
   font-weight: 500;
   letter-spacing: -0.01em;
@@ -1593,7 +1598,6 @@ footer .path-label::before { color: var(--accent-brass); opacity: 1; }
 }
 
 .worklog-month-id {
-  flex: none;
   margin: 0;
   font-family: var(--font-mono);
   font-size: clamp(1.125rem, 2.2vw, 1.375rem);
@@ -1604,7 +1608,6 @@ footer .path-label::before { color: var(--accent-brass); opacity: 1; }
 }
 
 .worklog-month-meta {
-  flex: none;
   font-family: var(--font-mono);
   font-size: 0.75rem;
   color: var(--text-tertiary);
@@ -1612,37 +1615,11 @@ footer .path-label::before { color: var(--accent-brass); opacity: 1; }
 }
 
 .worklog-month-headline {
-  max-width: none;
   margin: 0 0 16px;
   font-family: var(--font-body);
   font-size: 0.875rem;
   line-height: 1.7;
   color: var(--text-secondary);
-}
-
-@media (max-width: 768px) {
-  /* 看板上限是三個月,堆疊後的總高度可控 —— 不做橫向捲動,
-     省掉鍵盤可及性與捲動提示那一整套。 */
-  .worklog-board { grid-template-columns: minmax(0, 1fr); }
-
-  .worklog-column {
-    padding: 0;
-  }
-
-  /* 欄的分隔線從直線改成橫線 */
-  .worklog-column + .worklog-column {
-    border-left: none;
-    border-top: 1px solid var(--border);
-    padding-top: 28px;
-    margin-top: 28px;
-  }
-
-  .worklog-archive-summary {
-    flex-wrap: wrap;
-    gap: 6px 12px;
-  }
-
-  .worklog-archive-headline { flex-basis: 100%; }
 }
 
 /* ─── Work Log — archive(看板放不下的舊月份)─────────────────── */
@@ -1724,6 +1701,31 @@ footer .path-label::before { color: var(--accent-brass); opacity: 1; }
 
 .worklog-archive-cards {
   padding: 4px 0 20px 2ch;
+}
+
+@media (max-width: 768px) {
+  /* 看板上限是三個月,堆疊後的總高度可控 —— 不做橫向捲動,
+     省掉鍵盤可及性與捲動提示那一整套。 */
+  .worklog-board { grid-template-columns: minmax(0, 1fr); }
+
+  .worklog-column {
+    padding: 0;
+  }
+
+  /* 欄的分隔線從直線改成橫線 */
+  .worklog-column + .worklog-column {
+    border-left: none;
+    border-top: 1px solid var(--border);
+    padding-top: 28px;
+    margin-top: 28px;
+  }
+
+  .worklog-archive-summary {
+    flex-wrap: wrap;
+    gap: 6px 12px;
+  }
+
+  .worklog-archive-headline { flex-basis: 100%; }
 }
 
 /* ─── Terminal Card ───────────────────────────────────────────── */

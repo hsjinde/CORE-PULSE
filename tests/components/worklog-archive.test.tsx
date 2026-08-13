@@ -1,6 +1,6 @@
 import React from 'react'
 import { describe, it, expect, beforeAll, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import ArchiveList from '@/components/WorkLog/ArchiveList'
 import type { WorkLogMonth } from '@/content/worklog'
 
@@ -42,7 +42,22 @@ describe('ArchiveList', () => {
   })
 
   it('摺疊內容是該月的卡片', () => {
-    render(<ArchiveList months={MONTHS} />)
+    const { container } = render(<ArchiveList months={MONTHS} />)
     expect(screen.getByText('五月做的事')).toBeInTheDocument()
+    // getByText 不檢查可見性,收合的 <details> 內容在 jsdom 裡仍留在 DOM 中,
+    // 所以要額外驗證卡片確實是 details 的子節點,才有真的保護到結構。
+    const details = container.querySelector('details') as HTMLElement
+    expect(details.querySelector('.worklog-card')).toBeTruthy()
+  })
+
+  it('點擊 summary 會展開 details', () => {
+    const { container } = render(<ArchiveList months={MONTHS} />)
+    const details = container.querySelector('details') as HTMLElement
+    const summary = container.querySelector('summary') as HTMLElement
+    expect(details).not.toHaveAttribute('open')
+
+    fireEvent.click(summary)
+
+    expect(details).toHaveAttribute('open')
   })
 })
