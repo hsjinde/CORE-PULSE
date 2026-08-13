@@ -1499,6 +1499,14 @@ footer .path-label::before { color: var(--accent-brass); opacity: 1; }
   border-radius: 1px;
 }
 
+.worklog-board {
+  display: grid;
+  grid-template-columns: repeat(var(--worklog-columns, 3), minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
 .worklog-column {
   display: flex;
   flex-direction: column;
@@ -1613,7 +1621,28 @@ footer .path-label::before { color: var(--accent-brass); opacity: 1; }
 }
 
 @media (max-width: 768px) {
-  .worklog-month-meta { font-size: 0.6875rem; }
+  /* 看板上限是三個月,堆疊後的總高度可控 —— 不做橫向捲動,
+     省掉鍵盤可及性與捲動提示那一整套。 */
+  .worklog-board { grid-template-columns: minmax(0, 1fr); }
+
+  .worklog-column {
+    padding: 0;
+  }
+
+  /* 欄的分隔線從直線改成橫線 */
+  .worklog-column + .worklog-column {
+    border-left: none;
+    border-top: 1px solid var(--border);
+    padding-top: 28px;
+    margin-top: 28px;
+  }
+
+  .worklog-archive-summary {
+    flex-wrap: wrap;
+    gap: 6px 12px;
+  }
+
+  .worklog-archive-headline { flex-basis: 100%; }
 }
 
 /* ─── Work Log — archive(看板放不下的舊月份)─────────────────── */

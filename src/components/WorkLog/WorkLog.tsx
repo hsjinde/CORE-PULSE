@@ -1,6 +1,9 @@
+import type { CSSProperties } from 'react'
 import { motion } from 'framer-motion'
 import { ScrollText } from 'lucide-react'
 import { WORKLOG, CHANNEL_META, type WorkChannel } from '@/content/worklog'
+import MonthColumn from './MonthColumn'
+import ArchiveList from './ArchiveList'
 
 /* 進場動線統一走 DESIGN.md 的標準值:opacity 0 / y 28 → 0,ease-out-quint。
    framer 的 reducedMotion="user"(掛在 App.tsx)會自己把 y 位移吃掉。 */
@@ -8,16 +11,22 @@ const EASE = [0.22, 1, 0.36, 1] as const
 
 const CHANNEL_ORDER: WorkChannel[] = ['infra', 'web', 'ai', 'content']
 
+/** 看板同時放幾個月。超過的收進 archive —— 月份會一直累積,版面不能跟著長。 */
+const BOARD_MONTHS = 3
+
 /**
- * 工作紀錄 —— 逐月的出貨帳本。
+ * 專案進度看板 —— 逐月的出貨帳本,以「一欄一個月」的看板呈現。
  *
- * 版面刻意做成 `git log` 的樣子而不是文章卡片牆:每一列就是「哪個專案 · 做完了什麼」,
- * 月份標頭是一條貫穿的髮絲線。這一段的內容是低頻更新的既成事實,不是要人點進去讀的
- * 內容 —— 所以沒有內頁、沒有篩選器,一眼掃完就是它該有的樣子。
+ * 欄是月份而不是日期:資料最細只到月(來源是手工摘錄的月誌,見 src/content/worklog.ts),
+ * 做不出日 × 時段的時間網格,硬做只會逼自己去編日期。欄選月份的好處是顏色真的在扛
+ * 「這是哪一種工作」的資訊 —— 同一欄裡四種通道色交錯,一眼掃得出這個月在忙什麼。
  *
- * 資料與「哪些可以公開」的判準見 src/content/worklog.ts。
+ * 錨點與 CSS class 仍是 `worklog`(改名只改顯示文字,不動識別字與既有連結)。
  */
 export default function WorkLog() {
+  const board = WORKLOG.slice(0, BOARD_MONTHS)
+  const archived = WORKLOG.slice(BOARD_MONTHS)
+
   return (
     <section
       id="worklog"
@@ -45,7 +54,7 @@ export default function WorkLog() {
 
       <div className="section-container">
         {/* ── 區塊標頭 ─────────────────────────────── */}
-        <div style={{ marginBottom: 48, maxWidth: 620 }}>
+        <div style={{ marginBottom: 40, maxWidth: 620 }}>
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -70,7 +79,7 @@ export default function WorkLog() {
             className="text-headline"
             style={{ color: 'var(--text-primary)', marginBottom: 16 }}
           >
-            工作紀錄
+            專案進度看板
           </motion.h2>
 
           <motion.span
@@ -90,7 +99,7 @@ export default function WorkLog() {
             transition={{ delay: 0.16 }}
             className="text-body"
           >
-            逐月記下實際做完的事 —— 上線的功能、修掉的事故、補起來的護欄。
+            一張卡片是一件實際做完並且上線的事,按月份分欄,左緣的顏色標的是工作類型。
             內容摘自我自己的 Obsidian 月誌,只留已經收斂的結果。
           </motion.p>
         </div>
@@ -116,60 +125,19 @@ export default function WorkLog() {
           ))}
         </motion.ul>
 
-        {/* ── 逐月帳本 ─────────────────────────────── */}
-        <ol className="worklog-months">
-          {WORKLOG.map((month) => {
-            const [year, mm] = month.id.split('-')
-            return (
-              <li key={month.id} className="worklog-month">
-                <motion.div
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-60px' }}
-                  transition={{ duration: 0.6, ease: EASE }}
-                >
-                  <div className="worklog-month-head">
-                    <h3 className="worklog-month-id">
-                      {year} / {mm}
-                    </h3>
-                    <span aria-hidden="true" className="worklog-month-rule" />
-                    <span className="worklog-month-meta">
-                      {month.period} · {month.items.length} entries
-                    </span>
-                  </div>
-
-                  <p className="worklog-month-headline">{month.headline}</p>
-                </motion.div>
-
-                <ul className="worklog-entries">
-                  {month.items.map((item, i) => (
-                    <motion.li
-                      key={`${month.id}-${i}`}
-                      className="worklog-entry"
-                      initial={{ opacity: 0, y: 16 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true, margin: '-40px' }}
-                      transition={{ duration: 0.45, delay: Math.min(i, 6) * 0.05, ease: EASE }}
-                    >
-                      <span
-                        className="worklog-entry-project"
-                        style={{ color: CHANNEL_META[item.channel].color }}
-                      >
-                        <span
-                          aria-hidden="true"
-                          className="worklog-dot"
-                          style={{ background: CHANNEL_META[item.channel].color }}
-                        />
-                        {item.project}
-                      </span>
-                      <p className="worklog-entry-summary">{item.summary}</p>
-                    </motion.li>
-                  ))}
-                </ul>
-              </li>
-            )
-          })}
+        {/* ── 看板 ─────────────────────────────────── */}
+        <ol
+          className="worklog-board"
+          /* 欄數走 CSS 變數而不是直接寫 gridTemplateColumns:inline style 會蓋掉
+             media query,行動版就塌不成單欄。 */
+          style={{ '--worklog-columns': board.length } as CSSProperties}
+        >
+          {board.map((month) => (
+            <MonthColumn key={month.id} month={month} />
+          ))}
         </ol>
+
+        <ArchiveList months={archived} />
       </div>
     </section>
   )
