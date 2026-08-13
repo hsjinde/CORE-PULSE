@@ -40,7 +40,7 @@
 | **Skills & Infrastructure**（Bento） | 互動終端機卡、自架服務清單、IEEE Access 研究、資安、CI/CD、開源 Claude Code Skills、Core Stack |
 | **Career Timeline** | 垂直排列的真實工作經歷 |
 | **Projects** | 五張專案卡（RNN × SPARQL、Self-Hosted Mail Stack、my-note-web、Osaka-web、CORE PULSE 本站） |
-| **工作紀錄** | 逐月的出貨帳本，資料是版控在 repo 裡的 [worklog.ts](src/content/worklog.ts) |
+| **專案進度看板** | 逐月的出貨帳本，一欄一個月，資料是版控在 repo 裡的 [worklog.ts](src/content/worklog.ts) |
 | **Footer** | mailto 主行動鈕、站內導覽、key-value 聯絡清單，加上三個真實讀數（build / lcp / edge api） |
 
 > Footer 沒有聯絡表單——沒有寫入 API 也就沒有表單。聯絡方式是 `mailto:` 連結加上
@@ -167,7 +167,7 @@ core-pulse/
 │   ├── hooks/                   # useMascotChat / useTheme / useSignalClock / useLogFeed …
 │   ├── content/
 │   │   ├── wiki/*.md            # /ask 的知識庫（gen-wiki 來源）
-│   │   └── worklog.ts           # 首頁「工作紀錄」的唯一資料來源
+│   │   └── worklog.ts           # 首頁「專案進度看板」的唯一資料來源
 │   ├── lib/                     # utils(cn) / lenisController / notes
 │   ├── index.css                # 全域樣式 + Design Tokens（兩套主題）
 │   ├── App.tsx                  # 路由 + ScrollProgress
@@ -189,7 +189,7 @@ core-pulse/
 
 ## 架構重點
 
-### 首頁「工作紀錄」的內容從哪來
+### 首頁「專案進度看板」的內容從哪來
 
 資料是 [src/content/worklog.ts](src/content/worklog.ts)，**手工**摘錄自 Obsidian vault 的
 `工作專案/YYYY-MM 工作紀錄.md`。刻意不寫同步腳本，兩個理由都寫在那個檔案的檔頭：vault 在
@@ -198,6 +198,8 @@ repo 外面、CI 讀不到；而且原始月誌含有不該公開的東西（VPS
 
 新增一個月就在陣列**最前面**補一筆。`tests/content/worklog.test.ts` 會擋掉排序錯誤、
 未知的訊號通道，以及明顯的敏感字樣（IP 位址、本機路徑）。
+
+看板同時顯示最新的三個月，更早的月份會自動收進下方的 archive（可展開），不需要手動搬。
 
 ### `/ask` 的 LLM 代理
 
@@ -235,9 +237,9 @@ OpenAI 相容端點，以 `event: delta / done / error` 的 SSE frame 串回前�
 
 ---
 
-## 怎麼補一個月的工作紀錄
+## 怎麼補一個月的專案進度
 
-首頁的「工作紀錄」是版控在 repo 裡的靜態資料，沒有後台、沒有寫入 API，**改完要 push 才會上線**。
+首頁的「專案進度看板」是版控在 repo 裡的靜態資料，沒有後台、沒有寫入 API，**改完要 push 才會上線**。
 
 ### 1. 先在 vault 寫當月月誌
 

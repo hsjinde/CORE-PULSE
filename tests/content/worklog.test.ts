@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { WORKLOG, CHANNEL_META, type WorkLogMonth } from '@/content/worklog'
 
 /**
- * 工作紀錄的「可公開」契約。
+ * 專案進度看板的「可公開」契約。
  *
  * 這份資料是手工從 Obsidian vault 的月誌摘錄過來的(理由見 src/content/worklog.ts),
  * 而原始月誌裡有 VPS 位址、內部路徑、還沒收斂的安全待辦。人在複製貼上的時候會累,
@@ -20,7 +20,7 @@ const allText: Array<[string, string]> = [
   ...allItems.map((item): [string, string] => [`${item.month} · ${item.project}`, item.summary]),
 ]
 
-describe('工作紀錄資料結構', () => {
+describe('專案進度看板資料結構', () => {
   it('至少有一個月份,而且每個月都有內容', () => {
     expect(WORKLOG.length).toBeGreaterThan(0)
     for (const month of WORKLOG) {
