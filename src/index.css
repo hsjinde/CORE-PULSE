@@ -1469,9 +1469,9 @@ footer .path-label::before { color: var(--accent-brass); opacity: 1; }
   .hero-social-row { gap: 16px; flex-wrap: wrap; }
 }
 
-/* ─── Work Log — 逐月出貨帳本(git log 語彙,不是卡片牆)─────────
-   分隔全靠髮絲線與留白,沒有卡片底、沒有 hover 位移。列與列之間只有一條
-   1px 分隔線,hover 時左緣多一條訊號色細線 —— 這是這個區塊唯一的回饋。 */
+/* ─── Work Log — 分欄看板(欄 = 月份)───────────────────────────
+   欄與欄之間靠一條髮絲規線分隔,不是留白。卡片是近黑底 + 髮絲邊框 +
+   左緣 2px 通道色條 —— 色彩只出現在那條與專案名上,其餘全是灰階。 */
 .worklog-legend {
   display: flex;
   flex-wrap: wrap;
@@ -1499,20 +1499,89 @@ footer .path-label::before { color: var(--accent-brass); opacity: 1; }
   border-radius: 1px;
 }
 
-.worklog-months {
+.worklog-column {
   display: flex;
   flex-direction: column;
-  gap: 72px;
+  min-width: 0;
+  padding: 0 20px;
+}
+
+/* 第一欄不畫左線,規線只出現在欄與欄「之間」 */
+.worklog-column + .worklog-column {
+  border-left: 1px solid var(--border);
+}
+
+.worklog-column-head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.worklog-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.worklog-month-head {
+.worklog-card {
+  padding: 12px 14px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  /* --channel 由 EntryCard 的 inline style 給;沒給的話退回髮絲線色而不是消失 */
+  border-left: 2px solid var(--channel, var(--border));
+  border-radius: var(--radius-xs);
+  transition: border-color 0.25s var(--ease-out-quint);
+}
+
+/* 卡片內的色點與專案名共用同一個 --channel,元件那邊不再逐一掛 inline 色 */
+.worklog-card .worklog-dot { background: var(--channel); }
+.worklog-card-project { color: var(--channel); }
+
+/* hover 只換邊框色。不位移、不放大、不發光。 */
+.worklog-card:hover {
+  border-top-color: var(--border-hover);
+  border-right-color: var(--border-hover);
+  border-bottom-color: var(--border-hover);
+}
+
+.worklog-card-head {
   display: flex;
-  align-items: baseline;
-  gap: 16px;
-  margin-bottom: 14px;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 7px;
+}
+
+.worklog-card-project {
+  font-family: var(--font-mono);
+  /* 色值由上面的 .worklog-card-project { color: var(--channel) } 那條給 */
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  min-width: 0;
+  word-break: break-word;
+}
+
+/* 通道的文字標籤 —— 顏色不是唯一資訊載體的那一半,不要拿掉 */
+.worklog-card-channel {
+  margin-left: auto;
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--text-tertiary);
+}
+
+.worklog-card-summary {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
 }
 
 .worklog-month-id {
@@ -1526,14 +1595,6 @@ footer .path-label::before { color: var(--accent-brass); opacity: 1; }
   font-variant-numeric: tabular-nums;
 }
 
-/* 貫穿的髮絲線 —— 印刷版面裡分隔章節的那條規線 */
-.worklog-month-rule {
-  flex: 1 1 auto;
-  height: 1px;
-  min-width: 24px;
-  background: var(--border);
-}
-
 .worklog-month-meta {
   flex: none;
   font-family: var(--font-mono);
@@ -1543,78 +1604,15 @@ footer .path-label::before { color: var(--accent-brass); opacity: 1; }
 }
 
 .worklog-month-headline {
-  max-width: 68ch;
-  margin: 0 0 28px;
+  max-width: none;
+  margin: 0 0 16px;
   font-family: var(--font-body);
-  font-size: clamp(0.9375rem, 1.4vw, 1rem);
+  font-size: 0.875rem;
   line-height: 1.7;
   color: var(--text-secondary);
 }
 
-.worklog-entries {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border-top: 1px solid var(--border);
-}
-
-.worklog-entry {
-  display: grid;
-  grid-template-columns: 156px minmax(0, 1fr);
-  gap: 24px;
-  padding: 16px 0 16px 14px;
-  border-bottom: 1px solid var(--border);
-  position: relative;
-}
-
-/* hover 的左緣訊號線。用 ::before 而不是 border-left,列本身才不會位移。 */
-.worklog-entry::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  background: var(--border-hover);
-  opacity: 0;
-  transition: opacity 0.25s var(--ease-out-quint);
-}
-
-.worklog-entry:hover::before { opacity: 1; }
-
-.worklog-entry-project {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  align-self: start;
-  padding-top: 2px;
-  font-family: var(--font-mono);
-  font-size: 0.8125rem;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  word-break: break-word;
-}
-
-.worklog-entry-summary {
-  margin: 0;
-  font-family: var(--font-body);
-  font-size: 0.9375rem;
-  line-height: 1.72;
-  color: var(--text-secondary);
-  max-width: 76ch;
-}
-
 @media (max-width: 768px) {
-  .worklog-months { gap: 56px; }
-
-  /* 窄螢幕下 156px 的專案欄會把摘要壓成一行三四個字,改成上下堆疊 */
-  .worklog-entry {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 8px;
-    padding: 14px 0 14px 12px;
-  }
-
-  .worklog-month-head { gap: 12px; }
   .worklog-month-meta { font-size: 0.6875rem; }
 }
 
