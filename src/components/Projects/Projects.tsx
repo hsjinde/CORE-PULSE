@@ -97,7 +97,7 @@ const projects: Project[] = [
     problem: '靜態的作品集說服力有限。我想要一個真的跑得起來的網站：有後端、有串流、有 AI 整合，出事的時候我看得懂 log 也修得動。',
     solution: '前端 React 19 + Vite；後端用 Cloudflare Pages Functions 跑在邊緣，/api/chat 以 SSE 串流接自架的 LLM proxy，內建每日限流、輸入清洗與 prompt guardrails。原本的自有 blog（D1 文章表、發文 CLI、SEO middleware）八月整套拆掉，筆記交給 my-note-web，首頁改掛專案進度看板。',
     result: '跑在 Cloudflare 邊緣，push 到 main 就自動部署。八月補了一輪品質面：修掉被 CSP 無聲擋掉的淺色模式 bootstrap、把原本根本不存在的 sitemap 跟每頁 meta 補齊、清掉四條 WCAG 違規，並把對比度契約寫成 CI 會擋的 e2e 斷言。',
-    tags: ['React 19', 'TypeScript', 'Pages Functions', 'SSE', 'LLM'],
+    tags: ['React 19', 'TypeScript', 'Cloudflare Pages', 'SSE', 'LLM'],
     accentColor: 'var(--accent-green)',
     slug: 'core-pulse',
     status: 'live · deployed',

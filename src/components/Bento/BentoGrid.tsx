@@ -139,7 +139,7 @@ export default function BentoGrid() {
                 一台 VPS＋Cloudflare 邊緣
               </p>
               <p className="text-body" style={{ fontSize: '0.8125rem', marginBottom: 18, maxWidth: 560 }}>
-                八個容器常駐在 VPS 上，前面用 Cloudflare 接邊緣。每個服務都是日常實際在用——收得到信、查得到筆記，不是架好看的。
+                八個容器常駐在 VPS 上，前面用 Cloudflare 接邊緣。收信、查筆記、跟 /ask 對話，平常走的都是這幾條。
               </p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 18 }}>
                 {SERVICES.map(({ name, desc, href, color }) => (
@@ -386,7 +386,7 @@ export default function BentoGrid() {
                 開源 Claude Code Skills × 4
               </p>
               <p className="text-body" style={{ fontSize: '0.8125rem', marginBottom: 18 }}>
-                寫給 AI agent 用的工具，全部開源、上架 skills.sh——每一個都是自己每天在用，才敢放上去的。
+                寫給 AI agent 用的工具，四個都開源、上架 skills.sh。當初都是自己工作流程上卡住才動手寫的，現在每天都還在跑。
               </p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 18 }}>
                 {AGENT_SKILLS.map(({ name, desc, href }) => (
