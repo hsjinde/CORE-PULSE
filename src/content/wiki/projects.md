@@ -8,9 +8,9 @@ sensitivity: public
 ## CORE PULSE — 這個網站
 
 - **前端**：React 19 + TypeScript + Vite，Terminal Editorial 風格設計系統（近黑底、髮絲線邊框、JetBrains Mono）
-- **後端**：Cloudflare Pages Functions + D1（文章資料庫）+ R2（圖床），全部跑在邊緣
+- **後端**：Cloudflare Pages Functions，全部跑在邊緣；D1 現在只剩 /ask 的每日限流表（原本的文章資料庫、發文 CLI 與 SEO middleware 已隨自有 blog 一起拆掉，筆記統一交給 my-note-web）
 - **AI**：/ask 頁面是 SSE 串流的 LLM 對話，後端接我自架的 CLIProxyAPI，含每日限流、輸入清洗與 prompt guardrails
-- **維運**：GitHub Actions CI/CD，push 到 main 自動部署；後台用 HMAC 簽章的 HttpOnly cookie 驗證
+- **維運**：GitHub Actions CI/CD，push 到 main 自動部署；tsc / eslint / vitest 過了才 build，另有 Playwright e2e 守 SEO、無障礙對比度與淺色模式
 - **網址**：https://19980803.xyz
 
 ## 碩士論文 — Enhancing SPARQL Query Performance With Recurrent Neural Networks
