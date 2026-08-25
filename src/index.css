@@ -140,7 +140,7 @@
      (亮度帶、彩度、相鄰 CVD ΔE 8.4、normal-vision ΔE 19.3、對比 ≥3:1)。
      **slot 順序不可調動** —— 排序本身就是 CVD 安全的機制。
      只當左緣色條與色點,不當文字色(淺色欄有三個 slot 低於 3:1)。
-     slot 8 是紅色,目前保留未用;真的用到時要為 DESIGN.md 的紅色保留開例外。 */
+     slot 8 是紅色,2026-08 起指派給 watchdesk,ramp 已滿;紅色保留的例外寫在 DESIGN.md。 */
   --project-1: #3987e5;  /* blue */
   --project-2: #d95926;  /* orange */
   --project-3: #199e70;  /* aqua */
@@ -148,7 +148,7 @@
   --project-5: #d55181;  /* magenta */
   --project-6: #008300;  /* green */
   --project-7: #9085e9;  /* violet */
-  --project-8: #e66767;  /* red —— 未指派 */
+  --project-8: #e66767;  /* red —— watchdesk */
 
   /* Signature accent — white. The only decorative hue in the system. */
   --accent-signature:       #ffffff;
@@ -319,7 +319,7 @@
   --project-5: #e87ba4;  /* magenta */
   --project-6: #008300;  /* green */
   --project-7: #4a3aa7;  /* violet */
-  --project-8: #e34948;  /* red —— 未指派 */
+  --project-8: #e34948;  /* red —— watchdesk */
 
   --accent-signature:       #000000;
   --accent-signature-hover: #333333;

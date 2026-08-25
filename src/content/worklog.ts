@@ -37,6 +37,7 @@ export const PROJECT_META: Record<string, { color: string }> = {
   'my-note':      { color: 'var(--project-5)' }, // magenta
   'vps':          { color: 'var(--project-6)' }, // green
   'agent-skills': { color: 'var(--project-7)' }, // violet
+  'watchdesk':    { color: 'var(--project-8)' }, // red
 }
 
 /**
@@ -83,8 +84,9 @@ export interface WorkLogMonth {
 export const WORKLOG: WorkLogMonth[] = [
   {
     id: '2026-08',
-    period: '08.01 – 08.12',
-    headline: '不開新功能,回頭補既有專案的品質面 —— 上線後才發現的破口,以及一直沒補的工程護欄。',
+    period: '08.01 – 08.25',
+    headline:
+      '上半月回頭補既有專案的品質面,下半月把月初那次手動排查做成每輪自動跑的工具。',
     items: [
       {
         project: 'core-pulse',
@@ -107,6 +109,35 @@ export const WORKLOG: WorkLogMonth[] = [
           '拆掉自有 blog 系統(D1 posts、發文 CLI、SEO middleware 一併移除),筆記統一交給 my-note-web;首頁改掛這個專案進度看板。',
       },
       {
+        project: 'toeic-flow',
+        summary: '跳轉出口機制與跨裝置版型併回主線;章節速查卡從 11 張擴充到 17 張。',
+      },
+      {
+        project: 'osaka-web',
+        summary:
+          '視覺與版面重做:手機版行程與頁首重排、加五個零依賴動效,隔天就把其中會讓頁首晃動的 View Transitions 拆掉。主視覺迭代三次,最後定在拼貼式的微縮地景。',
+      },
+      {
+        project: 'bubble-beam',
+        summary:
+          'B4a 擴充包上市後環境重置,排行榜 tier 校正與活動行事曆全走七月自建的三個專案內 skill,不需要再重講流程。',
+      },
+      {
+        project: 'bubble-beam',
+        summary:
+          '全月 12 次 tier 校正、5 次行事曆複查,其中一次複查結果是無異動 —— 照樣記一筆,「查過沒事」跟「沒查」是兩件事。Pokopia 的 DLC 棲息地補到 245 筆並補齊建造材料,另開食譜與供品效果頁。',
+      },
+      {
+        project: 'my-note',
+        summary:
+          '把 vault 根目錄的散檔收進作品集資料夾,並寫了五份作品集簡報 —— 每份含架構圖、技術決策 Q&A 與履歷條目。撰寫時順手定下脫敏規範:含具體座標的內容不寫進公開頁。',
+      },
+      {
+        project: 'my-note',
+        summary:
+          '兩台機器的 vault 分歧收斂:九個檔案全數衝突,選以遠端為基底(事實較新),只前移本機獨有的那篇,舊 commit 留在分支上備查。',
+      },
+      {
         project: 'vps',
         summary:
           '例行安全巡檢揪出一個真實漏洞:fail2ban 的 postfix jail regex 只匹配得到 25 埠,submission / smtps 上的認證失敗整批被漏掉。修好 regex 並用 fail2ban-regex 對全日誌驗算。',
@@ -117,13 +148,19 @@ export const WORKLOG: WorkLogMonth[] = [
           '從上一條學到的:「有在跑」不等於「看得到」。三個 jail 狀態全綠、封鎖數字也在增加,光看儀表板永遠發現不了那個洞 —— 要對照原始日誌的實際筆數。',
       },
       {
-        project: 'toeic-flow',
-        summary: '跳轉出口機制與跨裝置版型併回主線;章節速查卡從 11 張擴充到 17 張。',
+        project: 'watchdesk',
+        summary:
+          '把上面那次手動排查做成常設工具並開源(Python + systemd timer,MIT):唯讀、規則先觸發才叫 LLM。核心是同一個時間窗算三個獨立的數 —— 自己用最寬的 matcher 數、把磁碟上的 filter 套回原始日誌數、fail2ban 自己的事件數 —— 三個對不起來就代表有東西沒被看見。',
       },
       {
-        project: 'bubble-beam',
+        project: 'watchdesk',
         summary:
-          'B4a 擴充包上市後環境重置,排行榜 tier 校正與活動行事曆全走七月自建的三個專案內 skill,不需要再重講流程。',
+          '驗收測試直接餵月初那次事故的日誌:212 筆認證失敗有 210 筆落在 jail 看不見的監聽器上,而三個獨立計數在同一個數字上一致。反方向也測 —— 重播平靜的日子,確認不會謊報一場沒發生的攻擊。',
+      },
+      {
+        project: 'watchdesk',
+        summary:
+          'LLM 只寫分診敘述,每一句都要過機械檢查:沒引用的丟掉、引用不存在的丟掉、講了沒人量過的數字丟掉;因果敘述一律降級成假設。CI 也抓到一個只在別人機器上會發生的解析 bug,修法是讓工具直接說「這項檢查做不了」而不是硬猜。',
       },
     ],
   },

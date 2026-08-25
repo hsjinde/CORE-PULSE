@@ -140,7 +140,7 @@ project is always the same color. `--project-4` does not mean "in progress" the 
 | `--project-5` | magenta | `#d55181` | `#e87ba4` | my-note |
 | `--project-6` | green | `#008300` | `#008300` | vps |
 | `--project-7` | violet | `#9085e9` | `#4a3aa7` | agent-skills |
-| `--project-8` | red | `#e66767` | `#e34948` | *unassigned* |
+| `--project-8` | red | `#e66767` | `#e34948` | watchdesk |
 
 Three rules make the exception safe:
 
@@ -159,8 +159,12 @@ Three rules make the exception safe:
 The assignment lives in `PROJECT_META` (`src/content/worklog.ts`), not in CSS, so the stylesheet
 stays content-agnostic. `tests/content/worklog.test.ts` fails when a project has no slot.
 
-Slot 8 is red. If it is ever assigned, `--accent-red`'s "error / destructive" reservation needs an
-explicit carve-out written here first.
+Slot 8 is red and, as of 2026-08, assigned to **watchdesk** — the ramp is now full. This is the
+carve-out `--accent-red`'s "error / destructive" reservation requires, and it is narrow: the two are
+different values (`--project-8` `#e66767` / `#e34948` vs `--accent-red` `#ff453a`), and slot 8 only
+ever appears as a `#worklog` card's left stripe and dot, never on a status, an alert, or a
+destructive control. Nothing outside the board reads red as identity, so "red means error"
+still holds everywhere else. A ninth project does not get a ninth slot — see rule 3.
 
 ### Brass — the Footer's warm accent
 

@@ -267,8 +267,9 @@ OpenAI 相容端點，以 `event: delta / done / error` 的 SSE frame 串回前�
 
 **如果是全新的專案**，還要在同一個檔案的 `PROJECT_META` 補一筆，指到一個還沒被用掉的
 `--project-N`（ramp 定義在 `src/index.css`，共 8 格）。忘了配色的話
-`tests/content/worklog.test.ts` 會擋下來——不會靜默變成沒有顏色。ramp 用完時不要硬加
-第 9 格：slot 順序是色盲安全性的驗證結果，加色相會破壞它，那時該重新想的是分類方式。
+`tests/content/worklog.test.ts` 會擋下來——不會靜默變成沒有顏色。**8 格在 2026-08 已全數
+指派完畢**，所以下一個新專案沒有現成的格子可以用；不要硬加第 9 格：slot 順序是色盲安全性
+的驗證結果，加色相會破壞它，那時該重新想的是分類方式（例如把已收尾的專案併成一格）。
 
 > ⚠️ 這一段會公開在首頁上。原始月誌裡的 VPS 位址、尚未修好的安全待辦、磁碟水位、
 > 內部主機名一律不要帶進來——只寫已經收斂的結果。`tests/content/worklog.test.ts`
