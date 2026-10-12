@@ -17,7 +17,7 @@ fetch('https://cli.19980803.xyz/v1/chat/completions', {
     'User-Agent': 'core-pulse-mascot/1.0',
   },
   body: JSON.stringify({
-    model: 'gpt-5.4-mini',
+    model: 'gpt-5.6-luna',
     messages: [{ role: 'user', content: 'hi' }],
     stream: false,
     max_tokens: 10,

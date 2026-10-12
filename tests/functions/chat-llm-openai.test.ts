@@ -60,4 +60,14 @@ describe('chat-llm-openai', () => {
     const gen = streamOpenAI(env, [], fetchMock as unknown as typeof fetch);
     await expect(gen.next()).rejects.toThrow(/upstream_error/);
   });
+
+  it('upstream 非 2xx 時把回應 body 記進 log，但錯誤訊息只帶狀態碼', async () => {
+    const upstreamBody = '{"error":{"message":"unknown provider for model x","code":"model_not_found"}}';
+    const fetchMock = vi.fn().mockResolvedValue(new Response(upstreamBody, { status: 400 }));
+    const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const gen = streamOpenAI(makeEnv(), [], fetchMock as unknown as typeof fetch);
+    await expect(gen.next()).rejects.toThrow(/^upstream_error:400$/);
+    expect(errSpy).toHaveBeenCalledWith(expect.stringContaining('model_not_found'));
+    errSpy.mockRestore();
+  });
 });

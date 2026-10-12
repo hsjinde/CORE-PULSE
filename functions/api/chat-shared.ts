@@ -17,7 +17,7 @@ export interface Env {
   RATE_LIMIT_SALT: string;
   // 變數
   LLM_PROVIDER?: string;      // 'openai'（MVP 預設）
-  LLM_MODEL?: string;         // 預設 'gpt-4o-mini'
+  LLM_MODEL?: string;         // 預設見 DEFAULT_LLM_MODEL
   LLM_BASE_URL?: string;      // 自訂 OpenAI-compatible endpoint（預設 https://api.openai.com/v1/chat/completions）
   RATE_LIMIT_DAILY?: string;  // 預設 '30'
   WIKI_TOKEN_BUDGET?: string; // 預設 '16000'
@@ -50,7 +50,8 @@ export interface Usage {
 export const MAX_BODY_BYTES = 64 * 1024;       // 64 KB
 export const MAX_HISTORY_TURNS = 6;            // session 內 6 輪 = 12 條
 export const DEFAULT_RATE_LIMIT_DAILY = 30;
-export const DEFAULT_LLM_MODEL = 'gpt-4o-mini';
+// 必須是上游 proxy `/v1/models` 清單裡的 id，否則上游回 400 model_not_found
+export const DEFAULT_LLM_MODEL = 'gpt-5.6-luna';
 export const DEFAULT_WIKI_TOKEN_BUDGET = 16000;
 
 const ALLOWED_ORIGINS = [

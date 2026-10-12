@@ -9,7 +9,7 @@ database_id = "e3aa19cf-79fc-4d04-8a05-cada7626b559"
 
 # ── Chat mascot env vars (non-secret; secrets via `wrangler pages secret put`) ──
 # LLM_PROVIDER       = "openai"
-# LLM_MODEL          = "gpt-4o-mini"
+# LLM_MODEL          = "gpt-5.6-luna"
 # LLM_BASE_URL       = "https://cli.19980803.xyz/v1/chat/completions"
 # RATE_LIMIT_DAILY   = "30"
 # WIKI_TOKEN_BUDGET  = "16000"

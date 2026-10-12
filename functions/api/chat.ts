@@ -3,6 +3,7 @@ import {
   MAX_BODY_BYTES,
   MAX_HISTORY_TURNS,
   DEFAULT_WIKI_TOKEN_BUDGET,
+  DEFAULT_LLM_MODEL,
   corsHeaders,
   jsonResponse,
   estimateTokens,
@@ -23,7 +24,7 @@ export const onRequestGet = async (context: EventContext): Promise<Response> => 
     return jsonResponse({
       baseUrl: env.LLM_BASE_URL || 'https://api.openai.com/v1/chat/completions',
       hasKey: !!(env.LLM_API_KEY || env.LLM_API_KEY_TEST),
-      model: env.LLM_MODEL || 'gpt-5.4-mini',
+      model: env.LLM_MODEL || DEFAULT_LLM_MODEL,
     }, 200, corsHeaders(origin));
   }
 

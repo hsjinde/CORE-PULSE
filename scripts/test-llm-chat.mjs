@@ -8,7 +8,7 @@ if (!key) {
 if (!key) {
   try { key = readFileSync(resolve(process.cwd(), '.dev.vars'), 'utf8').match(/^LLM_API_KEY=(.+)$/m)?.[1]?.trim(); } catch {}
 }
-const models = ['gpt-5.4-mini', 'claude-haiku-4-5', 'glm-4.7-flash'];
+const models = ['gpt-5.6-luna', 'claude-haiku-4-5', 'glm-4.7-flash'];
 
 for (const model of models) {
   try {

@@ -25,6 +25,9 @@ export async function* streamOpenAI(
   });
 
   if (!res.ok || !res.body) {
+    // 上游的錯誤原因（如 model_not_found）只進 Workers log，不回給 client
+    const detail = await res.text().catch(() => '');
+    console.error(`[chat] upstream ${res.status} model=${model}: ${detail.slice(0, 500)}`);
     throw new Error(`upstream_error:${res.status}`);
   }
 

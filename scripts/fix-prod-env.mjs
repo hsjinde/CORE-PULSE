@@ -11,7 +11,7 @@ const projectName = 'core-pulse';
 // Plain text env vars for production
 const envVars = {
   LLM_BASE_URL: { value: 'https://cli.19980803.xyz/v1/chat/completions', type: 'plain_text' },
-  LLM_MODEL: { value: 'gpt-5.4-mini', type: 'plain_text' },
+  LLM_MODEL: { value: 'gpt-5.6-luna', type: 'plain_text' },
   LLM_PROVIDER: { value: 'openai', type: 'plain_text' },
   RATE_LIMIT_DAILY: { value: '30', type: 'plain_text' },
   WIKI_TOKEN_BUDGET: { value: '16000', type: 'plain_text' },
