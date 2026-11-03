@@ -85,7 +85,7 @@ export const WORKLOG: WorkLogMonth[] = [
   {
     id: '2026-11',
     period: '11.01 – 11.03',
-    headline: '月初三天只有 Bubble-Beam 有動作:C1 環境拿到第一份照正常門檻跑的排行榜。',
+    headline: '月初三天的進度在 Bubble-Beam:C1 環境拿到第一份照正常門檻跑的排行榜。',
     items: [
       {
         project: 'bubble-beam',
